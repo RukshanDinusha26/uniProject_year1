@@ -1,0 +1,74 @@
+{% extends "layout.html" %}
+{% block head %}
+<link rel="stylesheet" href="{{ url_for('static', filename='mainstyle.css')}}" />
+{% endblock head %}
+
+{% block content %}
+
+<body>
+<div class="main">
+  <header class="header">
+    <a href="#" class="logo">SALON-WEBSITE</a>
+    
+    <ul class="navlist">
+      <li><a href="{{ url_for('home')}}">Home</a></li>
+      <li><a href="#">Services</a></li>
+      <li><a href="#">Offers</a></li>
+      <li><a href="#">About Us</a></li>
+    </ul>
+    <ul class="navlist2">
+      {% if current_user.is_authenticated %}
+      <li><a href="#">Account</a></li>
+      <li><a href="{{ url_for('logout') }}">Log Out</a></li>
+      {% else %}
+      <li><a href="{{ url_for('signup') }}">Log In</a></li>
+      {% endif %}
+    </ul>
+    <i class="fa-solid fa-bars" id="menu-icon"></i>
+  </header>
+  <div class="container">
+    <div class="bg-shape">
+      <img src="{{ url_for('static',filename='Images/blob(5).svg') }}" class="bg-1">
+      <img src="{{ url_for('static',filename='Images/blob(6).svg') }}" class="bg-1 bg-2">
+      <img src="{{ url_for('static',filename='Images/blob(4).svg') }}" class="bg-1 bg-3">
+      <img src="{{ url_for('static',filename='Images/blob(5).svg') }}" class="bg-1 bg-4">
+      <img src="{{ url_for('static',filename='Images/leaves1.svg') }}" class="bg-lf">
+      <img src="{{ url_for('static',filename='Images/leaves1.svg') }}" class="bg-lf lf-1">
+      <img src="{{ url_for('static',filename='Images/leaves1.svg') }}" class="bg-lf lf-2">
+      <img src="{{ url_for('static',filename='Images/leaves1.svg') }}" class="bg-lf lf-3">
+      <img src="{{ url_for('static',filename='Images/leaves1.svg') }}" class="bg-lf lf-4">
+    </div>
+    <div class="side-bar">
+      <a href="{{ url_for('appointment')}}"><i class="fa-solid fa-calendar-days"></i>
+        <div class="text1">Calendar</div>
+      </a>
+      <a href="#"><i class="fa-solid fa-bag-shopping"></i>
+        <div class="text2">Store</div>
+      </a>
+      <a href="#"><i class="fa-solid fa-image"></i>
+        <div class="text3">Gallery</div>
+      </a>
+    </div>
+    <section class="stock">
+      {% block container %}
+      <div class="stock-text">
+        <h5>Welcome!</h5>
+        <h1>SALOON</h1>
+        <p>We are thrilled to offer you the best salon service including, hair cutting
+          hair style for both men and women, bridal dressing and many more.
+        </p>
+        <a href="#">Join Us</a>
+        <a href="#" class="feedback"><i class="fa-solid fa-phone"></i>Contact</a>
+      </div>
+      <div class="stock-image">
+        <img src="{{ url_for('static', filename='Images/image_2.svg')}}" alt="">
+      </div>
+      {% endblock container %}
+    </section>
+  </div>
+  <div class="container2">
+  </div>
+  
+</div>
+</body>
+{% endblock content %}

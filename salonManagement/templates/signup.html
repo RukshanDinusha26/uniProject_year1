@@ -1,0 +1,175 @@
+{% extends "layout.html" %}
+{% block head %}
+<link rel="stylesheet" href="{{ url_for('static',filename='style.css') }}">
+{% endblock head %}
+
+
+{% block content %}
+
+<body>
+  <div class="container">
+    <div class="forms-container">
+      <div class="signin-signup"> 
+        <form action="" class="sign-in-form" method='POST'>
+          {{ form2.hidden_tag() }}
+          <h2 class="title">Sign In</h2>
+          <div class="input-field">
+            <i class="fa fa-user" id="user"></i>
+            {% if form2.username.errors %}
+            {{ form2.username(class="form-input-error",placeholder="Username", id="name") }}
+            <div class="invalid">
+              {% for error in form2.username.errors %}
+              <span> {{ error }} </span>
+              {% endfor %}
+            </div>
+
+            {% else %}
+            {{ form2.username(placeholder="Username",id="name") }}
+            {% endif %}
+
+          </div>
+          <div class="input-field">
+            <i class="fa fa-lock" id="pword"></i>
+            {% if form2.password.errors %}
+            {{ form2.password(class="form-input-error", placeholder="Password", id="pInput" )}}
+            <div class="invalid">
+              {% for error in form2.password.errors %}
+              <span> {{ error }} </span>
+              {% endfor %}
+            </div>
+            {% else %}
+            {{ form2.password(class="form-input", placeholder="Password") }}
+            {% endif %}
+          </div>
+          {{ form2.submit(class="btn solid") }}
+          <p class="social-text">Or Sign in with,
+          <div class="social-media">
+            <a href="#" class="social-icon"> <i class="fa-brands fa-google"></i></a>
+            <a href="#" class="social-icon"><i class="fa-brands fa-facebook"></i></a>
+            <a href="#" class="social-icon"><i class="fa-brands fa-twitter"></i></a>
+            </p>
+          </div>
+        </form>
+        <form action="" class="sign-up-form" method='POST' >
+          {{ form1.hidden_tag() }}
+          <h2 class="title">Sign Up</h2>
+          <div class="check-field">
+            <input type="radio" name="usertype" id="userc" checked="checked" value="user">
+            <label class="usercheck" for="userc" id="userlabel">User</label>
+            <input type="radio" name="usertype" id="employeec" value="employee">
+            <label class="admincheck" for="employeec" id="employeelabel">Employee</label>
+          </div>
+          <div class="input-field hide" id="employee">
+            <i class="fa fa-address-card" id='employee-id'></i>
+            {% if form1.empid.errors %}
+              {{ form1.empid(class="form-input-error" )}}
+              <div class="invalid">
+                {% for error in form1.empid.errors %}
+                <span>{{ error }} </span>
+                {% endfor %}
+              </div>
+              {% else %}
+                {{ form1.empid(class="form-input",placeholder="Employee ID",id="name")}}
+            {% endif %}
+          </div>
+          <div class="input-field">
+            <i class="fa fa-user" id='user'></i>
+            {% if form1.username.errors %}
+              {{ form1.username(class="form-input-error" )}}
+              <div class="invalid">
+                {% for error in form1.username.errors %}
+                <span>{{ error }} </span>
+                {% endfor %}
+              </div>
+              {% else %}
+                {{ form1.username(class="form-input",placeholder="Username",id="usrname")}}
+            {% endif %}
+ 
+          </div>
+          <div class="input-field">
+            <i class="fa fa-envelope"></i>
+            {% if form1.email.errors %}
+              {{ form1.email(class="form-input-error" )}}
+              <div class="invalid">
+                {% for error in form1.email.errors %}
+                <span>{{ error }} </span>
+                {% endfor %}
+              </div>
+              {% else %}
+                {{ form1.email(class="form-input",placeholder="Email",id="email")}}
+            {% endif %}
+
+          </div>
+          <div class="input-field">
+            <i class="fa fa-lock"></i>
+            {% if form1.pwd.errors %}
+              {{ form1.pwd(class="form-input-error" )}}
+              <div class="invalid">
+                {% for error in form1.pwd.errors %}
+                <span>{{ error }} </span>
+                {% endfor %}
+              </div>
+              {% else %}
+                {{ form1.pwd(class="form-input",placeholder="Password",id="pInput")}}
+            {% endif %}
+          </div>
+          <div class="input-field">
+            <i class="fa fa-lock"></i>
+            {% if form1.confirm_pwd.errors %}
+              {{ form1.confirm_pwd(class="form-input-error" )}}
+              <div class="invalid">
+                {% for error in form1.confirm_pwd.errors %}
+                <span>{{ error }} </span>
+                {% endfor %}
+              </div>
+              {% else %}
+                {{ form1.confirm_pwd(class="form-input",placeholder="Re-type Password",id="pInput")}}
+            {% endif %}
+ 
+          </div>
+            {{ form1.submit(class="btn solid") }}
+          <p class="social-text">Or Sign up with,
+          <div class="social-media">
+            <a href="#" class="social-icon"> <i class="fa-brands fa-google"></i></a>
+            <a href="#" class="social-icon"><i class="fa-brands fa-facebook"></i></a>
+            <a href="#" class="social-icon"><i class="fa-brands fa-twitter"></i></a>
+            </p>
+          </div>
+    
+        </form>
+
+      </div>
+    </div>
+
+    <div class="panels-container">
+      <div class="panel left-panel">
+        <div class="content">
+          <h3>New here?</h3>
+          <p>Lorem ipsum dolor, sit amet consectetur adipisicing elit.
+            Doloremque eaque accusamus sunt illo labore pariatur! Officia quidem animi, voluptate debitis sequi
+            tenetur nobis dolor dicta sed impedit, laborum delectus eos!
+          </p>
+          <button class="btn transparent" id="sign-up-btn">Sign Up</button>
+        </div>
+        <img src="{{ url_for('static', filename='Images/image_1.svg' )}}" class="image" alt="">
+      </div>
+      <div class="panel right-panel">
+        <div class="content">
+          <h3>New here?</h3>
+          <p>Lorem ipsum dolor, sit amet consectetur adipisicing elit.
+            Doloremque eaque accusamus sunt illo labore pariatur! Officia quidem animi, voluptate debitis sequi
+            tenetur nobis dolor dicta sed impedit, laborum delectus eos!
+          </p>
+          <button class="btn transparent" id="sign-in-btn">Sign In</button>
+        </div>
+        <img src="{{ url_for('static', filename='Images/image_2.svg')}}" class="image2" alt="">
+      </div>
+    </div>
+  </div>
+
+  <script src="{{ url_for('static', filename='script.js')}}"></script>
+
+</body>
+{% endblock content %}
+
+</html>

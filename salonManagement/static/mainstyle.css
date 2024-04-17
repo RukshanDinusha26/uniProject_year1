@@ -1,0 +1,287 @@
+/* Importing Poppins font and lobster font from Google fonts */
+ @import url('https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap');
+ @import url('https://fonts.googleapis.com/css2?family=Lobster&display=swap');
+ *{
+   padding: 0;
+   margin: 0;
+   box-sizing: border-box;
+   font-family: 'Poppins', sans-serif;
+   list-style: none;
+   text-decoration: none;
+ }
+
+ .header{
+   background: linear-gradient(to left, #bb86c0 0%, #a468a9 28.53%, #7d4a95 75.52%);
+   position: fixed;
+   right: 0;
+   top: 0;
+   z-index: 1000;
+   width: 100%;
+   display: flex;
+   align-items: center;
+   justify-content: space-between;
+   padding: 33px 9%;
+ }
+
+ .container{
+  background: linear-gradient(to left, #bb86c0 0%, #a468a9 28.53%, #7d4a95 75.52%);
+  position: absolute;
+  z-index: -2;
+  overflow: hidden;
+ }
+ .logo{
+   font-size: 1.2rem;
+   font-weight: 700;
+   color: white;
+ }
+
+ .navlist,.navlist2{
+   display: flex;
+ }
+ .navlist{
+   margin-left: 25%;
+ }
+ .navlist{
+  margin-right: 5%;  
+ }
+
+ .navlist a{
+   position: relative;
+   color: white;
+   margin-left: 40px;
+   font-size: 0.8rem;
+   font-weight: 600;
+ }
+
+ .navlist2 a{
+   position: relative;
+   color: white;
+   margin-left: 20px;
+   font-size: 0.8rem;
+   font-weight: 600;
+ }
+
+ .navlist a::after,
+ .navlist2 a::after{
+   content: "";
+   position: absolute;
+   bottom: -3px;
+   height: 2px;
+   width: 100%;
+   left: 0;
+   background-color: white;
+   transition: 0.3s ease-in-out;
+   transform: scaleX(0);
+ }
+
+ .navlist a:hover::after,
+ .navlist2 a:hover::after{
+  transform: scaleX(1)
+ }
+
+
+#menu-icon{
+  color: white;
+  font-size: 1.2rem;
+  z-index: 10;
+  cursor: pointer;
+  display: none;
+}
+
+.stock{
+  width: 100%;
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  align-items: center;
+  gap: 1rem;
+}
+
+
+section{
+  padding: 0 19%;
+  height: 100vh;
+}
+
+.stock-text h5{
+  font-size: 14px;
+  font-weight: 400;
+  color: white;
+  margin-bottom: 40px;
+}
+
+.stock-text h1{
+  font-family: 'Lobster', cursive;
+  font-size: 2rem;
+  line-height: 1;
+  color: white;
+  margin: 0 0 45px;
+}
+
+.stock-text h4{
+  font-size: 18px;
+  font-weight: 600;
+  color: white;
+  margin-bottom: 10px;
+}
+
+.stock-text p{
+  color: white;
+  font-size: 0.8rem;
+  line-height: 1.9;
+  margin-bottom: 40px;
+}
+.stock-image img{
+  width: 400px;
+  height: auto;
+}
+
+.stock-text a{
+  display: inline-block;
+  color: white;
+  background: #be8ab6;
+  font-size: 0.8rem;
+  border: 1px solid transparent;
+  padding: 10px 24px;
+  line-height: 1;
+  font-weight: 500;
+  border-radius: 30px;
+  text-transform: uppercase;
+  transition: all .55s ease;
+}
+
+.stock-text a:hover {
+  background: transparent;
+  border: 1px solid white;
+  transform: translateX(8px);
+}
+
+.stock-text a.feedback{
+  margin-left: 20px;
+}
+
+.stock-text a.feedback i{
+  margin-right: 7px;
+  font-size: 0.8rem;
+}
+
+.side-bar{
+  position: absolute;
+  z-index: 3;
+  top: 50%;
+  padding: 0 9%;
+  transform: translateY(-50%);
+}
+
+.side-bar i{
+  display: block;
+  margin: 40px 0;
+  font-size: 1.5rem;
+  color: white;
+  transition: all .50s ease;
+}
+
+.side-bar i:hover{
+  transform: scale(2);
+}
+
+
+
+.text1,.text2,.text3{
+  color: white;
+  font-size: 0.9rem;
+  z-index: 0;
+}
+
+.text1,.text2,.text3{
+  position: absolute;
+  left: 55%;
+  background-color: #be8ab6;
+  padding: 8px;
+  border-radius: 30px;
+  pointer-events: none;
+  visibility: hidden;
+}
+.text1{
+  top: 15%;
+}
+.text2{
+  top: 43%;
+}
+.text3{
+  top: 70%;
+}
+.side-bar a .text1,
+.side-bar a .text2,
+.side-bar a .text3{
+  transition: transform 0.2s ease;
+}
+.side-bar a:hover .text1,
+.side-bar a:hover .text2,
+.side-bar a:hover .text3{
+  visibility: visible;
+  transform: translateX(20%)
+}
+
+.container2{
+  width: 100vw;
+  height: 10000px;
+  position: absolute;
+  top: 100vh;
+  z-index: -2;
+}
+
+.bg-1{
+  position: absolute;
+  z-index: -1;
+  top: 0;
+  height: 200vh;
+  right: -50px;
+  transform: translateX(30%);
+  opacity: 10%;
+}
+
+.bg-2{
+  top: 200px;
+  right: 100px;
+}
+
+.bg-3{
+  top: -100px;
+  right: 100px;
+}
+
+.bg-4{
+  top: -600px;
+}
+
+.bg-lf{
+  z-index: -1;
+  position: absolute;
+  height: 20vh;
+  opacity: 15%;
+  right: 100px;
+  top: 274px;
+  transform: scaleX(-1);
+}
+
+.lf-1{
+  right: 749px;
+  transform: scaleX(1)
+}
+
+
+.lf-2{
+  right: 300px;
+  top: 561px;
+  transform: scaleY(-1);
+}
+.lf-3{
+  right: 662px;
+  top: 423px;
+  transform: scaleX(-1);
+}
+.lf-4{
+  right: 205px;
+  top: 400px;
+  transform: scale(-1,-1);
+}

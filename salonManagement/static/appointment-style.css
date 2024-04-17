@@ -1,0 +1,516 @@
+/* importing Poppins fonts from google fonts */
+@import url('https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Lobster&display=swap');
+
+*{
+  font-family:'Poppins', sans-serif;
+}
+
+body{
+  margin: 0;
+}
+
+.container{
+  display: flex;
+}
+
+.container-main{
+  display:flex;
+  justify-content: center;
+}
+.header{
+  width: 100%;
+  height: 300px;
+  background: linear-gradient(to left, #bb86c0 0%, #a468a9 28.53%, #7d4a95 75.52%);
+  position: relative;
+  left: 0;
+}
+
+.title-text{
+  position: absolute;
+  top: 30px;
+  left: 13.5%;
+}
+
+.menu{
+  position: absolute;
+  top: 35px;
+  right: 14%;
+}
+
+#menu{
+  font-size: 1.5rem;
+  color: white;
+}
+
+.title-text span{
+  font-family: 'Lobster', cursive;
+  font-size: 2rem;
+  line-height: 1;
+  color: white;
+  margin: 0 0 45px;
+}
+
+.container2{
+  z-index: 10;
+  width: 1000px;
+  height: 550px;
+  background-color: #e7dde1;
+  position: absolute;
+  top: 100px;
+  
+}
+
+.title_container{
+  position: relative;
+  display: flex;
+  flex-direction: row;
+  background-color: #fff;
+}
+
+
+.logo{
+  color: white;
+  font-weight: 600;
+}
+
+.employee_container{
+  margin-left: 10px;
+  height: 80px;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  position: relative;
+}
+
+.profile_pic{
+  height: 30px;
+  width: 30px;
+  border: 2px solid #7d4a95;
+  border-radius: 30px;
+  background-color: #d3b1c5;
+  margin: 5px 20px 5px 20px;
+}
+
+.employee_info{
+  display: flex;
+  flex-direction: column;
+  pointer-events: none;
+}
+
+.form-appointment{
+  display: flex;
+  flex-direction: row;
+}
+.employee_name{
+  font-size: 0.9rem;
+  color: #802688;
+}
+
+.employee_container i{
+  margin-left: 30px;
+  margin-right: 30px;
+}
+
+#dropdown{
+  cursor: pointer;
+}
+
+.date_container{
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  margin-left: 40px;
+}
+
+.date_logo, .time_logo{
+  padding: 10px 5px 10px 5px;
+}
+
+.date_logo i, .time_logo i{
+  color: #a468a9;
+}
+
+.date_info{
+  margin-left: 10px;
+  display: flex;
+  flex-direction: column;
+}
+
+.date_info span{
+  font-size: 0.9rem;
+
+}
+
+.date_info .date{
+  color: #a468a9;
+  font-size: 0.8rem;
+}
+
+.time_container{
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  margin-left: 30px;
+}
+
+
+.button_container{
+  position: absolute;
+  display: flex;
+  flex-direction: row;
+  top: 25%;
+  right: 5%;
+}
+
+.button_container button{
+  font-weight: 500;
+  display: flex;
+  height: 30px;
+  padding: 5px 10px 5px 10px;
+  border-radius: 5px;
+  align-items: center;
+  justify-content: center;
+  margin-left: 13%;
+}
+
+.add{
+  border: none;
+  background-color: #802688;
+  color: white;
+}
+
+.cancel{
+  border: none;
+  background-color: red;
+  color: white;
+}
+
+.add i , .cancel i{
+  color: white;
+}
+
+
+.add:hover{
+  background-color: white;
+  border: 2px solid #802688;
+  color: #802688;
+}
+
+.cancel:hover{
+  background-color: white;
+  border: 2px solid red;
+  color: red;
+}
+
+.button_container button i{
+  padding-right: 10px;
+  color: white;
+}
+
+.add:hover i{
+  color: #892688;
+}
+
+.cancel:hover i{
+  color: red;
+}
+
+.content_container{
+  margin-top: 2%;
+  display: flex;
+  flex-direction: column;
+  margin-left: 30px;
+  margin-right: 30px;
+}
+
+
+.table_head_container{
+  display: flex;
+  flex-direction: row;
+}
+
+.table_title{
+
+  display: flex;
+  flex-direction: column;
+  width: 100px;
+  background-color: #fff;
+  padding: 10px 20px 10px 20px;
+  border-top-left-radius: 10px;
+  border-top-right-radius: 10px;
+  margin-left: 10px;
+}
+
+.table_date{
+  color: #802688;
+  font-size: 1.3rem;
+  font-weight: 600;
+  line-height: 1;
+}
+
+.table_date_des{
+  color: #802688;
+  font-size: 0.7rem;
+  font-weight: 400;
+}
+
+.notactive{
+  background-color: #802688;
+}
+
+.table_title.notactive span{
+  color: white; 
+}
+
+.active{
+  position: relative;
+  box-shadow: 6px -6px 11px 0 rgb(0 0 0 / 8%);
+}
+
+.active::before{
+  position: absolute;
+  content: '';
+  width: 4px;
+  height: 55%;
+  background-color: #802688;
+  top: 15px;
+  left: 0;
+}
+
+.table_container{
+  background-color: white;
+  margin-left: 10px;
+  margin-right: 10px;
+  padding: 30px;
+}
+
+table{
+  width: 100%;
+}
+
+.t_row{
+  height: 60px;
+}
+
+.t_head{
+  text-align: left;
+  font-size: 0.7rem;
+  padding-bottom: 5px;
+}
+
+.number{
+  height: 18px;
+  width: 18px;
+  border-radius: 5px;
+  background-color: #FFDFBE;
+  color: #FE3403;
+  text-align: center;
+  font-size: 0.7rem;
+  margin-left: 10px;
+  margin-right: 10px;
+}
+
+.customer_container{
+  display: flex;
+  flex-direction: row;
+}
+
+.customer_pro_pic{
+  width: 30px;
+  height: 30px;
+  border-radius: 30px;
+  background-color: lightgrey;
+}
+
+.customer_profile{
+  margin-left: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.9rem;
+}
+
+.time{
+  font-size: 1rem;
+  color: #802688;
+  border: none;
+}
+
+.waited{
+  width: 50px;
+  height: 20px;
+  background-color: #ffb3b2;
+  color: #ff1632;
+  font-size: 0.7rem;
+  text-align: center;
+  border-radius: 30px;
+}
+
+.status{
+  font-size: 0.7rem;
+  color: blue;
+  font-weight: 500;
+  position: relative;
+}
+
+.status::before{
+  position: absolute;
+  content: '';
+  border-bottom: 3px solid blue;
+  width: 35%;
+  bottom: -3px;
+}
+
+
+.pay{
+  font-size: 0.7rem;
+  border: none;
+  width: 50px;
+  height: 20px;
+  border-radius: 30px;
+  background-color: yellow;
+  color: #7a4300;
+  text-align: center;
+}
+
+tbody{
+  box-shadow: 1px 1px 0px 1px rgb(0 0 0/ 1%);
+  border: none;
+  border-radius: 8px;
+}
+
+tbody tr{
+  box-shadow: 1px 1px 4px 5px rgb(0 0 0 / 1%);
+}
+
+.wrapper{
+  display: flex;
+  flex-direction: row;
+}
+
+.item{
+  display: flex;
+  flex-direction: row;
+  padding-right: 50px;
+  padding-bottom: 5px;
+}
+
+.item:hover{
+  background-color: #e7dde1;
+}
+
+.list{
+  position: absolute;
+  background-color: #fff;
+  top: 70px;
+  z-index: 10;
+  border-radius: 10px;
+  box-shadow: 2px 2px 10px 6px rgb(0 0 0/ 10%);
+  padding-top: 10px;
+  padding-bottom: 10px;
+  display: none;
+}
+
+.show{
+  display: block;
+}
+
+.flip{
+  transform: scaleY(-1);
+}
+
+
+#datepick{
+  cursor: pointer;
+}
+
+.date_picker{
+ display: none;
+}
+ .calendar{
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  opacity: 0;
+  cursor: pointer;
+}
+
+#date{
+  border: none;
+  color: #802688;
+  font-size: 1rem;
+}
+
+.bg-1 {
+  position: absolute;
+  z-index: -1;
+  top: 0;
+  height: 200vh;
+  right: -50px;
+  transform: translateX(30%);
+  opacity: 10%;
+}
+
+.bg-2 {
+  top: 200px;
+  right: 100px;
+}
+
+.bg-3 {
+  top: -100px;
+  right: 100px;
+}
+
+.bg-4 {
+  top: -600px;
+}
+
+.bg-lf {
+  z-index: -1;
+  position: absolute;
+  height: 20vh;
+  opacity: 15%;
+  right: 100px;
+  top: 274px;
+  transform: scaleX(-1);
+}
+
+.lf-1 {
+  top: 561px;
+  right: 1143px;
+  transform: scaleX(1)
+}
+
+
+.lf-2 {
+  right: 30px;
+  top: 561px;
+  transform: scaleY(-1);
+}
+
+.lf-3 {
+  right: 662px;
+  top: 423px;
+  transform: scaleX(-1);
+}
+
+.lf-4 {
+  right: 205px;
+  top: 400px;
+  transform: scale(-1, -1);
+}
+
+.bg-shape{
+  position: absolute;
+  z-index: 1;
+  top: -400px;
+  right: 0;
+  height: 400px;
+}
+
+

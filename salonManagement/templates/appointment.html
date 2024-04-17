@@ -1,0 +1,152 @@
+{% extends "layout.html"%}
+
+{% block head %}
+<link rel="stylesheet" href="{{ url_for('static',filename='appointment-style.css')}}" />
+{% endblock head%}
+
+{% block content %}
+<div class="header">
+  <div class="bg-shape">
+  <img src="{{ url_for('static',filename='Images/blob(5).svg') }}" class="bg-1">
+  <img src="{{ url_for('static',filename='Images/blob(6).svg') }}" class="bg-1 bg-2">
+  <img src="{{ url_for('static',filename='Images/blob(4).svg') }}" class="bg-1 bg-3">
+  <img src="{{ url_for('static',filename='Images/blob(5).svg') }}" class="bg-1 bg-4">
+  <img src="{{ url_for('static',filename='Images/leaves1.svg') }}" class="bg-lf">
+  <img src="{{ url_for('static',filename='Images/leaves1.svg') }}" class="bg-lf lf-1">
+  <img src="{{ url_for('static',filename='Images/leaves1.svg') }}" class="bg-lf lf-2">
+  <img src="{{ url_for('static',filename='Images/leaves1.svg') }}" class="bg-lf lf-3">
+  <img src="{{ url_for('static',filename='Images/leaves1.svg') }}" class="bg-lf lf-4">
+  </div>
+  <div class="title-text">
+    <span>Place your appointment!</span>
+  </div>
+  <div class="menu">
+    <i class="fa-solid fa-bars" id="menu"></i>
+  </i>
+</div>
+<div class="container-main">
+  <div class="container2">
+    <div class="title_container">
+  <form class="form-appointment" action="/appointment" method="POST">
+    <input type="hidden" id="emp_name" name="employee_name" value="">
+    <div class="employee_container">
+      <div class="wrapper">
+        <div class="profile_pic"></div>
+        <div class="employee_info">
+          <span class="employee_type">Men's Hair</span>
+          <span class="employee_name" >Mr.Heshan Kanvinda</span>
+        </div>
+      </div>
+      <i class="fa-solid fa-angle-down" id="dropdown"></i>
+      <div class="list">
+        <div class="item">
+          <div class="profile_pic"></div>
+          <div class="employee_info">
+            <span class="employee_type">Women's Hair</span>
+            <span class="employee_name">Mr.Sahan Perera</span>
+          </div>
+        </div>
+        <div class="item">
+          <div class="profile_pic"></div>
+          <div class="employee_info">
+            <span class="employee_type">Bridal Dressing</span>
+            <span class="employee_name">Mr. Yohan Kavishka</span>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="date_container">
+      <div class="date_info">
+        <input type="date" id="date" name="date">
+      </div>
+    </div>
+
+    <div class="time_container">
+      <div class="time_info">
+        <input type="time" class="time" step="3600" name="time">
+      </div>
+      <div class="time_logo">
+        <!-- <i class="fa-regular fa-clock"></i> -->
+      </div>
+    </div>
+    <div class="button_container">
+        <button type="submit" class="add"><i class="fa-solid fa-plus"></i>Add</button>
+       <!--<button class="cancel"><i class="fa-solid fa-xmark"></i>Cancel</button> -->
+      </div>
+  </form>
+  </div>
+  <div class="content_container">
+    <div class="table_head_container">
+      <div class="table_title active">
+        <span class="table_date">02</span>
+        <span class="table_date_des">Today</span>
+      </div>
+      <div class="table_title notactive">
+        <span class="table_date">03</span>
+        <span class="table_date_des">Tommorow</span>
+      </div>
+      <div class="table_title notactive">
+        <span class="table_date">04</span>
+        <span class="table_date_des">Day after</span>
+      </div>
+    </div>
+    <div class="table_container">
+      <table class="table">
+        <thead>
+          <tr>
+            <th></th>
+            <th class="t_head">CUSTOMER</th>
+            <th class="t_head">APPOINTMENT</th>
+            <th class="t_head">WAITED</th>
+            <th class="t_head">STATUS</th>
+            <th></th>
+            <th></th>
+          </tr>
+        </thead>
+        <tbody>
+          {% set count = {} %}
+          {% for appointment in appointments %}
+            {% set emp = appointment.employee_name %}
+
+            {% if not count[emp] %}
+              {% set _ = count.update({emp:1}) %}
+            {% endif %}
+          <tr class='t_row' data-employee="{{ appointment.employee_name }}">
+            <td>
+              <div class="number yellow">{{ count[emp] }}</div>
+            </td>
+            <td>
+              <div class="customer_container">
+                <div class="customer_pro_pic">
+                </div>
+                <div class="customer_profile">
+                  <span class="customer_name">{{ appointment.username }}</span>
+                </div>
+              </div>
+            </td>
+            <td>
+              <span class="time">{{ appointment.time.strftime('%I:%M%p')}}</span>
+            </td>
+            <td>
+              <div class="waited">6 Mins</div>
+            </td>
+            <td>
+              <div class="status">On Going</div>
+            </td>
+            <td>
+              <button class="pay">Pay</button>
+            </td>
+          </tr>
+
+          {% set _ = count.update({emp: count[emp] + 1}) %}
+          {% endfor %}
+      
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+</div>
+</div>
+<script src="{{ url_for('static',filename='appointment-script.js')}}"></script>
+{% endblock content %}
