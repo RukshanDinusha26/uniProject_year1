@@ -11,6 +11,10 @@ from datetime import datetime
 def home():
     return render_template('home.html')
 
+@app.route("/account")
+def account():
+    return render_template('account.html')
+
 
 @app.route("/signup", methods=['GET', 'POST'])
 def signup():

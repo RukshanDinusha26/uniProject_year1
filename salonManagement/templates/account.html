@@ -1,18 +1,21 @@
+{% extends "layout.html" %}
 
-<link rel="stylesheet" href="appointment-style.css" />
+{% block head %}
+<link rel="stylesheet" href="{{ url_for('static',filename='account-style.css') }}" />
+{% endblock head %}
 
-
+{% block content %}
 <div class="header">
   <div class="bg-shape">
-  <img src="Images/blob(5).svg" class="bg-1">
-  <img src="Images/blob(6).svg" class="bg-1 bg-2">
-  <img src="Images/blob(4).svg" class="bg-1 bg-3">
-  <img src="Images/blob(5).svg" class="bg-1 bg-4">
-  <img src="Images/leaves1.svg" class="bg-lf">
-  <img src="Images/leaves1.svg" class="bg-lf lf-1">
-  <img src="Images/leaves1.svg" class="bg-lf lf-2">
-  <img src="Images/leaves1.svg" class="bg-lf lf-3">
-  <img src="Images/leaves1.svg" class="bg-lf lf-4">
+  <img src="{{ url_for('static',filename='Images/blob(5).svg') }}" class="bg-1">
+  <img src="{{ url_for('static',filename='Images/blob(6).svg') }}" class="bg-1 bg-2">
+  <img src="{{ url_for('static',filename='Images/blob(4).svg') }}" class="bg-1 bg-3">
+  <img src="{{ url_for('static',filename='Images/blob(5).svg') }}" class="bg-1 bg-4">
+  <img src="{{ url_for('static',filename='Images/leaves1.svg') }}" class="bg-lf">
+  <img src="{{ url_for('static',filename='Images/leaves1.svg') }}" class="bg-lf lf-1">
+  <img src="{{ url_for('static',filename='Images/leaves1.svg') }}" class="bg-lf lf-2">
+  <img src="{{ url_for('static',filename='Images/leaves1.svg') }}" class="bg-lf lf-3">
+  <img src="{{ url_for('static',filename='Images/leaves1.svg') }}" class="bg-lf lf-4">
   </div>
   <div class="title-text">
     <span>Account</span>
@@ -55,3 +58,4 @@
   </div>
 </div>
 
+{% endblock content %}
