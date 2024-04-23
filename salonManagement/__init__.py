@@ -41,8 +41,8 @@ class Appointment(db.Model):
     username = db.Column(db.String(20),db.ForeignKey('user.username'),nullable=False) 
     employee_name = db.Column(db.String(255))
     employee_id = db.Column(db.String(255), db.ForeignKey('employee.employee_id'))
-    date = db.Column(db.Date, nullable=False)
-    time = db.Column(db.Time, nullable=False)
+    date = db.Column(db.Date, nullable=False,unique = True)
+    time = db.Column(db.Time, nullable=False, unique = True)
 
     user = db.relationship('User', back_populates='appointment')
     employee = db.relationship('Employee', back_populates='appointment')
@@ -58,6 +58,7 @@ class Employee(db.Model):
 
     user = db.relationship('User', back_populates='employee')
     appointment = db.relationship('Appointment', back_populates='employee')
+
     
 
 from salonManagement import routes #to avoid circular import 

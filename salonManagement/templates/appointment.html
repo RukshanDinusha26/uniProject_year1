@@ -2,6 +2,8 @@
 
 {% block head %}
 <link rel="stylesheet" href="{{ url_for('static',filename='appointment-style.css')}}" />
+<script src="https://code.jquery.com/jquery-3.7.1.js" integrity="sha256-eKhayi8LEQwp4NKxN+CfCh+3qOVUtJn3QNZ0TciWLP4="
+  crossorigin="anonymous"></script>
 {% endblock head%}
 
 {% block content %}
@@ -33,40 +35,42 @@
       <div class="wrapper">
         <div class="profile_pic"></div>
         <div class="employee_info">
-          <span class="employee_type">Men's Hair</span>
-          <span class="employee_name" >Mr.Heshan Kanvinda</span>
+          <span class="employee_type">{{ employees[0].employee_type }}</span>
+          <span class="employee_name" >Mr.{{ employees[0].employee_name }}</span>
         </div>
       </div>
       <i class="fa-solid fa-angle-down" id="dropdown"></i>
+
       <div class="list">
+        {% for employee in employees %}
         <div class="item">
           <div class="profile_pic"></div>
           <div class="employee_info">
-            <span class="employee_type">Women's Hair</span>
-            <span class="employee_name">Mr.Sahan Perera</span>
+            <span class="employee_type">{{ employee.employee_type }}</span>
+            <span class="employee_name">Mr.{{ employee.employee_name }}</span>
           </div>
         </div>
-        <div class="item">
-          <div class="profile_pic"></div>
-          <div class="employee_info">
-            <span class="employee_type">Bridal Dressing</span>
-            <span class="employee_name">Mr. Yohan Kavishka</span>
-          </div>
-        </div>
+        {% endfor %}
       </div>
     </div>
     <div class="date_container">
       <div class="date_info">
-        <input type="date" id="date" name="date">
+        <input type="date" id="date" name="date" class="datepicker">
       </div>
     </div>
 
     <div class="time_container">
       <div class="time_info">
-        <input type="time" class="time" step="3600" name="time">
+        Select Time
+      </div>
+      <div class="time_dropdown">
+        <div class="time_item">1</div>
+        <div class="time_item">1</div>
+        <div class="time_item">1</div>
+        <div class="time_item">1</div>
       </div>
       <div class="time_logo">
-        <!-- <i class="fa-regular fa-clock"></i> -->
+        <i class="fa-regular fa-clock"></i>
       </div>
     </div>
     <div class="button_container">
@@ -148,5 +152,6 @@
 
 </div>
 </div>
+<script src="https://code.jquery.com/jquery-3.1.0.js" ></script>
 <script src="{{ url_for('static',filename='appointment-script.js')}}"></script>
 {% endblock content %}

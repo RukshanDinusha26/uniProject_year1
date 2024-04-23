@@ -1,4 +1,5 @@
-from flask import request, render_template, url_for, flash, redirect
+import json
+from flask import request, render_template, url_for, flash, redirect, jsonify
 from salonManagement import db, User, app, bcrypt, Employee, Appointment
 from salonManagement.forms import SignUpForm , LoginForm
 from flask_sqlalchemy import SQLAlchemy
@@ -55,7 +56,14 @@ def signup():
             
 
 @app.route("/appointment", methods=['GET','POST'])
-def appointment():
+def appointment(): #can also get data by AJAX       
+
+    if request.is_json:
+        if request.method == 'POST':
+            datepicked = request.json.get('date')
+            print()
+            print(datepicked)
+            return jsonify({'date': datepicked})
 
     if request.method == 'POST':
         employee_name = request.form['employee_name']
