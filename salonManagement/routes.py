@@ -5,6 +5,7 @@ from salonManagement.forms import SignUpForm , LoginForm
 from flask_sqlalchemy import SQLAlchemy
 from flask_login import login_user, current_user, logout_user
 from datetime import datetime
+from sqlalchemy import func
 
 
 @app.route("/")
@@ -61,15 +62,30 @@ def appointment(): #can also get data by AJAX
     if request.is_json:
         if request.method == 'POST':
             datepicked = request.json.get('date')
+            selectedEmployee = request.json.get('selectedEmp')
             print()
             print(datepicked)
-            return jsonify({'date': datepicked})
+            print(selectedEmployee)
+            datepicked_obj = datetime.strptime(datepicked,'%Y-%m-%d').date()
+            appt = Appointment.query.filter(Appointment.date.like(datepicked_obj), Appointment.employee_name.like(selectedEmployee)).all()
+            print(appt)
+
+            hours = [8,9,10,11,12,13,14,15,16,17]
+            for appt_item in appt:
+                time_obj = db.session.query(func.strftime('%H',appt_item.time)).first()
+                print(time_obj)
+                i = int(time_obj[0])
+
+                if i in hours:
+                    hours = [x for x in hours if x !=i ]
+            return jsonify({'hours': hours})
+                
 
     if request.method == 'POST':
         employee_name = request.form['employee_name']
         date = request.form['date']
         time = request.form['time']
-        
+    
         #employee = Employee.query.filter_by(employee_name=employee_name).first()
         current_username = current_user.username
         #if employee:
