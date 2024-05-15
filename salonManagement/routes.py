@@ -54,7 +54,35 @@ def signup():
   #  
    # return render_template('signup.html', title="Loginin", form2=form2)
 
-            
+@app.route("/appointment/add",methods=['GET', 'POST'])         
+def appointmentAdd():
+    if request.method == 'POST':
+        employee_name = request.form.get('appEmp')
+        date = request.form.get('appDate')
+        time = request.form.get('appTime')
+        print(employee_name)
+        print(date)
+        print(time)
+    
+        #dont use employee = Employee.query.filter_by(employee_name=employee_name).first()
+        current_username = current_user.username
+        #dont use if employee:
+        date_obj = datetime.strptime(date, '%Y-%m-%d').date()
+        
+        time_obj = datetime.strptime(time, '%H:%M').time()
+
+        appointment = Appointment (
+                username=current_username,
+                employee_name = employee_name,
+                employee_id= '123',
+                date = date_obj,
+                time=time_obj
+            )
+        db.session.add(appointment)
+        db.session.commit()
+
+        return jsonify({'user':current_username})
+    
 
 @app.route("/appointment", methods=['GET','POST'])
 def appointment(): #can also get data by AJAX       
@@ -80,27 +108,6 @@ def appointment(): #can also get data by AJAX
                     hours = [x for x in hours if x !=i ]
             return jsonify({'hours': hours})
                 
-
-    if request.method == 'POST':
-        employee_name = request.form['employee_name']
-        date = request.form['date']
-        time = request.form['time']
-    
-        #employee = Employee.query.filter_by(employee_name=employee_name).first()
-        current_username = current_user.username
-        #if employee:
-        date_obj = datetime.strptime(date, '%Y-%m-%d').date()
-        time_obj = datetime.strptime(time, '%H:%M').time()
-
-        appointment = Appointment (
-                username=current_username,
-                employee_name = employee_name,
-                employee_id= '123',
-                date = date_obj,
-                time=time_obj
-            )
-        db.session.add(appointment)
-        db.session.commit()
 
     employees = Employee.query.all()
     appointments = Appointment.query.all()

@@ -7,6 +7,10 @@
 {% endblock head%}
 
 {% block content %}
+<body>
+
+<div class="popup-container">
+</div>
 <div class="header">
   <div class="bg-shape">
   <img src="{{ url_for('static',filename='Images/blob(5).svg') }}" class="bg-1">
@@ -29,7 +33,6 @@
 <div class="container-main">
   <div class="container2">
     <div class="title_container">
-  <form class="form-appointment" action="/appointment" method="POST">
     <input type="hidden" id="emp_name" name="employee_name" value="">
     <div class="employee_container">
       <div class="wrapper">
@@ -71,7 +74,7 @@
       </div>
     </div>
     <div class="button_container">
-        <button type="submit" class="add"><i class="fa-solid fa-plus"></i>Add</button>
+        <button class="add" onclick="addAppointment()"><i class="fa-solid fa-plus"></i>Add</button>
        <!--<button class="cancel"><i class="fa-solid fa-xmark"></i>Cancel</button> -->
       </div>
   </form>
@@ -149,6 +152,8 @@
 
 </div>
 </div>
+
 <script src="https://code.jquery.com/jquery-3.1.0.js" ></script>
 <script src="{{ url_for('static',filename='appointment-script.js')}}"></script>
+</body>
 {% endblock content %}
