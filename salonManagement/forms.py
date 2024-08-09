@@ -29,9 +29,16 @@ class SignUpForm(FlaskForm):
 
 class LoginForm(FlaskForm):
     username = StringField('Username', validators=[DataRequired()])
-
     password = PasswordField('Password', validators=[DataRequired()])
-
     remember = BooleanField('Remember Me')
-
     submit = SubmitField('Login')
+
+    def validate_username(self, username):
+        user = User.query.filter_by(username=username.data).first()
+        if user is None:
+            raise ValidationError("No account found with this username.")
+    
+    def validate_password(self, password):
+        user = User.query.filter_by(username=self.username.data).first()
+        if user and user.password != password.data:
+            raise ValidationError("Incorrect password.")

@@ -356,9 +356,12 @@ form.sign-up-form{
 }
 
 .invalid {
-  width: 100%;
+  display: block;
+  width: 380px;
   margin-top: 3px;
+  margin-left: 40px;
   font-weight: 400;
   color: red;
   font-size: 10px;
+
 }
