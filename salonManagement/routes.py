@@ -114,4 +114,8 @@ def logout():
 @app.route("/account")
 def account():
     return render_template("account.html")
+
+@app.route("/account/settings")
+def account_settings():
+    return render_template("accountSet.html")
     

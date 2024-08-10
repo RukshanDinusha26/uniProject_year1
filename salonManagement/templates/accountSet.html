@@ -1,0 +1,151 @@
+{% extends "layout.html" %}
+
+{% block head %}
+<link rel="stylesheet" href="{{ url_for('static',filename='accountSet-style.css') }}" />
+{% endblock head %}
+
+{% block content %}
+        <div class="header">
+            <div class="bg-shape">
+                <img src="{{ url_for('static',filename='Images/blob(5).svg') }}" class="bg-1">
+                <img src="{{ url_for('static',filename='Images/blob(6).svg') }}" class="bg-1 bg-2">
+                <img src="{{ url_for('static',filename='Images/blob(4).svg') }}" class="bg-1 bg-3">
+                <img src="{{ url_for('static',filename='Images/blob(5).svg') }}" class="bg-1 bg-4">
+                <img src="{{ url_for('static',filename='Images/leaves1.svg') }}" class="bg-lf">
+                <img src="{{ url_for('static',filename='Images/leaves1.svg') }}" class="bg-lf lf-1">
+                <img src="{{ url_for('static',filename='Images/leaves1.svg') }}" class="bg-lf lf-2">
+                <img src="{{ url_for('static',filename='Images/leaves1.svg') }}" class="bg-lf lf-3">
+                <img src="{{ url_for('static',filename='Images/leaves1.svg') }}" class="bg-lf lf-4">
+            </div>
+            <div class="title-text">
+                <span>Account - Settings</span>
+            </div>
+            <div class="menu">
+                <i class="fa-solid fa-bars" id="menu"></i>
+            </div>
+            <div class="disc">
+            </div>
+            <div class="disc down">
+            </div>
+            <div class="container-main">
+                <div class="container-body">
+                    <div class="proSetting-container">
+                        <div class="side-container">
+                            <div class="side-sub-container">
+                                <div class="tab active">Profile Info</div>
+                                <div class="tab">Personal Info</div>
+                                <div class="tab">Payment Settings</div>
+                                <div class="tab">Account settings</div>
+                                <div class="tab">Notification</div>
+                            </div>
+                        </div>
+                        <div class="setting-container">
+                            <form action="">
+                            
+                                <div class="setting-sub-container active">
+                                    <div class="title-cont">
+                                        <span>Edit Profile</span>
+                                    </div>
+                                    <div class="img-main-cont">
+                                        <div class="img-cont">
+                                            <div class="img-holder">
+                                            </div>
+                                        </div>
+                                        <div class="img-btn-cont">
+                                            <div class="change-ctn">
+                                                <button class="change-img-btn">Change Image
+                                                </button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="info-cont">
+                                            <div class="profile-box">
+                                                    <div class="info-col">
+                                                        <div class="r-1">
+                                                            <label class="username-label" for="username">Username</label>
+                                                            <input type="text" class="username">
+
+                                                            <label class="email-label" for="email">Email</label>
+                                                            <input type="text" class="email">
+                                                        </div>
+                                                        <div class="r-2">
+                                                            <label class="fname-label" for="fname">First Name</label>
+                                                            <input type="text" class="fname">
+                                                            <label class="lname-label" for="lname">Last Name</label>
+                                                            <input type="text" class="lname">
+                                                        </div>
+                                                    </div>
+                                                    <div class="about-col">
+                                                        <label class="about-label" for="about">About</label>
+                                                        <textarea id="about" rows="4"></textarea>
+                                                    </div>
+                                                    
+                                            </div>
+                                    </div>
+
+                                </div>
+                                <div class="setting-sub-container">
+                                            <div class="title-cont">
+                                                <span>Edit Personal Info</span>
+                                            </div>
+                                            <div class="personal-box">
+                                                Lorem ipsum dolor sit amet consectetur adipisicing elit.
+                                                Veniam impedit incidunt rem laboriosam, illum perferendis explicabo corporis ex facere, doloribus neque odio eligendi? Debitis, 
+                                                harum hic. Iste officia cum facere?
+                                            </div>
+                                </div>
+                                <div class="setting-sub-container">
+                                            <div class="title-cont">
+                                                <span>Edit Payment Settings</span>
+                                            </div>
+                                            <div class="personal-box">
+                                                Lorem ipsum dolor sit amet consectetur adipisicing elit.
+                                                Veniam impedit incidunt rem laboriosam, illum perferendis explicabo corporis ex facere, doloribus neque odio eligendi? Debitis, 
+                                                harum hic. Iste officia cum facere?
+                                            </div>
+                                </div><div class="setting-sub-container">
+                                            <div class="title-cont">
+                                                <span>Edit Account Settings</span>
+                                            </div>
+                                            <div class="personal-box">
+                                                Lorem ipsum dolor sit amet consectetur adipisicing elit.
+                                                Veniam impedit incidunt rem laboriosam, illum perferendis explicabo corporis ex facere, doloribus neque odio eligendi? Debitis, 
+                                                harum hic. Iste officia cum facere?
+                                            </div>
+                                </div><div class="setting-sub-container">
+                                            <div class="title-cont">
+                                                <span>Edit Notifications</span>
+                                            </div>
+                                            <div class="personal-box">
+                                                Lorem ipsum dolor sit amet consectetur adipisicing elit.
+                                                Veniam impedit incidunt rem laboriosam, illum perferendis explicabo corporis ex facere, doloribus neque odio eligendi? Debitis, 
+                                                harum hic. Iste officia cum facere?
+                                            </div>
+                                </div>
+                                <div class="btn-col">
+                                    <div class="btn-1">
+                                        <button class="change-img-btn">save changes</button>
+                                    </div>
+                                    <div class="btn-2">
+                                        <button class="change-img-btn">discard</button>
+                                    </div>
+                                </div>
+                            </form>
+
+                </div>
+            </div>
+        <script>
+            const tabs = document.querySelectorAll('.tab');
+            const all_content = document.querySelectorAll('.setting-sub-container');
+
+            tabs.forEach((tab,index)=>{
+                tab.addEventListener('click',()=>{
+                    tabs.forEach(tab=>{tab.classList.remove('active')});
+                    tab.classList.add('active');
+                
+                all_content.forEach(content=>{content.classList.remove('active')});
+                all_content[index].classList.add('active');
+                })
+            })
+        </script>
+{% endblock content %}

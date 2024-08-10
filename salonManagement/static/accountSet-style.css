@@ -1,0 +1,282 @@
+/* importing Poppins fonts from google fonts */
+@import url('https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Lobster&display=swap');
+
+*{
+  font-family:'Poppins', sans-serif;
+}
+
+body{
+  height: 100%;
+  margin: 0;
+  overflow-x: hidden;
+}
+
+.container{
+  display: flex;
+}
+
+.container-main{
+  display:flex;
+  justify-content: center;
+}
+.header{
+  width: 100%;
+  height: 300px;
+  background: linear-gradient(to left, #bb86c0 0%, #a468a9 28.53%, #7d4a95 75.52%);
+  position: relative;
+  left: 0;
+}
+
+.title-text{
+  position: absolute;
+  top: 30px;
+  left: 13.5%;
+}
+.title-text span{
+  font-family: 'Lobster';
+  font-size: 2rem;
+  color: white;
+}
+
+
+.bg-1 {
+  position: absolute;
+  z-index: -1;
+  top: 0;
+  height: 200vh;
+  right: -50px;
+  transform: translateX(30%);
+  opacity: 10%;
+}
+
+.bg-2 {
+  top: 200px;
+  right: 100px;
+}
+
+.bg-3 {
+  top: -100px;
+  right: 100px;
+}
+
+.bg-4 {
+  top: -600px;
+}
+
+.bg-lf {
+  z-index: -1;
+  position: absolute;
+  height: 20vh;
+  opacity: 15%;
+  right: 100px;
+  top: 274px;
+  transform: scaleX(-1);
+}
+
+.lf-1 {
+  top: 561px;
+  right: 1143px;
+  transform: scaleX(1)
+}
+
+
+.lf-2 {
+  right: 30px;
+  top: 561px;
+  transform: scaleY(-1);
+}
+
+.lf-3 {
+  right: 662px;
+  top: 423px;
+  transform: scaleX(-1);
+}
+
+.lf-4 {
+  right: 205px;
+  top: 400px;
+  transform: scale(-1, -1);
+}
+
+.bg-shape{
+  position: absolute;
+  z-index: 1;
+  top: -400px;
+  right: 0;
+  height: 400px;
+}
+
+/* Body */
+
+.container-body{
+  z-index: 1000;
+  background-color: white;
+  height: 500px;
+  width: 70%;
+  position: relative;
+  top: 110px;
+  border-radius: 5px;
+  box-shadow: 0px 0px 3px 3px rgba(0, 0, 0, 0.122);
+  overflow: hidden;
+}
+
+.proSetting-container{
+  display: flex;
+  flex-direction: row;
+  height: 100%;
+  width: 100%;
+}
+
+.side-container{
+  width: 25%;
+  height: 100%;
+}
+
+.side-sub-container{
+  width: 80%;
+  margin-left: 15%;
+  margin-top: 10%;
+  display: flex;
+  flex-direction: column;
+}
+.side-sub-container div{
+  display: flex;
+  height: 50px;
+  align-items: center;
+  font-size: 0.9rem;
+  font-weight: 600;
+}
+
+.side-sub-container div:hover{
+  color:#a067ba;
+  cursor: pointer;
+}
+
+.side-sub-container div:focus{
+  color:#7d4a95;
+}
+
+.setting-container{
+  width:75%;
+}
+.setting-sub-container{
+  width: 90%;
+  height: 90%;
+  margin-top: 3%;
+  margin-left: 5%;
+  display: flex;
+  flex-direction: column;
+}
+.title-cont{
+  height: 10%;
+  width: 100%;
+}
+
+.title-cont span{
+  font-size: 1.5rem;
+}
+.img-main-cont{
+  height: 30%;
+  width: 100%;
+  display: flex;
+  flex-direction: row;
+}
+.img-cont{
+  width: 25%;
+  display: flex;
+  align-items: center;
+}
+.img-holder{
+  height: 100px;
+  width: 100px;
+  background-color: grey;
+  border-radius: 1000px;
+}
+
+.img-btn-cont{
+  position: relative;
+  width: 100%;
+}
+
+.change-ctn{
+  position: absolute;
+  bottom: 20px;
+}
+
+.change-img-btn{
+  background-color: #a067ba;
+  border: none;
+  padding: 8px 8px;
+  color: white;
+  border-radius: 40px;
+}
+.change-img-btn:hover{
+  background-color: #87559e;
+  cursor: pointer;
+}
+
+.info-cont{
+  width: 100%;
+  height: 60%;
+}
+
+form{
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  height: 100%;
+}
+.info-col{
+  display: flex;
+  flex-direction: row;
+}
+.r-1,.r-2{
+  width: 50%;
+  display: flex;
+  flex-direction: column;
+}
+.about-col{
+  display: flex;
+  flex-direction: column;
+  width: 90%;
+}
+
+.about-col textarea{
+  resize: none;
+}
+
+.btn-col{
+  display: flex;
+  flex-direction: row;
+  position: relative;
+  height:10%;
+  margin-top: 20px;
+}
+.btn-1{
+  position: absolute;
+  right: 10%;
+  bottom: 100%;
+}
+
+.btn-2{
+  position: absolute;
+  right: 30%;
+  bottom:100%;
+}
+
+.tab.active{
+  color:#bb86c0;
+}
+
+.setting-sub-container{
+  display: none;
+  animation: moving .5s ease;
+}
+@keyframes moving{
+  from{transform: translateY(50px);opacity: 0;}
+}
+
+.setting-sub-container.active{
+  display: block;
+}
