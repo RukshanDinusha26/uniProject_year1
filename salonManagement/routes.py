@@ -7,7 +7,13 @@ from flask_login import login_user, current_user, logout_user
 from datetime import datetime
 from sqlalchemy import func
 import time
-
+import pandas 
+import matplotlib
+matplotlib.use('Agg') 
+import matplotlib.pyplot as plt
+import io
+import base64
+import seaborn 
 
 @app.route("/")
 @app.route("/home")
@@ -130,3 +136,61 @@ def report_financial():
 @app.route("/report/appointment")
 def report_appointments():
     return render_template("report_appointments.html")
+
+def load_data():
+    data = pandas.read_csv('C:\\Users\\HP\\Documents\\Project\\uniProject_year1\\salonManagement\\customer.csv')
+    return data
+
+@app.route("/report/customer_trends")
+def report_customer_trends():
+    data = load_data()
+
+    age_groups = pandas.cut(data['age'], bins=[0, 18, 30, 40, 50, 60, 100], 
+                        labels=['0-18', '19-30', '31-40', '41-50', '51-60', '61+'])
+    age_distribution = age_groups.value_counts().sort_index()
+
+    gender_distribution = data['gender'].value_counts()
+
+    fig, ax = plt.subplots(figsize=(8, 6))
+    seaborn.violinplot(x='gender', y='age', data=data, hue='gender', ax=ax, palette='pastel', legend=False)
+    
+    y_min, y_max = ax.get_ylim()
+    y_values = range(int(y_min), int(y_max) + 1) 
+
+    for y in y_values:
+        ax.axhline(y=y, color='lightgray', linestyle='-', linewidth=0.5)
+
+    ax.set_xlabel('Gender')
+    ax.set_ylabel('Age')
+
+    violin_img = io.BytesIO()
+    plt.savefig(violin_img, format='png')
+    violin_img.seek(0)
+    violin_img_base = base64.b64encode(violin_img.getvalue()).decode('utf-8')
+
+    plt.close()
+
+
+    fig_age, ax_age = plt.subplots(figsize=(8, 6))
+    age_distribution.plot(kind='bar', ax=ax_age, color='skyblue')
+    ax_age.set_xlabel('Age Group')
+    ax_age.set_ylabel('Count')
+
+    age_img = io.BytesIO()
+    plt.savefig(age_img, format='png')
+    age_img.seek(0)
+    age_img_base = base64.b64encode(age_img.getvalue()).decode('utf-8')
+
+    plt.close(fig_age)
+
+    fig_gender, ax_gender = plt.subplots(figsize=(8, 6))
+    gender_distribution.plot(kind='pie', ax=ax_gender, autopct='%1.1f%%', colors=['lightcoral', 'lightblue'])
+
+    gender_img = io.BytesIO()
+    plt.savefig(gender_img, format='png')
+    gender_img.seek(0)
+    gender_img_base = base64.b64encode(gender_img.getvalue()).decode('utf-8')
+
+    plt.close(fig_gender)
+
+    return render_template('report_customer_trends.html', age_plot_img=age_img_base, gender_plot_img=gender_img_base, violin_plot_img=violin_img_base)

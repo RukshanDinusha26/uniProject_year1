@@ -32,10 +32,11 @@
         <div class="sub-header">
             <a href="{{ url_for('report_financial') }}"><button class="btn">Finacial Reports</button></a>
             <a href="{{ url_for('report_appointments') }}"><button class="btn">Appointment Reports</button></a>
-            <button class="btn">Customer Trends</button>
+            <a href="{{ url_for('report_customer_trends') }}"><button class="btn">Customer Trends</button></a>
             <button class="btn">Service Trends</button>
             <button class="btn">Revenue Prediction</button>
         </div>
+        
         {% block content2 %}
         {% endblock content2 %}
 

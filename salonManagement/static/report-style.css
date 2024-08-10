@@ -26,6 +26,7 @@ body{
   background: linear-gradient(to left, #bb86c0 0%, #a468a9 28.53%, #7d4a95 75.52%);
   position: relative;
   left: 0;
+  overflow: hidden;
 }
 
 .title-text{
@@ -51,16 +52,19 @@ body{
 }
 
 .bg-2 {
+  z-index: -1;
   top: 200px;
   right: 100px;
 }
 
 .bg-3 {
+  z-index: -1;
   top: -100px;
   right: 100px;
 }
 
 .bg-4 {
+  z-index: -1;
   top: -600px;
 }
 
@@ -75,6 +79,7 @@ body{
 }
 
 .lf-1 {
+  z-index: -1;
   top: 561px;
   right: 1143px;
   transform: scaleX(1)
@@ -140,6 +145,7 @@ body{
   display: flex;
   justify-content: center; 
   padding: 20px; 
+  z-index: 15;
 }
 
 .container {
@@ -206,4 +212,31 @@ th {
 .summary-table td:last-child {
   text-align: left;
   color: #7d4a95;
+}
+
+.title{
+  display: flex; 
+  color: #7d4a95;
+  margin-bottom: 1rem;
+  font-size: 2rem;
+  font-weight: 700;
+}
+
+.sub-title{
+  display: flex; 
+  color: #7d4a95;
+  margin-bottom: 1rem;
+  font-size: 1rem;
+  font-weight: 700;
+}
+
+.img-cont{
+  width: 100%;
+  max-width: 800px;
+  margin-top: 1rem;
+  background-color: #fff;
+  padding: 20px;
+  border-radius: 8px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  z-index: 15;
 }

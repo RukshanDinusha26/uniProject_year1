@@ -1,0 +1,22 @@
+{% extends "report.html" %}
+
+{% block content2 %}
+<div class="Main-container">
+    <div class="container">
+        <div class="title">Customer Analysis</div>
+        <div class="sub-title">Age Demographics</div>
+        <div class="img_cont">
+            <img src="data:image/png;base64,{{ age_plot_img }}" alt="Age and Gender Demographics Plot">
+        </div>
+        <div class="sub-title">Genger Demographics</div>
+        <div class="img_cont">
+            <img src="data:image/png;base64,{{ gender_plot_img }}" alt="Age and Gender Demographics Plot">
+        </div>
+        <div class="sub-title">Age vs Gender Analysis</div>
+        <div class="img_cont">
+            <img src="data:image/png;base64,{{ violin_plot_img }}" alt="Age and Gender Demographics Plot">
+        </div>
+    </div>
+</div>
+
+{% endblock content2 %}
