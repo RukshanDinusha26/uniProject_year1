@@ -1,0 +1,209 @@
+/* importing Poppins fonts from google fonts */
+@import url('https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Lobster&display=swap');
+
+*{
+  font-family:'Poppins', sans-serif;
+}
+
+body{
+  height: 100%;
+  margin: 0;
+  overflow-x: hidden;
+}
+
+.container{
+  display: flex;
+}
+
+.container-main{
+  display:flex;
+  justify-content: center;
+}
+.header{
+  width: 100%;
+  height: 100px;
+  background: linear-gradient(to left, #bb86c0 0%, #a468a9 28.53%, #7d4a95 75.52%);
+  position: relative;
+  left: 0;
+}
+
+.title-text{
+  position: absolute;
+  top: 30px;
+  left: 13.5%;
+}
+.title-text span{
+  font-family: 'Lobster';
+  font-size: 2rem;
+  color: white;
+}
+
+
+.bg-1 {
+  position: absolute;
+  z-index: -1;
+  top: 0;
+  height: 200vh;
+  right: -50px;
+  transform: translateX(30%);
+  opacity: 10%;
+}
+
+.bg-2 {
+  top: 200px;
+  right: 100px;
+}
+
+.bg-3 {
+  top: -100px;
+  right: 100px;
+}
+
+.bg-4 {
+  top: -600px;
+}
+
+.bg-lf {
+  z-index: -1;
+  position: absolute;
+  height: 20vh;
+  opacity: 15%;
+  right: 100px;
+  top: 274px;
+  transform: scaleX(-1);
+}
+
+.lf-1 {
+  top: 561px;
+  right: 1143px;
+  transform: scaleX(1)
+}
+
+
+.lf-2 {
+  right: 30px;
+  top: 561px;
+  transform: scaleY(-1);
+}
+
+.lf-3 {
+  right: 662px;
+  top: 423px;
+  transform: scaleX(-1);
+}
+
+.lf-4 {
+  right: 205px;
+  top: 400px;
+  transform: scale(-1, -1);
+}
+
+.bg-shape{
+  position: absolute;
+  z-index: 1;
+  top: -400px;
+  right: 0;
+  height: 400px;
+}
+
+/* Body */
+
+.sub-header{
+  display: flex;
+  flex-direction: row;
+  margin-top: 2%;
+  justify-content: center;
+}
+
+.btn{
+  background-color: transparent;
+  border-radius: 8px;
+  color:#7d4a95;
+  font-weight: 500;
+  border: 2px solid #7d4a95;
+  margin-left: 2rem;
+  margin: 5px;
+  z-index: 10;
+}
+.sub-header a{
+  z-index: 10;
+}
+
+.btn:hover{
+  background-color: #7d4a95;
+  color: white;
+  cursor: pointer;
+}
+
+.Main-container {
+  display: flex;
+  justify-content: center; 
+  padding: 20px; 
+}
+
+.container {
+  width: 100%;
+  max-width: 600px; 
+  margin: 0 20px; 
+  display: flex;
+  flex-direction: column;
+}
+
+.select-cont {
+  width: 100%;
+}
+
+select {
+  padding: 10px;
+  font-size: 12px;
+  border-radius: 5px;
+  border: 1px solid #ccc;
+  box-sizing: border-box; 
+}
+
+.table-container {
+
+  width: 100%;
+  max-width: 800px;
+  margin-top: 1rem;
+  background-color: #fff;
+  padding: 20px;
+  border-radius: 8px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-bottom: 20px;
+}
+
+th, td {
+  text-align: left;
+  padding: 12px;
+  border-bottom: 1px solid #ddd;
+}
+
+th {
+  background-color: #7d4a95;
+  color: white;
+}
+
+.service-table tbody tr:nth-child(even) {
+  background-color: #f2f2f2;
+}
+
+.summary-table td {
+  font-weight: bold;
+  background-color: #f9f9f9;
+}
+
+.summary-table td:first-child {
+  text-align: right;
+}
+
+.summary-table td:last-child {
+  text-align: left;
+  color: #7d4a95;
+}

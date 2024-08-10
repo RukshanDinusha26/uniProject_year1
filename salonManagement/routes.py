@@ -118,4 +118,15 @@ def account():
 @app.route("/account/settings")
 def account_settings():
     return render_template("accountSet.html")
-    
+
+@app.route("/report")
+def report():
+    return render_template("report.html")
+
+@app.route("/report/financial")   
+def report_financial():
+    return render_template("report_financial.html") 
+
+@app.route("/report/appointment")
+def report_appointments():
+    return render_template("report_appointments.html")

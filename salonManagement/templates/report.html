@@ -1,0 +1,43 @@
+{% extends "layout.html" %}
+
+{% block head %}
+<link rel="stylesheet" href="{{ url_for('static',filename='report-style.css') }}" />
+{% endblock head %}
+
+{% block content %}
+    <body>
+        <div class="header">
+            <div class="bg-shape">
+                <img src="{{ url_for('static',filename='Images/blob(5).svg') }}" class="bg-1">
+                <img src="{{ url_for('static',filename='Images/blob(6).svg') }}" class="bg-1 bg-2">
+                <img src="{{ url_for('static',filename='Images/blob(4).svg') }}" class="bg-1 bg-3">
+                <img src="{{ url_for('static',filename='Images/blob(5).svg') }}" class="bg-1 bg-4">
+                <img src="{{ url_for('static',filename='Images/leaves1.svg') }}" class="bg-lf">
+                <img src="{{ url_for('static',filename='Images/leaves1.svg') }}" class="bg-lf lf-1">
+                <img src="{{ url_for('static',filename='Images/leaves1.svg') }}" class="bg-lf lf-2">
+                <img src="{{ url_for('static',filename='Images/leaves1.svg') }}" class="bg-lf lf-3">
+                <img src="{{ url_for('static',filename='Images/leaves1.svg') }}" class="bg-lf lf-4">
+            </div>
+            <div class="title-text">
+                <span>My Reports</span>
+            </div>
+            <div class="menu">
+                <i class="fa-solid fa-bars" id="menu"></i>
+            </div>
+            <div class="disc">
+            </div>
+            <div class="disc down">
+            </div>
+        </div>
+        <div class="sub-header">
+            <a href="{{ url_for('report_financial') }}"><button class="btn">Finacial Reports</button></a>
+            <a href="{{ url_for('report_appointments') }}"><button class="btn">Appointment Reports</button></a>
+            <button class="btn">Customer Trends</button>
+            <button class="btn">Service Trends</button>
+            <button class="btn">Revenue Prediction</button>
+        </div>
+        {% block content2 %}
+        {% endblock content2 %}
+
+    </body>
+{% endblock content %}
