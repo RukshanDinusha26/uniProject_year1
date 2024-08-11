@@ -15,13 +15,9 @@ import io
 import base64
 import seaborn 
 from sklearn.model_selection import TimeSeriesSplit
-from sklearn.model_selection import train_test_split
-from sklearn.linear_model import LinearRegression
 from sklearn.ensemble import RandomForestRegressor
 from sklearn.metrics import mean_absolute_error
-from sklearn.model_selection import train_test_split
 from sklearn.metrics import mean_absolute_error
-from statsmodels.tsa.statespace.sarimax import SARIMAX
 import numpy as np
 import os
 
@@ -38,7 +34,9 @@ def login():
         user = User.query.filter_by(username=form2.username.data).first()
         if user and (user.password == form2.password.data):
             login_user(user, remember=form2.remember.data)
+            flash('Welcom '+user.username+' ! You have Successfully Logged In', 'success')
             return redirect(url_for('home'))
+            
 
     return render_template('login.html', title="login",form2=form2)
 
@@ -46,7 +44,7 @@ def login():
 def signup():
     time.sleep(1.5)
     form1 = SignUpForm()
-    if request.method == 'POST' and form1.validate_on_submit():
+    if form1.validate_on_submit():
         usertype = request.form.get("usertype")
         emp_id = request.form.get("empid")
         name = request.form.get("username")
@@ -57,6 +55,7 @@ def signup():
                         username=name, password=password, email=email)
         db.session.add(new_user)
         db.session.commit()
+
         flash('Your account has been created! Please Log in to continue', 'success')
 
     return render_template('signup.html', title="signup", form1=form1)

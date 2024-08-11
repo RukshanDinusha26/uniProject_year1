@@ -43,3 +43,4 @@ input_field2.addEventListener('blur', () => {
   const icon = document.getElementById('pword')
   icon.style.removeProperty('color');
 });
+

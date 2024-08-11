@@ -19,7 +19,7 @@
     <ul class="navlist2">
       {% if current_user.is_authenticated %}
       <li><a href="{{ url_for('account') }}">Account</a></li>
-      <li><a href="{{ url_for('logout') }}">Log Out</a></li>
+      <li id="logoutBtn"><a>Log Out</a></li>
       {% else %}
       <li><a href="{{ url_for('login') }}">Log In</a></li>
       {% endif %}
@@ -70,5 +70,57 @@
   </div>
   
 </div>
+{% with messages = get_flashed_messages(with_categories=true) %}
+      {% if messages %}
+        <div class="flash-overlay">
+          <div class="flash-message">
+            {% for category, message in messages %}
+              <div class="alert alert-{{ category }}">
+                {{ message }}
+              </div>
+            {% endfor %}
+            <a href="{{ url_for('home') }}"><button class="btn">Continue</button></a>
+          </div>
+        </div>
+      {% endif %}
+  {% endwith %}
+
+  <div id="logoutModal" class="modal">
+    <div class="modal-content">
+      <div>Are you sure you want to log out?</div>
+      <div class="modal-buttons">
+        <a href="{{ url_for('logout') }}"><button class="btn btn-logout">Yes</button></a>
+        <button id="cancelBtn" class="btn btn-cancel">No</button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // Get the modal
+    var modal = document.getElementById("logoutModal");
+
+    // Get the button that opens the modal
+    var btn = document.getElementById("logoutBtn");
+
+    // Get the cancel button that closes the modal
+    var cancelBtn = document.getElementById("cancelBtn");
+
+    // When the user clicks the logout button, open the modal
+    btn.onclick = function() {
+      modal.style.display = "block";
+    }
+
+    // When the user clicks on cancel, close the modal
+    cancelBtn.onclick = function() {
+      modal.style.display = "none";
+    }
+
+    // When the user clicks anywhere outside of the modal, close it
+    window.onclick = function(event) {
+      if (event.target == modal) {
+        modal.style.display = "none";
+      }
+    }
+  </script>
 </body>
 {% endblock content %}
