@@ -1,0 +1,22 @@
+{% extends "report.html" %}
+
+{% block content2 %}
+<div class="Main-container">
+    <div class="container">
+        <div class="title">Service Trends</div>
+        <div class="sub-title">Monthly Service Booking Trends Over Time</div>
+        <div class="img_cont">
+            <img src="data:image/png;base64,{{ monthly_img_plot }}" alt="Age and Gender Demographics Plot">
+        </div>
+        <div class="sub-title">Total Revenue by Service</div>
+        <div class="img_cont">
+            <img src="data:image/png;base64,{{ revenue_img_plot }}" alt="Age and Gender Demographics Plot">
+        </div>
+        <div class="sub-title">Service Distribution</div>
+        <div class="img_cont">
+            <img src="data:image/png;base64,{{ distri_img_plot }}" alt="Age and Gender Demographics Plot">
+        </div>
+    </div>
+</div>
+
+{% endblock content2 %}

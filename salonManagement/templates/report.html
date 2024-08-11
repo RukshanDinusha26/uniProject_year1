@@ -33,8 +33,8 @@
             <a href="{{ url_for('report_financial') }}"><button class="btn">Finacial Reports</button></a>
             <a href="{{ url_for('report_appointments') }}"><button class="btn">Appointment Reports</button></a>
             <a href="{{ url_for('report_customer_trends') }}"><button class="btn">Customer Trends</button></a>
-            <button class="btn">Service Trends</button>
-            <button class="btn">Revenue Prediction</button>
+            <a href="{{ url_for('report_service_trends') }}"><button class="btn">Service Trends</button></a>
+            <a href="{{ url_for('report_predict_revenue') }}"><button class="btn">Revenue Prediction</button></a>
         </div>
         
         {% block content2 %}

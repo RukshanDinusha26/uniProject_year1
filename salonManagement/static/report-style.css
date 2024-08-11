@@ -150,7 +150,7 @@ body{
 
 .container {
   width: 100%;
-  max-width: 600px; 
+  max-width: 800px; 
   margin: 0 20px; 
   display: flex;
   flex-direction: column;
@@ -226,7 +226,7 @@ th {
   display: flex; 
   color: #7d4a95;
   margin-bottom: 1rem;
-  font-size: 1rem;
+  font-size: 1.5rem;
   font-weight: 700;
 }
 
@@ -239,4 +239,8 @@ th {
   border-radius: 8px;
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
   z-index: 15;
+}
+
+.predictImg{
+  width: 800px;
 }

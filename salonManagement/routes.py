@@ -14,6 +14,16 @@ import matplotlib.pyplot as plt
 import io
 import base64
 import seaborn 
+from sklearn.model_selection import TimeSeriesSplit
+from sklearn.model_selection import train_test_split
+from sklearn.linear_model import LinearRegression
+from sklearn.ensemble import RandomForestRegressor
+from sklearn.metrics import mean_absolute_error
+from sklearn.model_selection import train_test_split
+from sklearn.metrics import mean_absolute_error
+from statsmodels.tsa.statespace.sarimax import SARIMAX
+import numpy as np
+import os
 
 @app.route("/")
 @app.route("/home")
@@ -137,13 +147,13 @@ def report_financial():
 def report_appointments():
     return render_template("report_appointments.html")
 
-def load_data():
+def load_customer_data():
     data = pandas.read_csv('C:\\Users\\HP\\Documents\\Project\\uniProject_year1\\salonManagement\\customer.csv')
     return data
 
 @app.route("/report/customer_trends")
 def report_customer_trends():
-    data = load_data()
+    data = load_customer_data()
 
     age_groups = pandas.cut(data['age'], bins=[0, 18, 30, 40, 50, 60, 100], 
                         labels=['0-18', '19-30', '31-40', '41-50', '51-60', '61+'])
@@ -194,3 +204,165 @@ def report_customer_trends():
     plt.close(fig_gender)
 
     return render_template('report_customer_trends.html', age_plot_img=age_img_base, gender_plot_img=gender_img_base, violin_plot_img=violin_img_base)
+
+def load_service_data():
+    data = pandas.read_csv('C:\\Users\\HP\\Documents\\Project\\uniProject_year1\\salonManagement\\service.csv')
+       
+    data['Date'] = pandas.to_datetime(data['Date'], errors='coerce')
+    data = data.dropna(subset=['Date'])
+    return data
+
+@app.route("/report_service_trends")
+def report_service_trends():
+
+    data = load_service_data()
+
+    #total revenue by service
+    plt.figure(figsize=(10, 5))
+    revenue_data = data.groupby('Service')['Payment'].sum()
+    revenue_data.plot(kind='bar', color='skyblue')
+    plt.xlabel('Service')
+    plt.ylabel('Total Revenue ($)')
+    plt.grid(True)
+
+    revenue_img = io.BytesIO()
+    plt.tight_layout()
+    plt.savefig(revenue_img, format="png")
+    revenue_img_base = base64.b64encode(revenue_img.getbuffer()).decode("ascii")
+
+    #service distribution
+    plt.figure(figsize=(8, 8))
+    service_counts = data['Service'].value_counts()
+    service_counts.plot(kind='pie', autopct='%1.1f%%', startangle=140, colors=plt.cm.Paired.colors)
+    plt.ylabel('')
+
+    distri_img = io.BytesIO()
+    plt.tight_layout()
+    plt.savefig(distri_img, format="png")
+    distri_img_base = base64.b64encode(distri_img.getbuffer()).decode("ascii")
+    
+    #monthly service trends
+    plt.figure(figsize=(10, 5))
+    data['Month'] = data['Date'].dt.to_period('M')
+    monthly_trends = data.groupby(['Month', 'Service']).size().unstack(fill_value=0)
+    monthly_trends.plot(kind='line')
+    plt.xlabel('Month')
+    plt.ylabel('Number of Bookings')
+    plt.grid(True)
+
+    monthly_img = io.BytesIO()
+    plt.tight_layout()
+    plt.savefig(monthly_img, format="png")
+    monthly_img_base = base64.b64encode(monthly_img.getbuffer()).decode("ascii")
+
+    plt.close()
+
+    return render_template("report_service_trends.html",revenue_img_plot = revenue_img_base, distri_img_plot = distri_img_base,monthly_img_plot=monthly_img_base)
+
+@app.route("/report_predict_revenue")
+def report_predict_revenue():
+    # Load and preprocess data
+    data = pandas.read_csv('C:\\Users\\HP\\Documents\\Project\\uniProject_year1\\salonManagement\\income.csv')
+    data['Date'] = pandas.to_datetime(data['Date'])
+    
+    # Aggregate revenue by month
+    data['Month'] = data['Date'].dt.month
+    data['Year'] = data['Date'].dt.year
+    monthly_revenue = data.groupby(['Year', 'Month']).agg({'Payment': 'sum'}).reset_index()
+    monthly_revenue['Month_Year'] = monthly_revenue['Year'].astype(str) + '-' + monthly_revenue['Month'].astype(str).str.zfill(2)
+    
+    # Filter to include only this year's data
+    current_year = monthly_revenue['Year'].max()
+    this_year_revenue = monthly_revenue[monthly_revenue['Year'] == current_year]
+
+    # Feature Engineering: Adding lag features, rolling mean, etc.
+    this_year_revenue['Lag_1'] = this_year_revenue['Payment'].shift(1)
+    this_year_revenue['Lag_2'] = this_year_revenue['Payment'].shift(2)
+    this_year_revenue['Rolling_Mean_3'] = this_year_revenue['Payment'].rolling(window=3).mean()
+    this_year_revenue.dropna(inplace=True)
+
+    X = this_year_revenue[['Month', 'Lag_1', 'Lag_2', 'Rolling_Mean_3']]
+    y = this_year_revenue['Payment']
+
+    tscv = TimeSeriesSplit(n_splits=3)
+    
+    best_model = None
+    best_mae = float("inf")
+
+    for train_index, test_index in tscv.split(X):
+        X_train, X_test = X.iloc[train_index], X.iloc[test_index]
+        y_train, y_test = y.iloc[train_index], y.iloc[test_index]
+
+        model = RandomForestRegressor(n_estimators=100, random_state=42)
+        model.fit(X_train, y_train)
+
+        y_pred = model.predict(X_test)
+        mae = mean_absolute_error(y_test, y_pred)
+
+        if mae < best_mae:
+            best_mae = mae
+            best_model = model
+
+    last_month = this_year_revenue['Month'].max()
+    last_lag_1 = this_year_revenue.iloc[-1]['Payment']
+    last_lag_2 = this_year_revenue.iloc[-2]['Payment']
+    last_rolling_mean = this_year_revenue['Rolling_Mean_3'].iloc[-1]
+
+    future_months = []
+    future_payments = []
+
+    for i in range(1, 4):  
+        new_month = last_month + i
+        new_year = current_year
+        if new_month > 12:
+            new_month -= 12
+            new_year += 1
+
+        new_rolling_mean = (last_lag_1 + last_lag_2 + last_rolling_mean) / 3
+        future_data = pandas.DataFrame({
+            'Month': [new_month],
+            'Lag_1': [last_lag_1],
+            'Lag_2': [last_lag_2],
+            'Rolling_Mean_3': [new_rolling_mean]
+        })
+
+        future_payment = best_model.predict(future_data)[0]
+        future_months.append(f"{new_year}-{str(new_month).zfill(2)}")
+        future_payments.append(future_payment)
+
+        # Update lags for next iteration
+        last_lag_2 = last_lag_1
+        last_lag_1 = future_payment
+        last_rolling_mean = new_rolling_mean
+
+    # Combine past and future data for visualization
+    future_revenue_df = pandas.DataFrame({
+        'Month_Year': future_months,
+        'Payment': future_payments
+    })
+
+    combined_revenue = pandas.concat([this_year_revenue[['Month_Year', 'Payment']], future_revenue_df], ignore_index=True)
+
+    # Plotting
+    plt.figure(figsize=(12, 6))
+    plt.plot(this_year_revenue['Month_Year'], this_year_revenue['Payment'], marker='o', label='Actual Revenue', color='blue')
+    plt.plot(future_revenue_df['Month_Year'], future_revenue_df['Payment'], marker='x', linestyle='--', color='red', label='Predicted Revenue')
+    plt.title(f'Monthly Revenue Prediction for {current_year}')
+    plt.xlabel('Month-Year')
+    plt.ylabel('Revenue ($)')
+    plt.xticks(rotation=45)
+    plt.legend()
+    plt.grid(True)
+
+    # Save plot to BytesIO object
+    predict_img = io.BytesIO()
+    plt.tight_layout()
+    plt.savefig(predict_img, format='png')
+    predict_img_base = base64.b64encode(predict_img.getbuffer()).decode('ascii')
+    plt.close()
+
+    # Render template with plot image
+    return render_template("report_revenue_predict.html", predict_img_plot=predict_img_base)
+
+if __name__ == "__main__":
+    app.run(debug=True)
