@@ -141,6 +141,12 @@ body{
   cursor: pointer;
 }
 
+.btn.active {
+  background-color: #7d4a95;
+  color: white;
+  cursor: default;
+}
+
 .Main-container {
   display: flex;
   justify-content: center; 

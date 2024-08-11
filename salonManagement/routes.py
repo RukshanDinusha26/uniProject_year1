@@ -141,11 +141,11 @@ def report():
 
 @app.route("/report/financial")   
 def report_financial():
-    return render_template("report_financial.html") 
+    return render_template("report_financial.html",active_tab='financial') 
 
 @app.route("/report/appointment")
 def report_appointments():
-    return render_template("report_appointments.html")
+    return render_template("report_appointments.html",active_tab='appointments')
 
 def load_customer_data():
     data = pandas.read_csv('C:\\Users\\HP\\Documents\\Project\\uniProject_year1\\salonManagement\\customer.csv')
@@ -203,7 +203,7 @@ def report_customer_trends():
 
     plt.close(fig_gender)
 
-    return render_template('report_customer_trends.html', age_plot_img=age_img_base, gender_plot_img=gender_img_base, violin_plot_img=violin_img_base)
+    return render_template('report_customer_trends.html', age_plot_img=age_img_base, gender_plot_img=gender_img_base, violin_plot_img=violin_img_base,active_tab='customer')
 
 def load_service_data():
     data = pandas.read_csv('C:\\Users\\HP\\Documents\\Project\\uniProject_year1\\salonManagement\\service.csv')
@@ -257,25 +257,21 @@ def report_service_trends():
 
     plt.close()
 
-    return render_template("report_service_trends.html",revenue_img_plot = revenue_img_base, distri_img_plot = distri_img_base,monthly_img_plot=monthly_img_base)
+    return render_template("report_service_trends.html",revenue_img_plot = revenue_img_base, distri_img_plot = distri_img_base,monthly_img_plot=monthly_img_base,active_tab='service')
 
 @app.route("/report_predict_revenue")
 def report_predict_revenue():
-    # Load and preprocess data
     data = pandas.read_csv('C:\\Users\\HP\\Documents\\Project\\uniProject_year1\\salonManagement\\income.csv')
     data['Date'] = pandas.to_datetime(data['Date'])
     
-    # Aggregate revenue by month
     data['Month'] = data['Date'].dt.month
     data['Year'] = data['Date'].dt.year
     monthly_revenue = data.groupby(['Year', 'Month']).agg({'Payment': 'sum'}).reset_index()
     monthly_revenue['Month_Year'] = monthly_revenue['Year'].astype(str) + '-' + monthly_revenue['Month'].astype(str).str.zfill(2)
     
-    # Filter to include only this year's data
     current_year = monthly_revenue['Year'].max()
     this_year_revenue = monthly_revenue[monthly_revenue['Year'] == current_year]
 
-    # Feature Engineering: Adding lag features, rolling mean, etc.
     this_year_revenue['Lag_1'] = this_year_revenue['Payment'].shift(1)
     this_year_revenue['Lag_2'] = this_year_revenue['Payment'].shift(2)
     this_year_revenue['Rolling_Mean_3'] = this_year_revenue['Payment'].rolling(window=3).mean()
@@ -330,12 +326,11 @@ def report_predict_revenue():
         future_months.append(f"{new_year}-{str(new_month).zfill(2)}")
         future_payments.append(future_payment)
 
-        # Update lags for next iteration
         last_lag_2 = last_lag_1
         last_lag_1 = future_payment
         last_rolling_mean = new_rolling_mean
 
-    # Combine past and future data for visualization
+
     future_revenue_df = pandas.DataFrame({
         'Month_Year': future_months,
         'Payment': future_payments
@@ -343,7 +338,6 @@ def report_predict_revenue():
 
     combined_revenue = pandas.concat([this_year_revenue[['Month_Year', 'Payment']], future_revenue_df], ignore_index=True)
 
-    # Plotting
     plt.figure(figsize=(12, 6))
     plt.plot(this_year_revenue['Month_Year'], this_year_revenue['Payment'], marker='o', label='Actual Revenue', color='blue')
     plt.plot(future_revenue_df['Month_Year'], future_revenue_df['Payment'], marker='x', linestyle='--', color='red', label='Predicted Revenue')
@@ -354,15 +348,13 @@ def report_predict_revenue():
     plt.legend()
     plt.grid(True)
 
-    # Save plot to BytesIO object
     predict_img = io.BytesIO()
     plt.tight_layout()
     plt.savefig(predict_img, format='png')
     predict_img_base = base64.b64encode(predict_img.getbuffer()).decode('ascii')
     plt.close()
 
-    # Render template with plot image
-    return render_template("report_revenue_predict.html", predict_img_plot=predict_img_base)
+    return render_template("report_revenue_predict.html", predict_img_plot=predict_img_base,active_tab='revenue')
 
 if __name__ == "__main__":
     app.run(debug=True)
