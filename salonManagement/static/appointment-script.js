@@ -67,8 +67,17 @@ rows.forEach((row) => {
   }
 });
 
-function addAppointment(){
-  $('.add').click(function(event){
+function addAppointment() {
+  $('#close-popup').on('click', function() {
+    $('#popup-modal').hide();
+  });
+
+  function showPopup(message) {
+    $('#popup-message').text(message);
+    $('#popup-modal').show();
+  }
+
+  $('.add').click(function(event) {
     var appEmp = $('.employee_name:first').text();
     var appDate = $('#date').val();
     var appTime = $('.time_info').text();
@@ -81,72 +90,72 @@ function addAppointment(){
       url: '/appointment/add',
       type: 'POST',
       contentType: 'application/x-www-form-urlencoded',
-      data:{
+      data: {
         appEmp: appEmp,
         appDate: appDate,
         appTime: appTime
       },
-      success: function(response){
-        alert('success'+response.user);
+      success: function(response) {
+        showPopup('Appointment added successfully!');
 
-        
-          var appointmentCount = $('.t_row[data-employee="' + appEmp + '"]').length + 1;
+        var appointmentCount = $('.t_row[data-employee="' + appEmp + '"]').length + 1;
 
-          var newRow = '<tr class="t_row" data-employee="' + appEmp + '">' +
-                      '<td>' +
-                        '<div class="number yellow">' + appointmentCount + '</div>' +
-                      '</td>' +
-                      '<td>' +
-                        '<div class="customer_container">' +
-                          '<div class="customer_pro_pic"></div>' +
-                          '<div class="customer_profile">' +
-                            '<span class="customer_name">' + response.user + '</span>' +
+        var newRow = '<tr class="t_row" data-employee="' + appEmp + '">' +
+                        '<td>' +
+                          '<div class="number yellow">' + appointmentCount + '</div>' +
+                        '</td>' +
+                        '<td>' +
+                          '<div class="customer_container">' +
+                            '<div class="customer_pro_pic"></div>' +
+                            '<div class="customer_profile">' +
+                              '<span class="customer_name">' + response.user + '</span>' +
+                            '</div>' +
                           '</div>' +
-                        '</div>' +
-                      '</td>' +
-                      '<td>' +
-                        '<span class="time">' + appTime + '</span>' +
-                      '</td>' +
-                      '<td>' +
-                        '<div class="waited">6 Mins</div>' +
-                      '</td>' +
-                      '<td>' +
-                        '<div class="status">On Going</div>' +
-                      '</td>' +
-                      '<td>' +
-                        '<button class="pay">Pay</button>' +
-                      '</td>' +
-                    '</tr>';
+                        '</td>' +
+                        '<td>' +
+                          '<span class="time">' + appTime + '</span>' +
+                        '</td>' +
+                        '<td>' +
+                          '<div class="waited">6 Mins</div>' +
+                        '</td>' +
+                        '<td>' +
+                          '<div class="status">On Going</div>' +
+                        '</td>' +
+                        '<td>' +
+                          '<button class="pay">Pay</button>' +
+                        '</td>' +
+                      '</tr>';
 
         $('.table tbody').append(newRow);
-          
-        
-
+      },
+      error: function(xhr) {
+        if (xhr.status === 401) { // Not logged in
+          showPopup('Please log in to add an appointment.');
+        } else {
+          showPopup('Failed to add appointment. Please try again.');
+        }
       }
-
-    })
-  })
+    });
+  });
 }
 
-$(document).ready(function(){
-
-  $('#date').on('change',function(){
+$(document).ready(function() {
+  $('#date').on('change', function() {
     var selectedDate = $(this).val();
-    var selectedEmployee = $('.employee_name:first').text(); //since there is multiple divs named .employee_name :first method will give us the first divs text
-     console.log(selectedDate);
+    var selectedEmployee = $('.employee_name:first').text(); // Since there are multiple divs named .employee_name, the :first method will give us the first div's text
+    console.log(selectedDate);
 
     $.ajax({
       url: '/appointment',
       type: 'POST',
       contentType: 'application/json',
-      data: JSON.stringify({date: selectedDate, selectedEmp: selectedEmployee}),
-      success: function(data){
+      data: JSON.stringify({ date: selectedDate, selectedEmp: selectedEmployee }),
+      success: function(data) {
         $('.time_dropdown').empty();
-        $.each(data.hours, function(index,hour){
-          $('.time_dropdown').append("<span class='time_item'>"+hour+':00</span>'); })
+        $.each(data.hours, function(index, hour) {
+          $('.time_dropdown').append("<span class='time_item'>" + hour + ':00</span>');
+        });
       }
-    })
+    });
   });
-  
-
-})
+});

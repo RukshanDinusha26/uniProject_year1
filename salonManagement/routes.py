@@ -63,6 +63,10 @@ def signup():
 @app.route("/appointment/add",methods=['GET', 'POST'])         
 def appointmentAdd():
     if request.method == 'POST':
+
+        if not current_user.is_authenticated:
+            return jsonify({'error': 'Unauthorized'}), 401
+
         employee_name = request.form.get('appEmp')
         date = request.form.get('appDate')
         time = request.form.get('appTime')

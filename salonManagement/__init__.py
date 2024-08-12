@@ -1,8 +1,9 @@
 from flask import Flask
 from flask_sqlalchemy import SQLAlchemy
 from flask_bcrypt import Bcrypt
+from flask_migrate import Migrate
 from flask_login import LoginManager, UserMixin
-from sqlalchemy import CheckConstraint
+from sqlalchemy import CheckConstraint , UniqueConstraint
 #from flask_debugtoolbar import  DebugToolbarExtension
 
 
@@ -13,6 +14,7 @@ app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///site.db'
 #toolbar = DebugToolbarExtension(app)
 
 db = SQLAlchemy(app)
+migrate = Migrate(app,db)
 bcrypt = Bcrypt(app)
 login_manager = LoginManager(app)
 
@@ -38,17 +40,19 @@ class User(db.Model, UserMixin):
 
 class Appointment(db.Model):
     id = db.Column(db.Integer, primary_key=True)
-    username = db.Column(db.String(20),db.ForeignKey('user.username'),nullable=False) 
-    employee_name = db.Column(db.String(255),nullable=False)
-    employee_id = db.Column(db.String(255), db.ForeignKey('employee.employee_id'),nullable=False)
+    username = db.Column(db.String(20), db.ForeignKey('user.username'), nullable=False)
+    employee_name = db.Column(db.String(255), nullable=False)
+    employee_id = db.Column(db.String(255), db.ForeignKey('employee.employee_id'), nullable=False)
     date = db.Column(db.Date, nullable=False)
-    time = db.Column(db.Time, nullable=False, unique = True)
+    time = db.Column(db.Time, nullable=False)
 
     user = db.relationship('User', back_populates='appointment')
     employee = db.relationship('Employee', back_populates='appointment')
 
+    __table_args__ = (UniqueConstraint('date', 'time', name='unique_date_time'),)
+
     def __repr__(self):
-        return f"Appointment('{self.username}','{self.employee_name}',{self.employee_id}','{self.date}',{self.time}')"
+        return f"Appointment('{self.username}', '{self.employee_name}', '{self.employee_id}', '{self.date}', '{self.time}')"
 
 class Employee(db.Model):
     id = db.Column(db.Integer, primary_key=True)
