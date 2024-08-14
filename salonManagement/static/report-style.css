@@ -12,6 +12,71 @@ body{
   overflow-x: hidden;
 }
 
+section{
+  padding: 5% 25%;
+  display: flex;
+  flex-direction: row;
+}
+
+
+
+.stock-text h5 {
+  font-size: 14px;
+  font-weight: 400;
+  color: rgb(7, 7, 7);
+  margin-bottom: 40px;
+}
+
+.stock-text h1 {
+  font-family: 'Lobster', cursive;
+  font-size: 2rem;
+  line-height: 1;
+  color: rgb(0, 0, 0);
+  margin: 0 0 45px;
+}
+
+.stock-text p {
+  color: rgb(0, 0, 0);
+  font-size: 0.8rem;
+  line-height: 1.9;
+  margin-bottom: 40px;
+}
+
+.stock-image img {
+  width: 400px;
+  height: auto;
+  margin-left: 5%;
+}
+
+.stock-text a {
+  display: inline-block;
+  color: rgb(5, 5, 5);
+  background: #be8ab6;
+  font-size: 0.8rem;
+  border: 1px solid transparent;
+  padding: 10px 24px;
+  line-height: 1;
+  font-weight: 500;
+  border-radius: 30px;
+  text-transform: uppercase;
+  transition: all .55s ease;
+}
+
+.stock-text a:hover {
+  background: transparent;
+  border: 1px solid white;
+  transform: translateX(8px);
+}
+
+.stock-text a.feedback {
+  margin-left: 20px;
+}
+
+.stock-text a.feedback i {
+  margin-right: 7px;
+  font-size: 0.8rem;
+}
+
 .container{
   display: flex;
 }
@@ -19,14 +84,7 @@ body{
 .container-main{
   display:flex;
   justify-content: center;
-}
-.header{
-  width: 100%;
-  height: 100px;
-  background: linear-gradient(to left, #bb86c0 0%, #a468a9 28.53%, #7d4a95 75.52%);
-  position: relative;
-  left: 0;
-  overflow: hidden;
+
 }
 
 .title-text{
@@ -41,84 +99,14 @@ body{
 }
 
 
-.bg-1 {
-  position: absolute;
-  z-index: -1;
-  top: 0;
-  height: 200vh;
-  right: -50px;
-  transform: translateX(30%);
-  opacity: 10%;
-}
-
-.bg-2 {
-  z-index: -1;
-  top: 200px;
-  right: 100px;
-}
-
-.bg-3 {
-  z-index: -1;
-  top: -100px;
-  right: 100px;
-}
-
-.bg-4 {
-  z-index: -1;
-  top: -600px;
-}
-
-.bg-lf {
-  z-index: -1;
-  position: absolute;
-  height: 20vh;
-  opacity: 15%;
-  right: 100px;
-  top: 274px;
-  transform: scaleX(-1);
-}
-
-.lf-1 {
-  z-index: -1;
-  top: 561px;
-  right: 1143px;
-  transform: scaleX(1)
-}
-
-
-.lf-2 {
-  right: 30px;
-  top: 561px;
-  transform: scaleY(-1);
-}
-
-.lf-3 {
-  right: 662px;
-  top: 423px;
-  transform: scaleX(-1);
-}
-
-.lf-4 {
-  right: 205px;
-  top: 400px;
-  transform: scale(-1, -1);
-}
-
-.bg-shape{
-  position: absolute;
-  z-index: 1;
-  top: -400px;
-  right: 0;
-  height: 400px;
-}
-
 /* Body */
 
 .sub-header{
   display: flex;
   flex-direction: row;
-  margin-top: 2%;
+  margin-top: 7%;
   justify-content: center;
+
 }
 
 .btn{
@@ -130,6 +118,7 @@ body{
   margin-left: 2rem;
   margin: 5px;
   z-index: 10;
+  padding: 5px;
 }
 .sub-header a{
   z-index: 10;

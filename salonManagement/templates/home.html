@@ -1,39 +1,13 @@
-{% extends "layout.html" %}
+{% extends "layout.html"%}
+
 {% block head %}
 <link rel="stylesheet" href="{{ url_for('static', filename='mainstyle.css')}}" />
 {% endblock head %}
 
-{% block content %}
+</head>
 
-<body>
+{% block content %}
 <div class="main">
-  <header class="header">
-    <a href="#" class="logo">SALON-WEBSITE</a>
-    
-    <ul class="navlist">
-      <li><a class="menu" href="#home">Home</a></li>
-      <li><a class="menu" href="#services">Services</a></li>
-      <li><a class="menu" href="#offers">Offers</a></li>
-      <li><a class="menu" href="#about">About Us</a></li>
-      <li class="dropdown">
-        <a class="menu" href="#">Tools <i class="fa fa-caret-down"></i></a>
-        <div class="dropdown-content">
-           <a href="{{ url_for('appointment') }}">Appointment Calendar</a>
-           <a href="{{ url_for('report') }}">Report Generation</a>
-           <a href="#">Store</a>
-        </div>
-     </li>
-    </ul>
-    <ul class="navlist2">
-      {% if current_user.is_authenticated %}
-      <li><a href="{{ url_for('account') }}">Account</a></li>
-      <li id="logoutBtn"><a>Log Out</a></li>
-      {% else %}
-      <li><a href="{{ url_for('login') }}">Log In</a></li>
-      {% endif %}
-    </ul>
-    <i class="fa-solid fa-bars" id="menu-icon"></i>
-  </header>
   <div class="container">
     <div class="bg-shape">
       <img src="{{ url_for('static',filename='Images/blob(5).svg') }}" class="bg-1">
@@ -184,5 +158,5 @@
       });
     });
   </script>
-</body>
+
 {% endblock content %}

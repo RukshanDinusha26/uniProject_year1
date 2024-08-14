@@ -1,0 +1,266 @@
+/* Importing Poppins font and lobster font from Google fonts */
+@import url('https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Lobster&display=swap');
+*{
+  padding: 0;
+  margin: 0;
+  box-sizing: border-box;
+  font-family: 'Poppins', sans-serif;
+  list-style: none;
+  text-decoration: none;
+}
+
+.header{
+  background: linear-gradient(to left, #bb86c0 0%, #a468a9 28.53%, #7d4a95 75.52%);
+  position: fixed;
+  right: 0;
+  top: 0;
+  z-index: 998;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 15px 9%;
+}
+
+.logo{
+  font-size: 1.2rem;
+  font-weight: 700;
+  color: white;
+}
+
+.navlist,.navlist2{
+  display: flex;
+}
+.navlist{
+  margin-left: 25%;
+}
+.navlist{
+ margin-right: 5%;  
+}
+
+.navlist a{
+  position: relative;
+  color: white;
+  margin-left: 40px;
+  font-size: 0.8rem;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.navlist2 a{
+  position: relative;
+  color: white;
+  margin-left: 20px;
+  font-size: 0.8rem;
+  font-weight: 600;
+}
+
+.navlist .menu::after,
+.navlist2 .menu::after{
+  content: "";
+  position: absolute;
+  bottom: -3px;
+  height: 2px;
+  width: 100%;
+  left: 0;
+  background-color: white;
+  transition: 0.3s ease-in-out;
+  transform: scaleX(0);
+}
+
+.navlist .menu:hover::after,
+.navlist2 .menu:hover::after{
+ transform: scaleX(1)
+}
+
+
+#menu-icon{
+ color: white;
+ font-size: 1.2rem;
+ z-index: 10;
+ cursor: pointer;
+ display: none;
+}
+
+.cl{
+    cursor: pointer;
+}
+
+
+.text1,.text2,.text3{
+ color: white;
+ font-size: 0.9rem;
+ z-index: 0;
+}
+
+.text1,.text2,.text3{
+ position: absolute;
+ left: 55%;
+ background-color: #be8ab6;
+ padding: 8px;
+ border-radius: 30px;
+ pointer-events: none;
+ visibility: hidden;
+}
+.text1{
+ top: 15%;
+}
+.text2{
+ top: 43%;
+}
+.text3{
+ top: 70%;
+}
+
+
+
+.flash-overlay {
+ position: fixed;
+ top: 0;
+ left: 0;
+ width: 100%;
+ height: 100%;
+ background: rgba(0, 0, 0, 0.5); 
+ display: flex;
+ align-items: center;
+ justify-content: center;
+ z-index: 999; 
+ backdrop-filter: blur(5px);
+}
+
+.flash-message{
+ background: white;
+ padding: 20px;
+ border-radius: 10px;
+ box-shadow: 0px 0px 15px rgba(0, 0, 0, 0.3); 
+ display: flex;
+ flex-direction: column;
+ justify-content: center;
+ align-items: center;
+}
+
+.flash-message .alert {
+ margin-bottom: 15px;
+}
+
+.flash-message .btn {
+ background-color: #a468a9;
+ color: white;
+ padding: 10px 20px;
+ border: none;
+ border-radius: 50px;
+ cursor: pointer;
+}
+
+.flash-message .btn:hover {
+ background-color: #be8ab6;
+}
+.modal-content {
+ background-color: #fff;
+ margin: 15% auto; /* 15% from the top and centered */
+ padding: 20px;
+ border: 1px solid #888;
+ width: 400px; /* Could be more or less, depending on screen size */
+ text-align: center;
+ border-radius: 10px;
+}
+
+.modal {
+ display: none; /* Hidden by default */
+ position: fixed; /* Stay in place */
+ z-index: 1000; /* Sit on top */
+ left: 0;
+ top: 0;
+ width: 100%; /* Full width */
+ height: 100%; /* Full height */
+ background-color: rgba(0, 0, 0, 0.5); /* Black w/ opacity */
+ backdrop-filter: blur(5px); /* Apply blur effect to the background */
+}
+
+/* Dropdown container */
+.dropdown {
+ position: relative;
+ display: inline-block;
+ margin: 0;
+}
+
+/* Dropdown content (hidden by default) */
+.dropdown-content {
+ display: none;
+ position: absolute;
+ background-color: white; /* Main dropdown background color */
+ box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+ z-index: 1;
+ border: none; /* Border color */
+ border-radius: 3px;
+ padding: 0; /* Ensure no extra padding */
+ margin: 0; /* Ensure no extra margin */
+ left: 0; /* Align to the left edge */
+ overflow: hidden;
+}
+
+/* Show the dropdown content on hover */
+.dropdown:hover .dropdown-content {
+ display: block;
+}
+
+/* Dropdown links */
+.dropdown-content a {
+ color: black; /* Link text color */
+ padding: 12px 16px;
+ text-decoration: none;
+ transition: background-color 0.3s ease, color 0.3s ease;
+ display: flex;
+ flex-direction: row;
+ margin: 0; /* Ensure no extra margin */
+ box-sizing: border-box; /* Include padding and border in width */
+}
+
+
+/* Change the background and text color of links on hover */
+.dropdown-content a:hover {
+ background-color: #deb7f3; /* Hover background color */
+ color: black; /* Hover text color */
+}
+
+/* Optional: Caret styling */
+.fa-caret-down {
+ margin-left: 5px;
+ font-size: 0.8rem;
+ transition: transform 0.3s ease;
+ color: #ffffff; /* Caret color to match text */
+}
+
+.dropdown:hover .fa-caret-down {
+ transform: rotate(180deg);
+}
+
+
+/* Smooth Scrolling */
+html {
+ scroll-behavior: smooth;
+}
+
+/* Active Link Highlight */
+.navlist a.active {
+ font-weight: 700;
+ color: #bb86c0;
+}
+
+.navlist a.active::after {
+ background-color: #bb86c0;
+}
+
+.btn {
+    background-color: #a468a9;
+    color: white;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 50px;
+    cursor: pointer;
+  }
+  
+.btn:hover {
+    background-color: #be8ab6;
+}

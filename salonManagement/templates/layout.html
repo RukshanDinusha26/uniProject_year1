@@ -6,6 +6,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <!-- importing font awsome icons -->
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css" />
+  <link rel="stylesheet" href="{{ url_for('static', filename='layout-style.css')}}" />
   {% block head %}
   {% endblock %}
 
@@ -17,9 +18,86 @@
 
 </head>
 
-{% block content %}
-{% endblock %}
+<header class="header">
+  <a href="{{ url_for('home') }}" class="logo">SALON-WEBSITE</a>
+  
+  <ul class="navlist">
+    {% if request.endpoint == 'home' %}
+    <li><a class="menu" href="#home">Home</a></li>
+    <li><a class="menu" href="#services">Services</a></li>
+    <li><a class="menu" href="#offers">Offers</a></li>
+    <li><a class="menu" href="#about">About Us</a></li>
+     {% endif %}
+    <li class="dropdown">
+      <a class="menu" href="#">Tools <i class="fa fa-caret-down"></i></a>
+      <div class="dropdown-content">
+         <a href="{{ url_for('appointment') }}">Appointment Calendar</a>
+         <a href="{{ url_for('report') }}">Report Generation</a>
+         <a href="{{ url_for('adminPanel')}}">Admin Panel</a>
+      </div>
+   </li>
+  </ul>
+  <ul class="navlist2">
+    {% if current_user.is_authenticated %}
+    <li><a class="menu" href="{{ url_for('account') }}">Account</a></li>
+    <li id="logoutBtn"><a class="menu cl">Log Out</a></li>
+    {% else %}
+    <li><a class="menu" href="{{ url_for('login') }}">Log In</a></li>
+    {% endif %}
+  </ul>
+  <i class="fa-solid fa-bars" id="menu-icon"></i>
+</header>
+<div id="logoutModal" class="modal">
+  <div class="modal-content">
+    <div>Are you sure you want to log out?</div>
+    <div class="modal-buttons">
+      <a href="{{ url_for('logout') }}"><button class="btn btn-logout">Yes</button></a>
+      <button id="cancelBtn" class="btn btn-cancel">No</button>
+    </div>
+  </div>
+</div>
 
+{% block content %}
+
+{% endblock %}
+<script>
+  // Get the modal
+  var modal = document.getElementById("logoutModal");
+
+  // Get the button that opens the modal
+  var btn = document.getElementById("logoutBtn");
+
+  // Get the cancel button that closes the modal
+  var cancelBtn = document.getElementById("cancelBtn");
+
+  // When the user clicks the logout button, open the modal
+  btn.onclick = function() {
+    modal.style.display = "block";
+  }
+
+  // When the user clicks on cancel, close the modal
+  cancelBtn.onclick = function() {
+    modal.style.display = "none";
+  }
+
+  // When the user clicks anywhere outside of the modal, close it
+  window.onclick = function(event) {
+    if (event.target == modal) {
+      modal.style.display = "none";
+    }
+  }
+
+
+  document.querySelectorAll('.navlist a[href^="#"]').forEach(anchor => {
+    anchor.addEventListener('click', function (e) {
+      e.preventDefault();
+      
+      document.querySelector(this.getAttribute('href')).scrollIntoView({
+        behavior: 'smooth'
+      });
+    });
+  });
+</script>
 
 
 </html>

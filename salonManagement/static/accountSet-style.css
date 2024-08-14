@@ -20,13 +20,7 @@ body{
   display:flex;
   justify-content: center;
 }
-.header{
-  width: 100%;
-  height: 300px;
-  background: linear-gradient(to left, #bb86c0 0%, #a468a9 28.53%, #7d4a95 75.52%);
-  position: relative;
-  left: 0;
-}
+
 
 .title-text{
   position: absolute;
@@ -40,77 +34,9 @@ body{
 }
 
 
-.bg-1 {
-  position: absolute;
-  z-index: -1;
-  top: 0;
-  height: 200vh;
-  right: -50px;
-  transform: translateX(30%);
-  opacity: 10%;
-}
-
-.bg-2 {
-  top: 200px;
-  right: 100px;
-}
-
-.bg-3 {
-  top: -100px;
-  right: 100px;
-}
-
-.bg-4 {
-  top: -600px;
-}
-
-.bg-lf {
-  z-index: -1;
-  position: absolute;
-  height: 20vh;
-  opacity: 15%;
-  right: 100px;
-  top: 274px;
-  transform: scaleX(-1);
-}
-
-.lf-1 {
-  top: 561px;
-  right: 1143px;
-  transform: scaleX(1)
-}
-
-
-.lf-2 {
-  right: 30px;
-  top: 561px;
-  transform: scaleY(-1);
-}
-
-.lf-3 {
-  right: 662px;
-  top: 423px;
-  transform: scaleX(-1);
-}
-
-.lf-4 {
-  right: 205px;
-  top: 400px;
-  transform: scale(-1, -1);
-}
-
-.bg-shape{
-  position: absolute;
-  z-index: 1;
-  top: -400px;
-  right: 0;
-  height: 400px;
-}
-
 /* Body */
 
 .container-body{
-  z-index: 1000;
   background-color: white;
   height: 500px;
   width: 70%;
