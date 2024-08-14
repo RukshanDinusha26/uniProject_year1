@@ -11,12 +11,12 @@
     <a href="#" class="logo">SALON-WEBSITE</a>
     
     <ul class="navlist">
-      <li><a href="{{ url_for('home')}}">Home</a></li>
-      <li><a href="#">Services</a></li>
-      <li><a href="#">Offers</a></li>
-      <li><a href="#">About Us</a></li>
+      <li><a class="menu" href="#home">Home</a></li>
+      <li><a class="menu" href="#services">Services</a></li>
+      <li><a class="menu" href="#offers">Offers</a></li>
+      <li><a class="menu" href="#about">About Us</a></li>
       <li class="dropdown">
-        <a href="#">Tools <i class="fa fa-caret-down"></i></a>
+        <a class="menu" href="#">Tools <i class="fa fa-caret-down"></i></a>
         <div class="dropdown-content">
            <a href="{{ url_for('appointment') }}">Appointment Calendar</a>
            <a href="{{ url_for('report') }}">Report Generation</a>
@@ -47,7 +47,7 @@
       <img src="{{ url_for('static',filename='Images/leaves1.svg') }}" class="bg-lf lf-4">
     </div>
     
-    <section class="stock section1">
+    <section id='home' class="stock section1">
       <div class="stock-text">
         <h5>Welcome!</h5>
         <h1>SALOON</h1>
@@ -119,8 +119,6 @@
     </div>
   </footer>
 </div>
-  </div>
-  <div class="container2">
   </div>
   
 </div>

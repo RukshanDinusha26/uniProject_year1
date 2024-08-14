@@ -61,8 +61,8 @@
    font-weight: 600;
  }
 
- .navlist a::after,
- .navlist2 a::after{
+ .navlist .menu::after,
+ .navlist2 .menu::after{
    content: "";
    position: absolute;
    bottom: -3px;
@@ -74,8 +74,8 @@
    transform: scaleX(0);
  }
 
- .navlist a:hover::after,
- .navlist2 a:hover::after{
+ .navlist .menu:hover::after,
+ .navlist2 .menu:hover::after{
   transform: scaleX(1)
  }
 
@@ -126,14 +126,10 @@
 
 /* Other existing styles */
 
-.section1 {
-  margin-top: 100px;
-  padding: 0 19%;
+#home{
+  padding: 150px 19%;
 }
-.section2 {
-  margin-top: 700px;
-  padding: 0 19%;
-}
+
 
 .stock-text h5 {
   font-size: 14px;
@@ -367,12 +363,15 @@
 .dropdown-content {
   display: none;
   position: absolute;
-  background-color: #300e41; /* Main dropdown background color */
-  min-width: 160px;
+  background-color: white; /* Main dropdown background color */
   box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
   z-index: 1;
   border: none; /* Border color */
   border-radius: 3px;
+  padding: 0; /* Ensure no extra padding */
+  margin: 0; /* Ensure no extra margin */
+  left: 0; /* Align to the left edge */
+  overflow: hidden;
 }
 
 /* Show the dropdown content on hover */
@@ -382,18 +381,21 @@
 
 /* Dropdown links */
 .dropdown-content a {
-  color: #ffffff; /* Link text color */
+  color: black; /* Link text color */
   padding: 12px 16px;
   text-decoration: none;
-  display: block;
   transition: background-color 0.3s ease, color 0.3s ease;
-  text-align: left;
+  display: flex;
+  flex-direction: row;
+  margin: 0; /* Ensure no extra margin */
+  box-sizing: border-box; /* Include padding and border in width */
 }
+
 
 /* Change the background and text color of links on hover */
 .dropdown-content a:hover {
-  background-color: #614272; /* Hover background color */
-  color: #f3e5f5; /* Hover text color */
+  background-color: #deb7f3; /* Hover background color */
+  color: black; /* Hover text color */
 }
 
 /* Optional: Caret styling */
@@ -414,6 +416,7 @@
   align-items: center;
   background-color: #f5f5f5; /* Light background for contrast */
   color: #333;
+  padding: 150px 19%;
 }
 
 .service-item {
@@ -438,6 +441,7 @@
   background: linear-gradient(to left, #a468a9, #bb86c0); /* Gradient background */
   color: white;
   text-align: center;
+  padding: 150px 19%;
 }
 
 #offers h2 {
@@ -472,6 +476,7 @@
   background-color: #fff; /* Plain background */
   color: #333;
   text-align: left;
+  padding: 150px 19%;
 }
 
 #about h2 {
