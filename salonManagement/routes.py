@@ -359,5 +359,7 @@ def report_predict_revenue():
 
     return render_template("report_revenue_predict.html", predict_img_plot=predict_img_base,active_tab='revenue')
 
-if __name__ == "__main__":
-    app.run(debug=True)
+@app.route("/admin-panel")
+def adminPanel():
+
+    return render_template("admin-panel.html")

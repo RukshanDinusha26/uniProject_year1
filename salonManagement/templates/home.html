@@ -15,6 +15,14 @@
       <li><a href="#">Services</a></li>
       <li><a href="#">Offers</a></li>
       <li><a href="#">About Us</a></li>
+      <li class="dropdown">
+        <a href="#">Tools <i class="fa fa-caret-down"></i></a>
+        <div class="dropdown-content">
+           <a href="{{ url_for('appointment') }}">Appointment Calendar</a>
+           <a href="{{ url_for('report') }}">Report Generation</a>
+           <a href="#">Store</a>
+        </div>
+     </li>
     </ul>
     <ul class="navlist2">
       {% if current_user.is_authenticated %}
@@ -38,19 +46,8 @@
       <img src="{{ url_for('static',filename='Images/leaves1.svg') }}" class="bg-lf lf-3">
       <img src="{{ url_for('static',filename='Images/leaves1.svg') }}" class="bg-lf lf-4">
     </div>
-    <div class="side-bar">
-      <a href="{{ url_for('appointment')}}"><i class="fa-solid fa-calendar-days"></i>
-        <div class="text1">Calendar</div>
-      </a>
-      <a href="#"><i class="fa-solid fa-bag-shopping"></i>
-        <div class="text2">Store</div>
-      </a>
-      <a href="{{ url_for('report')}}"><i class="fa-solid fa-file"></i>
-        <div class="text3">Gallery</div>
-      </a>
-    </div>
-    <section class="stock">
-      {% block container %}
+    
+    <section class="stock section1">
       <div class="stock-text">
         <h5>Welcome!</h5>
         <h1>SALOON</h1>
@@ -63,8 +60,65 @@
       <div class="stock-image">
         <img src="{{ url_for('static', filename='Images/image_2.svg')}}" alt="">
       </div>
-      {% endblock container %}
     </section>
+
+    <section id="services" class="section1 services">
+      <h2>Our Services</h2>
+      <div class="service-cards">
+        <div class="card">
+          <img src="{{ url_for('static', filename='Images/haircut.jpg')}}" alt="Haircut">
+          <h3>Haircut</h3>
+          <p>Expert haircuts for men and women.</p>
+        </div>
+        <div class="card">
+          <img src="{{ url_for('static', filename='Images/bridal.jpg')}}" alt="Bridal Dressing">
+          <h3>Bridal Dressing</h3>
+          <p>Beautiful bridal dressing services.</p>
+        </div>
+        <div class="card">
+          <img src="{{ url_for('static', filename='Images/styling.jpg')}}" alt="Styling">
+          <h3>Styling</h3>
+          <p>Professional styling for any occasion.</p>
+        </div>
+      </div>
+    </section>
+    
+    <!-- Offers Section -->
+    <section id="offers" class="section1 offers">
+      <h2>Exclusive Offers</h2>
+      <div class="offer-cards">
+        <div class="card">
+          <h3>50% Off Haircuts</h3>
+          <p>Get a fresh look with a 50% discount on haircuts.</p>
+        </div>
+        <div class="card">
+          <h3>Free Bridal Trial</h3>
+          <p>Book now and enjoy a free bridal trial session.</p>
+        </div>
+      </div>
+    </section>
+    
+    <!-- About Us Section -->
+    <section id="about" class="section1 about">
+      <h2>About Us</h2>
+      <p>Our salon is dedicated to providing top-quality services to our clients. Our team of experts is here to help you look and feel your best. We pride ourselves on our professional services, friendly atmosphere, and commitment to excellence.</p>
+      <img src="{{ url_for('static', filename='Images/salon_interior.jpg')}}" alt="Salon Interior">
+    </section>
+  </div>
+  <!-- New Content Ends Here -->
+
+  <!-- Footer -->
+  <footer class="footer">
+    <div class="footer-content">
+      <p>&copy; 2024 SALON-WEBSITE. All Rights Reserved.</p>
+      <ul class="social-links">
+        <li><a href="#"><i class="fa-brands fa-facebook"></i></a></li>
+        <li><a href="#"><i class="fa-brands fa-instagram"></i></a></li>
+        <li><a href="#"><i class="fa-brands fa-twitter"></i></a></li>
+      </ul>
+    </div>
+  </footer>
+</div>
   </div>
   <div class="container2">
   </div>
@@ -121,6 +175,16 @@
         modal.style.display = "none";
       }
     }
+
+    document.querySelectorAll('.navlist a[href^="#"]').forEach(anchor => {
+      anchor.addEventListener('click', function (e) {
+        e.preventDefault();
+        
+        document.querySelector(this.getAttribute('href')).scrollIntoView({
+          behavior: 'smooth'
+        });
+      });
+    });
   </script>
 </body>
 {% endblock content %}

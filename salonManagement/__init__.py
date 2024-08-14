@@ -10,7 +10,7 @@ from sqlalchemy import CheckConstraint , UniqueConstraint
 app = Flask(__name__)
 #app.debug = True
 app.config['SECRET_KEY'] = '275159fcd3bf7264d16dd63a3e300d15'
-app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///site.db'
+app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://postgres:root@localhost:5432/site'
 #toolbar = DebugToolbarExtension(app)
 
 db = SQLAlchemy(app)
