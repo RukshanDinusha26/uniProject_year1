@@ -363,3 +363,19 @@ def report_predict_revenue():
 def adminPanel():
 
     return render_template("admin-panel.html")
+
+@app.route("/admin-panel/appointments")
+def adminPanel_appointments():
+
+    return render_template("admin-appointments.html",active_tab='appointments')
+
+
+@app.route("/admin-panel/employee")
+def adminPanel_employee():
+
+    return render_template("admin-employee.html",active_tab='employees')
+
+@app.route("/admin-panel/payments")
+def adminPanel_payments():
+
+    return render_template("admin-payments.html",active_tab='payments')

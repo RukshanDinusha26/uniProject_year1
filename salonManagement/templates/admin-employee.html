@@ -1,0 +1,43 @@
+{% extends "admin-panel.html" %}
+
+{% block subcontent %}
+<!-- Employees Section -->
+<div id="employees" class="section">
+  <h2>Manage Employees</h2>
+  <form class="employee-form">
+    <div class="form-group">
+      <label for="employeeName">Employee Name:</label>
+      <input type="text" id="employeeName" name="employeeName" required>
+    </div>
+    <div class="form-group">
+      <label for="employeeEmail">Email:</label>
+      <input type="email" id="employeeEmail" name="employeeEmail" required>
+    </div>
+    <button type="submit" class="btn">Create Employee</button>
+  </form>
+  <h3>Existing Employees</h3>
+  <table class="table">
+    <thead>
+      <tr>
+        <th>Employee ID</th>
+        <th>Name</th>
+        <th>Email</th>
+        <th>Actions</th>
+      </tr>
+    </thead>
+    <tbody>
+      <!-- Sample Employee Row -->
+      <tr>
+        <td>101</td>
+        <td>Jane Smith</td>
+        <td>jane.smith@example.com</td>
+        <td>
+          <button class="btn">Edit</button>
+          <button class="btn">Delete</button>
+        </td>
+      </tr>
+      <!-- Add more employee rows here -->
+    </tbody>
+  </table>
+</div>
+{% endblock subcontent %}

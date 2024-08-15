@@ -1,0 +1,31 @@
+{% extends "admin-panel.html" %}
+
+{% block subcontent %}
+<div id="payments" class="section">
+  <h2>Manage Payments</h2>
+  <table class="table">
+    <thead>
+      <tr>
+        <th>Appointment ID</th>
+        <th>Customer Name</th>
+        <th>Amount</th>
+        <th>Payment Status</th>
+        <th>Actions</th>
+      </tr>
+    </thead>
+    <tbody>
+      <!-- Sample Payment Row -->
+      <tr>
+        <td>001</td>
+        <td>John Doe</td>
+        <td>$100</td>
+        <td>Pending</td>
+        <td>
+          <button class="btn">Complete Payment</button>
+        </td>
+      </tr>
+      <!-- Add more payment rows here -->
+    </tbody>
+  </table>
+</div>
+{% endblock subcontent %}

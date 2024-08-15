@@ -5,127 +5,29 @@
 {% endblock head %}
 
 {% block content %}
-<div class="admin-panel">
   <!-- Navigation Bar -->
-  <div class="nav-bar">
-    <ul>
-      <li><a href="#dashboard">Dashboard</a></li>
-      <li><a href="#appointments">Appointments</a></li>
-      <li><a href="#employees">Employees</a></li>
-      <li><a href="#payments">Payments</a></li>
-    </ul>
+  <div class="sub-header">
+    <a href="{{ url_for('adminPanel_appointments') }}"><button class="btn {% if active_tab == 'appointments' %}active{% endif %}">Appointments</button></a>
+    <a href="{{ url_for('adminPanel_employee') }}"><button class="btn {% if active_tab == 'employees' %}active{% endif %}">Employees</button></a>
+    <a href="{{ url_for('adminPanel_payments') }}"><button class="btn {% if active_tab == 'payments' %}active{% endif %}">Payments</button></a>
   </div>
 
+  {% block subcontent %}
   <!-- Content Area -->
-  <div class="content">
+  <section class="container">
     <!-- Dashboard Section -->
     <div id="dashboard" class="section">
       <h2>Dashboard</h2>
       <p>Overview of today's appointments, pending payments, and employee availability.</p>
       <!-- Add more dashboard content here -->
-    </div>
-
+    </section>
+  {% endblock subcontent %}
     <!-- Appointments Section -->
-    <div id="appointments" class="section">
-      <h2>Manage Appointments</h2>
-      <table class="table">
-        <thead>
-          <tr>
-            <th>Appointment ID</th>
-            <th>Customer Name</th>
-            <th>Employee</th>
-            <th>Date & Time</th>
-            <th>Status</th>
-            <th>Actions</th>
-          </tr>
-        </thead>
-        <tbody>
-          <!-- Sample Appointment Row -->
-          <tr>
-            <td>001</td>
-            <td>John Doe</td>
-            <td>Jane Smith</td>
-            <td>2024-08-15 10:00 AM</td>
-            <td>Confirmed</td>
-            <td>
-              <button class="btn">Edit</button>
-              <button class="btn">Assign</button>
-              <button class="btn">Cancel</button>
-            </td>
-          </tr>
-          <!-- Add more appointment rows here -->
-        </tbody>
-      </table>
-    </div>
+    
 
-    <!-- Employees Section -->
-    <div id="employees" class="section">
-      <h2>Manage Employees</h2>
-      <form class="employee-form">
-        <div class="form-group">
-          <label for="employeeName">Employee Name:</label>
-          <input type="text" id="employeeName" name="employeeName" required>
-        </div>
-        <div class="form-group">
-          <label for="employeeEmail">Email:</label>
-          <input type="email" id="employeeEmail" name="employeeEmail" required>
-        </div>
-        <button type="submit" class="btn">Create Employee</button>
-      </form>
-      <h3>Existing Employees</h3>
-      <table class="table">
-        <thead>
-          <tr>
-            <th>Employee ID</th>
-            <th>Name</th>
-            <th>Email</th>
-            <th>Actions</th>
-          </tr>
-        </thead>
-        <tbody>
-          <!-- Sample Employee Row -->
-          <tr>
-            <td>101</td>
-            <td>Jane Smith</td>
-            <td>jane.smith@example.com</td>
-            <td>
-              <button class="btn">Edit</button>
-              <button class="btn">Delete</button>
-            </td>
-          </tr>
-          <!-- Add more employee rows here -->
-        </tbody>
-      </table>
-    </div>
+    
 
     <!-- Payments Section -->
-    <div id="payments" class="section">
-      <h2>Manage Payments</h2>
-      <table class="table">
-        <thead>
-          <tr>
-            <th>Appointment ID</th>
-            <th>Customer Name</th>
-            <th>Amount</th>
-            <th>Payment Status</th>
-            <th>Actions</th>
-          </tr>
-        </thead>
-        <tbody>
-          <!-- Sample Payment Row -->
-          <tr>
-            <td>001</td>
-            <td>John Doe</td>
-            <td>$100</td>
-            <td>Pending</td>
-            <td>
-              <button class="btn">Complete Payment</button>
-            </td>
-          </tr>
-          <!-- Add more payment rows here -->
-        </tbody>
-      </table>
-    </div>
+    
   </div>
-</div>
 {% endblock content %}

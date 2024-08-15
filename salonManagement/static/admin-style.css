@@ -6,14 +6,51 @@
     background-color: white;
   }
   
+  
+.sub-header{
+  display: flex;
+  flex-direction: row;
+  margin-top: 7%;
+  justify-content: center;
+
+}
+
+.btn{
+  background-color: transparent;
+  border-radius: 8px;
+  color:#7d4a95;
+  font-weight: 500;
+  border: 2px solid #7d4a95;
+  margin-left: 2rem;
+  margin: 5px;
+  z-index: 10;
+  padding: 5px;
+}
+
+.sub-header a{
+  z-index: 10;
+}
+
+.btn:hover{
+  background-color: #7d4a95;
+  color: white;
+  cursor: pointer;
+}
+
+.btn.active {
+  background-color: #7d4a95;
+  color: white;
+  cursor: default;
+}
   .admin-panel {
     display: flex;
     height: 100vh;
   }
   
   .nav-bar {
+    margin-top: 50px;
     width: 250px;
-    background-color: #7d4a95;
+    background-color: #b46abb;
     color: white;
     padding: 20px;
   }
@@ -35,10 +72,11 @@
   .content {
     flex-grow: 1;
     padding: 20px;
+    margin-top: 80px;
   }
   
   .section {
-    margin-bottom: 40px;
+    margin: 50px 19%;
   }
   
   .section h2 {
@@ -72,18 +110,7 @@
     background-color: #f1f1f1;
   }
   
-  .btn {
-    background-color: #a468a9;
-    color: white;
-    border: none;
-    padding: 10px 20px;
-    border-radius: 5px;
-    cursor: pointer;
-  }
-  
-  .btn:hover {
-    background-color: #7d4a95;
-  }
+
   
   /* Form Styles */
   .employee-form {
@@ -105,5 +132,13 @@
     padding: 10px;
     border-radius: 5px;
     border: 1px solid #ddd;
+  }
+
+  .container {
+    width: 100%;
+    max-width: 800px; 
+    margin: 0 20px; 
+    display: flex;
+    flex-direction: column;
   }
   
