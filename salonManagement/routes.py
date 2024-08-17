@@ -21,6 +21,7 @@ from sklearn.metrics import mean_absolute_error
 from sklearn.metrics import mean_absolute_error
 import numpy as np
 import os
+import secrets
 
 @app.route("/")
 @app.route("/home")
@@ -83,6 +84,7 @@ def signup():
     return render_template('signup.html', title="signup", form1=form1)
 
 
+
 @app.route("/appointment/add", methods=['GET', 'POST'])
 def appointment_add():
     if request.method == 'POST':
@@ -93,6 +95,7 @@ def appointment_add():
         employee_id = request.form['employee_id']
         date = request.form['date']
         time = request.form['time']
+        token = generate_secure_token()
 
         current_username = current_user.username
         date_obj = datetime.strptime(date, '%Y-%m-%d').date()
@@ -101,6 +104,7 @@ def appointment_add():
         employee_id = request.form.get('employee_id')
 
         appointment = Appointment(
+            token_number=token,
             username=current_username,
             employee_id=employee_id,
             date=date_obj,
@@ -161,7 +165,8 @@ def get_available_times():
         print(f"Error: {e}")  # Log the error for debugging
         return jsonify({'times': []})
 
-
+def generate_secure_token():
+    return secrets.randbelow(10**12)
     
 @app.route("/appointment", methods=['GET','POST'])
 def appointment(): 
@@ -209,6 +214,9 @@ def appointment():
 def book_appointment():
     print(request.form)
     try:
+        if not current_user.is_authenticated:
+            flash('Unauthorized access. Please log in.', 'error')
+            return redirect(url_for('login'))
         # Retrieve form data
         service_id = request.form.get('service_id')
         agent_name = request.form.get('agent')
@@ -236,7 +244,8 @@ def book_appointment():
             return redirect(url_for('appointment'))
 
         employee_id = employee.employee_id
-
+        token = generate_secure_token()
+        
         service = Service.query.filter_by(service_id=service_id).first()
         if not service:
             flash('Service not found.')
@@ -247,6 +256,7 @@ def book_appointment():
         print(service)
         # Create a new appointment
         new_appointment = Appointment(
+            token_number = token,
             username=current_username,
             employee_id=employee_id,
             service_id = service_id,
@@ -257,7 +267,7 @@ def book_appointment():
         # Add and commit to the database
         db.session.add(new_appointment)
         db.session.commit()
-        return redirect(url_for('appointment_proceed'))
+        return redirect(url_for('appointment_proceed' ,token=token,service_id=service_id))
 
     except Exception as e:
         print(f"Error: {e}")  # Log the error for debugging
@@ -265,7 +275,11 @@ def book_appointment():
 
 @app.route("/appointment/proceed")
 def appointment_proceed():
-    return render_template("appointment_proceed.html")
+    token = request.args.get('token')
+    service_id = request.args.get('service_id')
+    service = Service.query.filter_by(service_id=service_id).first()
+
+    return render_template("appointment_proceed.html",token=token,service=service)
 
 @app.route("/logout")
 def logout():

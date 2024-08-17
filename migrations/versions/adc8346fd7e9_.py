@@ -1,8 +1,8 @@
 """empty message
 
-Revision ID: bc1d198b2410
+Revision ID: adc8346fd7e9
 Revises: 
-Create Date: 2024-08-17 15:58:38.392295
+Create Date: 2024-08-17 18:51:35.431179
 
 """
 from alembic import op
@@ -10,7 +10,7 @@ import sqlalchemy as sa
 
 
 # revision identifiers, used by Alembic.
-revision = 'bc1d198b2410'
+revision = 'adc8346fd7e9'
 down_revision = None
 branch_labels = None
 depends_on = None
@@ -31,14 +31,17 @@ def upgrade():
     )
     op.create_table('appointment',
     sa.Column('id', sa.Integer(), nullable=False),
+    sa.Column('token_number', sa.String(length=12), nullable=False),
     sa.Column('username', sa.String(length=100), nullable=False),
     sa.Column('employee_id', sa.Integer(), nullable=False),
     sa.Column('service_id', sa.Integer(), nullable=False),
     sa.Column('date', sa.Date(), nullable=False),
     sa.Column('time', sa.Time(), nullable=False),
+    sa.Column('payment_status', sa.String(length=20), nullable=False),
     sa.ForeignKeyConstraint(['employee_id'], ['employee.id'], ),
     sa.ForeignKeyConstraint(['service_id'], ['services.service_id'], ),
-    sa.PrimaryKeyConstraint('id')
+    sa.PrimaryKeyConstraint('id'),
+    sa.UniqueConstraint('token_number')
     )
     op.create_table('employee_service',
     sa.Column('employee_id', sa.Integer(), nullable=True),

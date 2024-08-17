@@ -78,11 +78,13 @@ class Service(db.Model):
 
 class Appointment(db.Model):
     id = db.Column(db.Integer, primary_key=True)
+    token_number = db.Column(db.String(12), unique=True, nullable=False)
     username = db.Column(db.String(100), nullable=False)
     employee_id = db.Column(db.Integer, db.ForeignKey('employee.id'), nullable=False)
     service_id = db.Column(db.Integer, db.ForeignKey('services.service_id'), nullable=False)
     date = db.Column(db.Date, nullable=False)
     time = db.Column(db.Time, nullable=False)
+    payment_status = db.Column(db.String(20), nullable=False, default='Pending')
 
     employee = db.relationship('Employee', backref=db.backref('appointments', lazy=True))
     service = db.relationship('Service')

@@ -273,11 +273,13 @@ html {
   padding: 2rem;
   margin: 80px 19%;
   max-width: 800px;
+  align-items: center;
+  justify-content: center;
 }
 
 .success-page h1 {
   font-size: 2rem;
-  color: #4CAF50; /* Green color for success */
+  color: #7d4a95; /* Green color for success */
   margin-bottom: 1rem;
 }
 
@@ -321,4 +323,26 @@ html {
 
 .payment-options .btn-pay-later:hover {
   background-color: #e0a800; /* Darker yellow on hover */
+}
+
+.token{
+  display: flex;
+  background-color: #45a049;
+  color: white;
+  border-radius: 5px;
+  max-width: 200px;
+  align-items: center;
+  justify-content: center;
+  padding: 3px;
+}
+
+.price{
+  display: flex;
+  background-color: #b9a02f;
+  color: white;
+  border-radius: 5px;
+  max-width: 100px;
+  align-items: center;
+  justify-content: center;
+  padding: 3px;
 }
