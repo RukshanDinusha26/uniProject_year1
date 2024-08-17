@@ -12,28 +12,74 @@
       <div class="profile-container">
         <div class="propic-container">
           <div class="propic">
+            <img src="" alt="Profile Picture">
           </div>
         </div>
         <div class="proinfo-container">
           <span class="name">
-            Rukshan Dinusha
+            {{ user.firstname }} {{ user.lastname }}
           </span>
           <span class="email">
-            Rukshan.Dinusha3@gmail.com
+            {{ user.email }}
           </span>
           <br>
           <span class="appointments">
-            0 Appointments Pending
+            {{ pending_appointments|length }} Appointments Pending
           </span>
         </div>
         <div class="proedit-container">
           <div class="button-container">
-          <a href=" {{ url_for('account_settings')}}"><button class="profile-edit-btn">Edit Profile</button></a>
+            <a href="{{ url_for('account_settings') }}"><button class="profile-edit-btn">Edit Profile</button></a>
           </div>
         </div>
-        
       </div>
     </div>
+
+    <div class="sub_title"><h4>Pending Appointments</h4></div>
+    <div class="appointments-section">
+      
+      {% if pending_appointments %}
+      <table>
+        <thead>
+          <tr>
+            <th>Service</th>
+            <th>Date</th>
+            <th>Time</th>
+            <th>Status</th>
+            <th>Action</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for appointment in pending_appointments %}
+          <tr>
+            <td>{{ appointment.Service.service_name }}</td>
+            <td>{{ appointment.Appointment.date.strftime('%B %d, %Y') }}</td>
+            <td>{{ appointment.Appointment.time.strftime('%I:%M %p') }}</td>
+            <td>{{ appointment.Appointment.payment_status }}</td>
+            <td>
+              {% if appointment.Appointment.payment_status == 'Pending' %}
+              <form action="" method="POST">
+                <input type="hidden" name="appointment_id" value="{{ appointment.id }}">
+                <button type="submit" class="btn-pay">Pay</button>
+              </form>
+              {% else %}
+              <span>Paid</span>
+              {% endif %}
+            </td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+      {% else %}
+      <p>No pending appointments.</p>
+      {% endif %}
+    </div>
+
+    <div class="appointment-history-section">
+      <h3>Appointment History</h3>
+      <!-- Similar structure for showing past appointments, if needed -->
+    </div>
+    
   </div>
 </div>
 

@@ -14,5 +14,10 @@
       <a href="{{ url_for('home')}}" class="btn btn-pay-later">Pay Later</a>
     </div>
 </div>
+<script type="text/javascript">
+    window.onbeforeunload = function() {
+        return "Are you sure you want to leave this page? Your changes may not be saved.";
+    };
+</script>
 
 {% endblock content %}

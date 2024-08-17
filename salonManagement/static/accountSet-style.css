@@ -195,14 +195,6 @@ form{
   color:#bb86c0;
 }
 
-.setting-sub-container{
-  display: none;
-  animation: moving .5s ease;
-}
 @keyframes moving{
   from{transform: translateY(50px);opacity: 0;}
-}
-
-.setting-sub-container.active{
-  display: block;
 }

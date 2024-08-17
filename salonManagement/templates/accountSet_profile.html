@@ -1,0 +1,47 @@
+{% extends "accountSet.html" %}
+
+{% block settings %}
+    <div class="setting-sub-container active">
+        <div class="title-cont">
+            <span>Edit Profile</span>
+        </div>
+        <div class="img-main-cont">
+            <div class="img-cont">S
+                <div class="img-holder">
+                </div>
+            </div>
+            <div class="img-btn-cont">
+                <div class="change-ctn">
+                    <button class="change-img-btn">Change Image
+                    </button>
+                </div>
+            </div>
+        </div>
+        <div class="info-cont">
+                <div class="profile-box">
+                        <div class="info-col">
+                            <div class="r-1">
+                                <label class="username-label" for="username">Username</label>
+                                <input type="text" class="username">
+
+                                <label class="email-label" for="email">Email</label>
+                                <input type="text" class="email">
+                            </div>
+                            <div class="r-2">
+                                <label class="fname-label" for="fname">First Name</label>
+                                <input type="text" class="fname">
+                                <label class="lname-label" for="lname">Last Name</label>
+                                <input type="text" class="lname">
+                            </div>
+                        </div>
+                        <div class="about-col">
+                            <label class="about-label" for="about">About</label>
+                            <textarea id="about" rows="4"></textarea>
+                        </div>
+                        
+                </div>
+        </div>
+
+    </div>
+    
+{% endblock settings %}

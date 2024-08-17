@@ -1,4 +1,5 @@
 from flask import Flask
+from datetime import datetime, timezone
 from flask_sqlalchemy import SQLAlchemy
 from flask_bcrypt import Bcrypt
 from flask_migrate import Migrate
@@ -38,6 +39,7 @@ class User(db.Model, UserMixin):
     dob = Column(Date)
     address = Column(Text)
     gender = Column(String(10))
+    created_at = db.Column(db.DateTime, default=lambda: datetime.now(timezone.utc))
 
     employee_id = Column(Integer, ForeignKey('employee.id'), nullable=True)
     # Relationships

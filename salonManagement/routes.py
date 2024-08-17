@@ -4,7 +4,7 @@ from salonManagement import db, User, app, bcrypt, Employee, Appointment , Servi
 from salonManagement.forms import SignUpForm , LoginForm
 from flask_sqlalchemy import SQLAlchemy
 from sqlalchemy.orm import joinedload
-from flask_login import login_user, current_user, logout_user
+from flask_login import login_user, current_user, logout_user, login_required
 from datetime import datetime, time as dt_time
 from sqlalchemy import func
 import time
@@ -14,6 +14,7 @@ matplotlib.use('Agg')
 import matplotlib.pyplot as plt
 import io
 import base64
+from flask import session
 import seaborn 
 from sklearn.model_selection import TimeSeriesSplit
 from sklearn.ensemble import RandomForestRegressor
@@ -263,10 +264,12 @@ def book_appointment():
             date=date,
             time=time
         )
-        print(new_appointment)
         # Add and commit to the database
         db.session.add(new_appointment)
         db.session.commit()
+
+        session['appointment_proceed'] = True
+
         return redirect(url_for('appointment_proceed' ,token=token,service_id=service_id))
 
     except Exception as e:
@@ -275,9 +278,16 @@ def book_appointment():
 
 @app.route("/appointment/proceed")
 def appointment_proceed():
+
+    if not session.get('appointment_proceed'):
+        flash('Unauthorized access to this page.', 'error')
+        return redirect(url_for('appointment'))
+
     token = request.args.get('token')
     service_id = request.args.get('service_id')
     service = Service.query.filter_by(service_id=service_id).first()
+    
+    session.pop('appointment_proceed', None)
 
     return render_template("appointment_proceed.html",token=token,service=service)
 
@@ -287,8 +297,20 @@ def logout():
     return redirect(url_for('home'))
 
 @app.route("/account")
+@login_required
 def account():
-    return render_template("account.html")
+    user = current_user  # Assuming current_user contains the logged-in user's details
+
+    # Fetch pending appointments for the user
+    pending_appointments = (
+        db.session.query(Appointment, Service)
+        .join(Service, Appointment.service_id == Service.service_id)
+        .filter(Appointment.username == user.username, Appointment.payment_status == 'Pending')
+        .all()
+    )
+
+    # Pass the user and appointments to the template
+    return render_template('account.html', user=user, pending_appointments=pending_appointments)
 
 @app.route("/account/settings")
 def account_settings():
@@ -535,3 +557,21 @@ def adminPanel_employee():
 def adminPanel_payments():
 
     return render_template("admin-payments.html",active_tab='payments')
+
+
+@app.route("/account-settings/profile")
+def accountSet_profile():
+
+    return render_template("accountSet_profile.html",active_tab='payments')
+
+
+@app.route("/account-settings/personal")
+def accountSet_personal():
+
+    return render_template("accountSet_personal.html",active_tab='payments')
+
+
+@app.route("/account-settings/personal")
+def accountSet_account():
+
+    return render_template("accountSet_account.html",active_tab='payments')
