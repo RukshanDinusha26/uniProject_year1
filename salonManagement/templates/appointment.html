@@ -8,138 +8,149 @@
 
 {% block content %}
 <body>
-
-<div class="popup-container2">
-</div>
-<div class="container-main">
-  <div class="container2">
-    <div class="title_container">
-    <input type="hidden" id="emp_name" name="employee_name" value="">
-    <div class="employee_container">
-      <div class="wrapper">
-        <div class="profile_pic"></div>
-        <div class="employee_info">
-          <span class="employee_type">{{ employees[0].employee_type }}</span>
-          <span class="employee_name" >Mr.{{ employees[0].employee_name }}</span>
-        </div>
-      </div>
-      <i class="fa-solid fa-angle-down" id="dropdown"></i>
-
-      <div class="list">
-        {% for employee in employees %}
-        <div class="item">
-          <div class="profile_pic"></div>
-          <div class="employee_info">
-            <span class="employee_type">{{ employee.employee_type }}</span>
-            <span class="employee_name">Mr.{{ employee.employee_name }}</span>
-          </div>
+    <div class="appointment-container">
+      <!-- Services Section -->
+       
+      <div class="services-section">
+        {% for service in services %}
+        <div class="service-item">
+          <input type="radio" name="service" id="service{{ loop.index }}" value="{{ service.service_id }}"
+          data-service-id="{{ service.service_id }}"
+          data-agents="{{ service.agent_names | join(',') }}"
+          data-employee-ids="{{ service.employee_ids | join(',') }}"
+          onchange="console.log('Selected service:', this.value)" >
+          <label for="service{{ loop.index }}">
+            <div class="service-card">
+              <img src="{{ url_for('static', filename='images/service1.jpg') }}" alt="Service 1">
+              <div class="service-details">
+                <div class="service-name">{{ service.service_name }}</div>
+                <div class="service-price">Rs. {{ service.price }}</div>
+              </div>
+            </div>
+          </label>
         </div>
         {% endfor %}
       </div>
-    </div>
-    <div class="date_container">
-      <div class="date_info">
-        <input type="date" id="date" name="date" class="datepicker">
+      <div class="booking-section">
+        <form method="POST" action="{{ url_for('book_appointment') }}" onsubmit="checkSelectedService(event)">
+          <input type="hidden" name="service_id" id="hidden-service-id">
+          <input type="hidden" name="employee_id" id="hidden-employee-id">
+          <!-- Select Agent -->
+          <div class="form-group">
+            <label for="select-agent">Select Barber / Beautician </label>
+            <select name="agent" id="select-agent">
+            </select>
+          </div>
+          
+          <!-- Select Date -->
+          <div class="form-group">
+            <label for="select-date">Select Date</label>
+            <input type="date" name="date" id="select-date" required>
+          </div>
+  
+          <!-- Select Available Time -->
+          <div class="form-group">
+            <div class="subtitle">Select Available Time</div>
+            <div class="available-times" id="available-times">
+              
+              <input type="radio" id="time1" name="time" value="9:00 AM">
+              <label for="time1" class="time-slot">9:00 AM</label>
+              <input type="radio" id="time2" name="time" value="10:00 AM">
+              <label for="time2" class="time-slot">10:00 AM</label>
+              <input type="radio" id="time3" name="time" value="11:00 AM">
+              <label for="time3" class="time-slot">11:00 AM</label>
+              <input type="radio" id="time4" name="time" value="12:00 PM">
+              <label for="time4" class="time-slot">12:00 PM</label>
+              <input type="radio" id="time5" name="time" value="1:00 PM">
+              <label for="time5" class="time-slot">1:00 PM</label>
+              <input type="radio" id="time6" name="time" value="2:00 PM">
+              <label for="time6" class="time-slot">2:00 AM</label>
+            </div>
+          </div>
+  
+          <!-- Submit Button -->
+           <div class="btn-cont">
+          <button type="submit" class="btn2 submit">Book Appointment</button>
+          </div>
+        </form>
       </div>
     </div>
 
-    <div class="time_container">
-      <div class="time_info">
-        Select Time
-      </div>
-      <div class="time_dropdown">
-        --select date--
-      </div>
-      <div class="time_logo">
-        <i class="fa-regular fa-clock" id="time"></i>
-      </div>
-    </div>
-    <div class="button_container">
-        <button class="add" onclick="addAppointment()"><i class="fa-solid fa-plus"></i>Add</button>
-       <!--<button class="cancel"><i class="fa-solid fa-xmark"></i>Cancel</button> -->
-      </div>
-  </form>
-  </div>
-  <div class="content_container">
-    <div class="table_head_container">
-      <div class="table_title active">
-        <span class="table_date">02</span>
-        <span class="table_date_des">Today</span>
-      </div>
-      <div class="table_title notactive">
-        <span class="table_date">03</span>
-        <span class="table_date_des">Tommorow</span>
-      </div>
-      <div class="table_title notactive">
-        <span class="table_date">04</span>
-        <span class="table_date_des">Day after</span>
-      </div>
-    </div>
-    <div class="table_container">
-      <table class="table">
-        <thead>
-          <tr>
-            <th></th>
-            <th class="t_head">CUSTOMER</th>
-            <th class="t_head">APPOINTMENT</th>
-            <th class="t_head">WAITED</th>
-            <th class="t_head">STATUS</th>
-            <th></th>
-            <th></th>
-          </tr>
-        </thead>
-        <tbody>
-          {% set count = {} %}
-          {% for appointment in appointments %}
-            {% set emp = appointment.employee_name %}
-
-            {% if not count[emp] %}
-              {% set _ = count.update({emp:1}) %}
-            {% endif %}
-          <tr class='t_row' data-employee="{{ appointment.employee_name }}">
-            <td>
-              <div class="number yellow">{{ count[emp] }}</div>
-            </td>
-            <td>
-              <div class="customer_container">
-                <div class="customer_pro_pic">
-                </div>
-                <div class="customer_profile">
-                  <span class="customer_name">{{ appointment.username }}</span>
-                </div>
-              </div>
-            </td>
-            <td>
-              <span class="time">{{ appointment.time.strftime('%I:%M%p')}}</span>
-            </td>
-            <td>
-              <div class="waited">6 Mins</div>
-            </td>
-            <td>
-              <div class="status">On Going</div>
-            </td>
-            <td>
-              <button class="pay">Pay</button>
-            </td>
-          </tr>
-
-          {% set _ = count.update({emp: count[emp] + 1}) %}
-          {% endfor %}
       
-        </tbody>
-      </table>
-    </div>
-  </div>
-
-</div>
-</div>
-
+  
 <div id="popup-modal" class="popup-container" style="display: none;">
   <div class="popup-content">
     <span id="popup-message"></span>
     <button id="close-popup">OK</button>
   </div>
 </div>
+{% with messages = get_flashed_messages(with_categories=true) %}
+      {% if messages %}
+        <div class="flash-overlay">
+          <div class="flash-message">
+            {% for category, message in messages %}
+              <div class="alert alert-{{ category }}">
+                {{ message }}
+              </div>
+            {% endfor %}
+            <a href="{{ url_for('appointment') }}"><button class="btn">Continue</button></a>
+          </div>
+        </div>
+      {% endif %}
+  {% endwith %}
+
+<script>
+  document.addEventListener('DOMContentLoaded', function () {
+    const agentSelect = document.getElementById('select-agent');
+    const dateInput = document.getElementById('select-date');
+    const availableTimesDiv = document.getElementById('available-times');
+    
+    
+    function updateAvailableTimes() {
+      const agent = agentSelect.value;
+      const date = dateInput.value;
+      
+
+      if (agent && date) {
+        fetch(`/get_available_times?agent=${encodeURIComponent(agent)}&date=${encodeURIComponent(date)}`)
+          .then(response => response.json())
+          .then(data => {
+            availableTimesDiv.innerHTML = '';
+            data.times.forEach((time, index) => {
+              const timeSlotId = `time${index + 1}`;
+              const input = document.createElement('input');
+              input.type = 'radio';
+              input.id = timeSlotId;
+              input.name = 'time';
+              input.value = time;
+              const label = document.createElement('label');
+              label.htmlFor = timeSlotId;
+              label.className = 'time-slot';
+              label.textContent = time;
+              availableTimesDiv.appendChild(input);
+              availableTimesDiv.appendChild(label);
+            });
+          })
+          .catch(error => console.error('Error fetching available times:', error));
+      }
+    }
+
+    agentSelect.addEventListener('change', updateAvailableTimes);
+    dateInput.addEventListener('change', updateAvailableTimes);
+  });
+</script>
+<script>
+  function checkSelectedService(event) {
+    const selectedService = document.querySelector('input[name="service"]:checked');
+    
+    if (selectedService) {
+      console.log('Service ID to be booked:', selectedService.value);  // This will log the selected service_id
+    } else {
+      console.log('No service selected');
+      event.preventDefault();  // Prevent form submission if no service is selected
+    }
+  }
+</script>
 
 <script src="https://code.jquery.com/jquery-3.1.0.js" ></script>
 <script src="{{ url_for('static',filename='appointment-script.js')}}"></script>

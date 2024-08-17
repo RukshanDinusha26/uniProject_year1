@@ -4,6 +4,8 @@ from flask_bcrypt import Bcrypt
 from flask_migrate import Migrate
 from flask_login import LoginManager, UserMixin
 from sqlalchemy import CheckConstraint , UniqueConstraint
+from sqlalchemy import create_engine, Column, Integer, String, Text, Date, ForeignKey, Boolean, Float, ForeignKeyConstraint, Table
+from sqlalchemy.orm import relationship, declarative_base
 #from flask_debugtoolbar import  DebugToolbarExtension
 
 
@@ -23,46 +25,67 @@ def load_user(user_id):
     return User.query.get(int(user_id))
 
 class User(db.Model, UserMixin):
-    id = db.Column(db.Integer, primary_key=True)
-    accType = db.Column(db.String(20), nullable=False)
-    username = db.Column(db.String(20), unique=True, nullable=False)
-    fname=db.Column(db.String(120))
-    lname=db.Column(db.String(120))
-    email = db.Column(db.String(120), unique=True, nullable=False)
-    password = db.Column(db.String(60), nullable=False)
-    employee_id = db.Column(db.String(20),db.ForeignKey('employee.employee_id'), nullable=True, server_default=None)
+    __tablename__ = 'user'
 
-    employee = db.relationship('Employee', back_populates='user')
-    appointment = db.relationship('Appointment', back_populates='user')
+    id = Column(Integer, primary_key=True)
+    username = Column(String(50), unique=True, nullable=False)
+    email = Column(String(100), unique=True, nullable=False)
+    password = Column(String(100), nullable=False)
+    firstname = Column(String(50))
+    lastname = Column(String(50))
+    about = Column(Text)
+    age = Column(Integer)
+    dob = Column(Date)
+    address = Column(Text)
+    gender = Column(String(10))
+
+    employee_id = Column(Integer, ForeignKey('employee.id'), nullable=True)
+    # Relationships
+    employee = relationship("Employee", uselist=False, back_populates="user")
 
     def __repr__(self):
-        return f"User('{self.accType}','{self.username}',{self.email}','{self.password}','{self.employee_id}')"
+        return f"User('{self.username}',{self.email}','{self.employee_id}','{self.firstname},'{self.lastname})"
+
+employee_service = Table('employee_service', db.Model.metadata,
+    Column('employee_id', Integer, ForeignKey('employee.id')),
+    Column('service_id', Integer, ForeignKey('services.service_id'))
+)
+class Employee(db.Model):
+    __tablename__ = 'employee'
+
+    id = Column(Integer, primary_key=True)
+    user = relationship('User', back_populates='employee', uselist=False)
+    
+    # Define the many-to-many relationship with the Service model
+    services = relationship('Service', secondary=employee_service, back_populates='employees')
+
+    def __repr__(self):
+        return f"Employee('{self.id}')"
+
+class Service(db.Model):
+    __tablename__ = 'services'
+    
+    service_id = db.Column(db.Integer, primary_key=True, autoincrement=True)
+    service_name = db.Column(db.String(100), nullable=False)
+    service_image = db.Column(db.String(255))  # Stores image file path or URL
+    price = db.Column(db.Float, nullable=False)
+
+    # Define the many-to-many relationship with the Employee model
+    employees = relationship('Employee', secondary=employee_service, back_populates='services')
+
+    def __repr__(self):
+        return f"Service('{self.service_name}','{self.service_id}','{self.service_image}','{self.price}')"
 
 class Appointment(db.Model):
     id = db.Column(db.Integer, primary_key=True)
-    username = db.Column(db.String(20), db.ForeignKey('user.username'), nullable=False)
-    employee_name = db.Column(db.String(255), nullable=False)
-    employee_id = db.Column(db.String(255), db.ForeignKey('employee.employee_id'), nullable=False)
+    username = db.Column(db.String(100), nullable=False)
+    employee_id = db.Column(db.Integer, db.ForeignKey('employee.id'), nullable=False)
+    service_id = db.Column(db.Integer, db.ForeignKey('services.service_id'), nullable=False)
     date = db.Column(db.Date, nullable=False)
     time = db.Column(db.Time, nullable=False)
 
-    user = db.relationship('User', back_populates='appointment')
-    employee = db.relationship('Employee', back_populates='appointment')
+    employee = db.relationship('Employee', backref=db.backref('appointments', lazy=True))
+    service = db.relationship('Service')
 
-    __table_args__ = (UniqueConstraint('date', 'time', name='unique_date_time'),)
-
-    def __repr__(self):
-        return f"Appointment('{self.username}', '{self.employee_name}', '{self.employee_id}', '{self.date}', '{self.time}')"
-
-class Employee(db.Model):
-    id = db.Column(db.Integer, primary_key=True)
-    employee_id = db.Column(db.String(20), nullable=False, unique=True)
-    employee_name = db.Column(db.String(255))
-    employee_type = db.Column(db.String(255))
-
-    user = db.relationship('User', back_populates='employee')
-    appointment = db.relationship('Appointment', back_populates='employee')
-
-    
 
 from salonManagement import routes #to avoid circular import 

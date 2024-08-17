@@ -1,0 +1,41 @@
+{% extends 'appointment.html' %}
+
+{% block table %}
+{% set count = {} %}
+          {% for appointment in appointments %}
+            {% set emp = appointment.employee_name %}
+
+            {% if not count[emp] %}
+              {% set _ = count.update({emp:1}) %}
+            {% endif %}
+          <tr class='t_row' data-employee="{{ appointment.employee_id }}">
+            <td>
+              <div class="number yellow">{{ count[emp] }}</div>
+            </td>
+            <td>
+              <div class="customer_container">
+                <div class="customer_pro_pic">
+                </div>
+                <div class="customer_profile">
+                  <span class="customer_name">{{ appointment.username }}</span>
+                </div>
+              </div>
+            </td>
+            <td>
+              <span class="time">{{ appointment.time.strftime('%I:%M%p')}}</span>
+            </td>
+            <td>
+              <div class="waited">6 Mins</div>
+            </td>
+            <td>
+              <div class="status">On Going</div>
+            </td>
+            <td>
+              <button class="pay">Pay</button>
+            </td>
+          </tr>
+
+          {% set _ = count.update({emp: count[emp] + 1}) %}
+          {% endfor %}
+
+{% endblock table %}

@@ -1,10 +1,11 @@
 import json
 from flask import request, render_template, url_for, flash, redirect, jsonify
-from salonManagement import db, User, app, bcrypt, Employee, Appointment
+from salonManagement import db, User, app, bcrypt, Employee, Appointment , Service
 from salonManagement.forms import SignUpForm , LoginForm
 from flask_sqlalchemy import SQLAlchemy
+from sqlalchemy.orm import joinedload
 from flask_login import login_user, current_user, logout_user
-from datetime import datetime
+from datetime import datetime, time as dt_time
 from sqlalchemy import func
 import time
 import pandas 
@@ -51,52 +52,119 @@ def signup():
         email = request.form.get("email")
         password = request.form.get("pwd")
 
-        new_user = User(accType=usertype, employee_id=emp_id,
-                        username=name, password=password, email=email)
+
+        new_user = User(
+            username=name,
+            email=email,
+            password=password
+        )
+
+        if usertype == 'employee':
+            existing_employee = Employee.query.filter_by(id=emp_id).first()
+            
+            if existing_employee:
+                # If employee ID exists, create the employee user account
+                new_user = User(
+                    username=name,
+                    email=email,
+                    password=password,
+                    employee_id = emp_id
+                )
+            else:
+                # If employee ID does not exist, flash an error message
+                flash('Employee ID does not exist. Please contact the admin.', 'danger')
+                return render_template('signup.html', title="Signup", form1=form1)
+            
         db.session.add(new_user)
         db.session.commit()
 
-        flash('Your account has been created! Please Log in to continue', 'success')
+        flash('Your account has been created! Please log in to continue.', 'success')
 
     return render_template('signup.html', title="signup", form1=form1)
 
-@app.route("/appointment/add",methods=['GET', 'POST'])         
-def appointmentAdd():
+
+@app.route("/appointment/add", methods=['GET', 'POST'])
+def appointment_add():
     if request.method == 'POST':
-
         if not current_user.is_authenticated:
-            return jsonify({'error': 'Unauthorized'}), 401
+            flash('Unauthorized access. Please log in.', 'error')
+            return redirect(url_for('login'))
 
-        employee_name = request.form.get('appEmp')
-        date = request.form.get('appDate')
-        time = request.form.get('appTime')
-        print(employee_name)
-        print(date)
-        print(time)
-    
-        #dont use employee = Employee.query.filter_by(employee_name=employee_name).first()
+        employee_id = request.form['employee_id']
+        date = request.form['date']
+        time = request.form['time']
+
         current_username = current_user.username
-        #dont use if employee:
         date_obj = datetime.strptime(date, '%Y-%m-%d').date()
-        
         time_obj = datetime.strptime(time, '%H:%M').time()
 
-        appointment = Appointment (
-                username=current_username,
-                employee_name = employee_name,
-                employee_id= '123',
-                date = date_obj,
-                time=time_obj
-            )
+        employee_id = request.form.get('employee_id')
+
+        appointment = Appointment(
+            username=current_username,
+            employee_id=employee_id,
+            date=date_obj,
+            time=time_obj
+        )
+        print(appointment)
         db.session.add(appointment)
         db.session.commit()
 
-        return jsonify({'user':current_username})
+        flash('Appointment added successfully!', 'success')
+
+ALL_TIME_SLOTS = [
+    "9:00 AM", "10:00 AM", "11:00 AM", "12:00 PM", "1:00 PM", "2:00 PM", "3:00 PM", "4:00 PM"
+]
+@app.route('/get_available_times')
+def get_available_times():
+    try:
+        agent_name = request.args.get('agent')
+        date_str = request.args.get('date')
+        date = datetime.strptime(date_str, '%Y-%m-%d') if date_str else None
+
+        if not agent_name or not date:
+            return jsonify({'times': []})
+
+        # Split the agent_name into first and last names if applicable
+        name_parts = agent_name.split(' ', 1)  # Split on the first space
+        if len(name_parts) != 2:
+            return jsonify({'times': []})
+
+        first_name, last_name = name_parts
+
+        # Query to find the employee ID based on the agent's name
+        employee = User.query.filter_by(firstname=first_name, lastname=last_name).first()
+
+        if not employee:
+            return jsonify({'times': []})
+
+        employee_id = employee.employee_id
+
+        # Convert time strings to datetime.time objects for comparison
+        available_times = [dt_time(hour=int(slot.split(':')[0]), minute=int(slot.split(':')[1].split(' ')[0])) for slot in ALL_TIME_SLOTS]
+
+        # Query existing appointments
+        appointments = Appointment.query.filter_by(employee_id=employee_id, date=date).all()
+
+        # Extract booked times
+        booked_times = [appt.time for appt in appointments]
+
+        # Determine available times by removing booked times
+        available_times = [slot for slot in available_times if slot not in booked_times]
+
+        # Convert available times back to string format
+        available_times_str = [f"{t.strftime('%I:%M %p')}" for t in available_times]
+
+        return jsonify({'times': available_times_str})
+
+    except Exception as e:
+        print(f"Error: {e}")  # Log the error for debugging
+        return jsonify({'times': []})
+
+
     
-
 @app.route("/appointment", methods=['GET','POST'])
-def appointment(): #can also get data by AJAX       
-
+def appointment(): 
     if request.is_json:
         if request.method == 'POST':
             datepicked = request.json.get('date')
@@ -104,9 +172,13 @@ def appointment(): #can also get data by AJAX
             print()
             print(datepicked)
             print(selectedEmployee)
-            datepicked_obj = datetime.strptime(datepicked,'%Y-%m-%d').date()
-            appt = Appointment.query.filter(Appointment.date.like(datepicked_obj), Appointment.employee_name.like(selectedEmployee)).all()
-            print(appt)
+
+            datepicked_obj = datetime.strptime(datepicked, '%Y-%m-%d').date()
+
+            appt = Appointment.query.filter(
+                Appointment.date == datepicked_obj,
+                Appointment.employee_name == selectedEmployee
+            ).all()
 
             hours = [8,9,10,11,12,13,14,15,16,17]
             for appt_item in appt:
@@ -119,11 +191,81 @@ def appointment(): #can also get data by AJAX
             return jsonify({'hours': hours})
     
 
-    employees = Employee.query.all()
+    employees = db.session.query(Employee, User).join(User).all()
+    services = Service.query.all()
+    for service in services:
+        service.agent_names = [
+            f"{employee.user.firstname} {employee.user.lastname}" 
+            for employee in service.employees
+        ]
+    print(employees)
     appointments = Appointment.query.all()
     users = User.query.all()
 
-    return render_template("appointment.html", employees=employees, appointments=appointments, users=users)
+    return render_template("appointment.html", employees=employees, appointments=appointments, users=users, services=services)
+
+
+@app.route('/book_appointment', methods=['POST'])
+def book_appointment():
+    print(request.form)
+    try:
+        # Retrieve form data
+        service_id = request.form.get('service_id')
+        agent_name = request.form.get('agent')
+        date_str = request.form.get('date')
+        time_str = request.form.get('time')
+        print(service_id)
+
+        # Parse date and time
+        date = datetime.strptime(date_str, '%Y-%m-%d') if date_str else None
+        time = datetime.strptime(time_str, '%I:%M %p').time() if time_str else None
+
+        current_username = current_user.username
+
+        # Get employee_id from agent_name
+        name_parts = agent_name.split(' ', 1)
+        if len(name_parts) != 2:
+            flash('Invalid agent name.')
+            return redirect(url_for('appointment'))
+
+        first_name, last_name = name_parts
+        employee = User.query.filter_by(firstname=first_name, lastname=last_name).first()
+
+        if not employee:
+            flash('Agent not found.')
+            return redirect(url_for('appointment'))
+
+        employee_id = employee.employee_id
+
+        service = Service.query.filter_by(service_id=service_id).first()
+        if not service:
+            flash('Service not found.')
+            print(service_id)
+            return redirect(url_for('appointment'))
+
+        service_id = service.service_id
+        print(service)
+        # Create a new appointment
+        new_appointment = Appointment(
+            username=current_username,
+            employee_id=employee_id,
+            service_id = service_id,
+            date=date,
+            time=time
+        )
+        print(new_appointment)
+        # Add and commit to the database
+        db.session.add(new_appointment)
+        db.session.commit()
+        return redirect(url_for('appointment_proceed'))
+
+    except Exception as e:
+        print(f"Error: {e}")  # Log the error for debugging
+        flash('An error occurred while booking the appointment.')
+
+@app.route("/appointment/proceed")
+def appointment_proceed():
+    return render_template("appointment_proceed.html")
 
 @app.route("/logout")
 def logout():
