@@ -542,10 +542,75 @@ def adminPanel():
 
     return render_template("admin-panel.html")
 
-@app.route("/admin-panel/appointments")
+@app.route("/admin-panel/appointments",methods=['POST','GET'])
 def adminPanel_appointments():
+    today = datetime.today().date()
+    yesterday = today - timedelta(days=1)
+    tomorrow = today + timedelta(days=1)
+    
+    # Fetch appointments for yesterday, today, and tomorrow
+    appointments_yesterday = (
+        db.session.query(Appointment, Service)
+        .join(Service, Appointment.service_id == Service.service_id)
+        .filter(Appointment.date == yesterday)
+        .all()
+    )
+    appointments_today = (
+        db.session.query(Appointment, Service)
+        .join(Service, Appointment.service_id == Service.service_id)
+        .filter(Appointment.date == today)
+        .all()
+    )
+    appointments_tomorrow = (
+        db.session.query(Appointment, Service)
+        .join(Service, Appointment.service_id == Service.service_id)
+        .filter(Appointment.date == tomorrow)
+        .all()
+    )
 
-    return render_template("admin-appointments.html",active_tab='appointments')
+    
+    list_appointments = {
+        'yesterday': [],
+        'today': [],
+        'tomorrow': []
+    }
+    
+    for appointment in appointments_yesterday:
+            list_appointments['yesterday'].append(appointment)
+
+    for appointment in appointments_today:
+            list_appointments['today'].append(appointment)
+
+    for appointment in appointments_tomorrow:
+            list_appointments['tomorrow'].append(appointment)
+    
+    if request.method == 'POST':
+        appointment_id = request.form.get('appointment_id')
+        status = request.form.get('status')
+        payment_status = request.form.get('payment_status')
+
+        if not appointment_id or not appointment_id.isdigit():
+            flash('Please Select an Appointment to update!', 'error')
+            return redirect(url_for('adminPanel_appointments'))
+        
+        # Update appointment status
+        appointment = db.session.query(Appointment).filter_by(id=appointment_id).first()
+        if appointment:
+            appointment.status = status
+            appointment.payment_status = payment_status
+            db.session.commit()
+        
+        return redirect(url_for('adminPanel_appointments'))
+
+    return render_template(
+        'admin-appointments.html',
+        list_appointments=list_appointments,
+        yesterday=yesterday,
+        today=today,
+        tomorrow=tomorrow,
+        active_tab='appointments'
+    )
+    
 
 
 @app.route("/admin-panel/employee")
@@ -612,3 +677,82 @@ def appointments_schedule():
         today=today,
         tomorrow=tomorrow
     )
+
+@app.route('/appointments/manage', methods=['GET', 'POST'])
+def manage_appointments():
+    today = datetime.today().date()
+    yesterday = today - timedelta(days=1)
+    tomorrow = today + timedelta(days=1)
+    
+    # Fetch appointments for yesterday, today, and tomorrow
+    appointments_yesterday = (
+        db.session.query(Appointment, Service)
+        .join(Service, Appointment.service_id == Service.service_id)
+        .filter(Appointment.date == yesterday)
+        .all()
+    )
+    appointments_today = (
+        db.session.query(Appointment, Service)
+        .join(Service, Appointment.service_id == Service.service_id)
+        .filter(Appointment.date == today)
+        .all()
+    )
+    appointments_tomorrow = (
+        db.session.query(Appointment, Service)
+        .join(Service, Appointment.service_id == Service.service_id)
+        .filter(Appointment.date == tomorrow)
+        .all()
+    )
+
+    user = current_user
+    user_id = user.id 
+    employee = (db.session.query(Employee, User)
+            .join(User, Employee.user)
+            .filter(User.id == user_id)
+            .first())
+
+    
+    employee_appointments = {
+        'yesterday': [],
+        'today': [],
+        'tomorrow': []
+    }
+    
+    for appointment in appointments_yesterday:
+        if appointment.Appointment.employee_id == employee.User.employee_id:
+            employee_appointments['yesterday'].append(appointment)
+
+    for appointment in appointments_today:
+        if appointment.Appointment.employee_id == employee.User.employee_id:
+            employee_appointments['today'].append(appointment)
+
+    for appointment in appointments_tomorrow:
+        if appointment.Appointment.employee_id == employee.User.employee_id:
+            employee_appointments['tomorrow'].append(appointment)
+    
+    if request.method == 'POST':
+        appointment_id = request.form.get('appointment_id')
+        status = request.form.get('status')
+        payment_status = request.form.get('payment_status')
+
+        if not appointment_id or not appointment_id.isdigit():
+            flash('Please Select an Appointment to update!', 'error')
+            return redirect(url_for('manage_appointments'))
+        
+        # Update appointment status
+        appointment = db.session.query(Appointment).filter_by(id=appointment_id).first()
+        if appointment:
+            appointment.status = status
+            appointment.payment_status = payment_status
+            db.session.commit()
+        
+        return redirect(url_for('manage_appointments'))
+
+    return render_template(
+        'manage_appointments.html',
+        employee_appointments=employee_appointments,
+        yesterday=yesterday,
+        today=today,
+        tomorrow=tomorrow
+    )
+
