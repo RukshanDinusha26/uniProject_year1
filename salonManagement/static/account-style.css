@@ -90,9 +90,7 @@ body {
   color: #a067ba;
 }
 
-.button-container {
-  margin-top: 20px;
-}
+
 
 .profile-edit-btn {
   background-color: #a067ba;
@@ -199,4 +197,9 @@ body {
   font-size: 1.2rem;
   margin-bottom: 40px;
   color: #333;
+}
+
+.member_since{
+  margin: 0;
+  font-size: 0.8rem;
 }

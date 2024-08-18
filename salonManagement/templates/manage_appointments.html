@@ -1,0 +1,88 @@
+{% extends "layout.html" %}
+
+{% block head %}
+<link rel="stylesheet" href="{{ url_for('static', filename='employee_appointment_schedule-style.css') }}" />
+{% endblock head %}
+</head>
+
+{% block content %}
+<body>
+    <h1>Manage Appointments</h1>
+
+    <!-- Form for Selecting Date -->
+    <form method="GET" action="{{ url_for('employee_manage_appointments') }}">
+        <label for="date-select">Select Date:</label>
+        <select id="date-select" name="date" onchange="this.form.submit()">
+            <option value="yesterday" {% if selected_date == 'yesterday' %}selected{% endif %}>Yesterday</option>
+            <option value="today" {% if selected_date == 'today' %}selected{% endif %}>Today</option>
+            <option value="tomorrow" {% if selected_date == 'tomorrow' %}selected{% endif %}>Tomorrow</option>
+        </select>
+    </form>
+
+    <!-- Table for Appointments -->
+    <div class="appointment-schedule">
+        <h2>Appointments for {{ date_label }}</h2>
+        <div class="table-container">
+            <form method="POST" action="{{ url_for('update_appointment_status') }}">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Service</th>
+                            <th>Time Slot</th>
+                            <th>Price</th>
+                            <th>Status</th>
+                            <th>Payment Status</th>
+                            <th>Action</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% if appointments %}
+                            {% for appointment in appointments %}
+                                <tr>
+                                    <td class="service-name">{{ appointment.Service.service_name }}</td>
+                                    <td>{{ appointment.Appointment.time.strftime('%H:%M') }}</td>
+                                    <td>${{ appointment.Service.price }}</td>
+                                    <td>
+                                        <select name="status_{{ appointment.Appointment.id }}">
+                                            <option value="ongoing" {% if appointment.Appointment.status == 'ongoing' %}selected{% endif %}>Ongoing</option>
+                                            <option value="yet to come" {% if appointment.Appointment.status == 'yet to come' %}selected{% endif %}>Yet to Come</option>
+                                            <option value="completed" {% if appointment.Appointment.status == 'completed' %}selected{% endif %}>Completed</option>
+                                            <option value="didn't show up" {% if appointment.Appointment.status == "didn't show up" %}selected{% endif %}>Didn't Show Up</option>
+                                            <option value="cancelled" {% if appointment.Appointment.status == 'cancelled' %}selected{% endif %}>Cancelled</option>
+                                            <option value="upcoming" {% if appointment.Appointment.status == 'upcoming' %}selected{% endif %}>Upcoming</option>
+                                        </select>
+                                    </td>
+                                    <td>
+                                        <select name="payment_status_{{ appointment.Appointment.id }}">
+                                            <option value="paid" {% if appointment.Appointment.payment_status == 'paid' %}selected{% endif %}>Paid</option>
+                                            <option value="pending" {% if appointment.Appointment.payment_status == 'pending' %}selected{% endif %}>Pending</option>
+                                        </select>
+                                    </td>
+                                    <td>
+                                        <button type="submit" name="update_appointment_id" value="{{ appointment.Appointment.id }}">Update</button>
+                                    </td>
+                                </tr>
+                            {% endfor %}
+                        {% else %}
+                            <tr>
+                                <td colspan="6">No appointments available.</td>
+                            </tr>
+                        {% endif %}
+                    </tbody>
+                </table>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            var dateSelect = document.getElementById('date-select');
+            if (dateSelect) {
+                dateSelect.addEventListener('change', function() {
+                    this.form.submit();
+                });
+            }
+        });
+    </script>
+</body>
+{% endblock content %}

@@ -24,7 +24,7 @@ body{
 
 .title-text{
   position: absolute;
-  top: 30px;
+  top: 10px;
   left: 13.5%;
 }
 .title-text span{
@@ -38,10 +38,10 @@ body{
 
 .container-body{
   background-color: white;
-  height: 500px;
+  height: 600px;
   width: 70%;
   position: relative;
-  top: 110px;
+  top: 60px;
   border-radius: 5px;
   box-shadow: 0px 0px 3px 3px rgba(0, 0, 0, 0.122);
   overflow: hidden;
@@ -90,11 +90,12 @@ body{
   width: 90%;
   height: 90%;
   margin-top: 3%;
-  margin-left: 5%;
+  margin-left: 2%;
   display: flex;
   flex-direction: column;
 }
 .title-cont{
+
   height: 10%;
   width: 100%;
 }
@@ -118,6 +119,7 @@ body{
   width: 100px;
   background-color: grey;
   border-radius: 1000px;
+  margin-left: 20px;
 }
 
 .img-btn-cont{
@@ -127,7 +129,8 @@ body{
 
 .change-ctn{
   position: absolute;
-  bottom: 20px;
+  bottom: -40px;
+  left: 10px;
 }
 
 .change-img-btn{
@@ -147,7 +150,7 @@ body{
   height: 60%;
 }
 
-form{
+.form{
   display: flex;
   flex-direction: column;
   width: 100%;
@@ -157,11 +160,7 @@ form{
   display: flex;
   flex-direction: row;
 }
-.r-1,.r-2{
-  width: 50%;
-  display: flex;
-  flex-direction: column;
-}
+
 .about-col{
   display: flex;
   flex-direction: column;
@@ -197,4 +196,333 @@ form{
 
 @keyframes moving{
   from{transform: translateY(50px);opacity: 0;}
+}
+
+/* General settings */
+.setting-sub-container {
+  padding: 40px;
+  background-color: #f9f9f9;
+  border-radius: 10px;
+  width: 100%;
+  max-width: 800px;
+  margin: 0 auto;
+  height: 100%;
+}
+
+.title-cont span {
+  font-size: 1.5rem;
+  font-weight: bold;
+}
+
+/* Profile image section */
+.img-main-cont {
+  margin-top: -20px;
+  display: flex;
+  align-items: center;
+  margin-bottom: 10px;
+}
+
+
+
+
+.img-btn-cont {
+  margin-left: 20px;
+}
+
+.change-ctn {
+  display: flex;
+  align-items: center;
+}
+
+.upload-btn {
+  display: inline-block;
+  padding: 10px 20px;
+  background-color: #007bff;
+  color: white;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 14px;
+  text-align: center;
+}
+
+.upload-btn:hover {
+  background-color: #0056b3;
+}
+
+/* Hide default file input */
+.file-input {
+  display: none;
+}
+
+/* Input fields */
+.info-cont {
+  margin-top: 20px;
+}
+
+.info-col {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.profile-box{
+  margin-top: -20px;
+}
+
+.profile-box label {
+  font-weight: bold;
+  font-size: 0.8rem;
+}
+
+.profile-box input,
+.profile-box textarea {
+  width: 100%;
+  padding: 8px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  font-size: 14px;
+  margin-top: 5px;
+}
+
+textarea {
+  resize: vertical;
+}
+
+.form-btn-cont {
+  margin-top: 20px;
+  text-align: right;
+}
+
+.submit-btn {
+  padding: 10px 20px;
+  background-color: #28a745;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.submit-btn:hover {
+  background-color: #218838;
+}
+
+/* General settings */
+.setting-sub-container {
+  padding: 20px;
+  background-color: #f9f9f9;
+  border-radius: 10px;
+  width: 100%;
+  max-width: 800px;
+  margin: 0 auto;
+}
+
+.title-cont span {
+  font-size: 1.3rem;
+  font-weight: bold;
+  color: #7d4a95
+}
+
+/* Profile image section */
+.img-main-cont {
+  display: flex;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+
+.img-holder img.profile-image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: 50%;
+}
+
+.img-btn-cont {
+  margin-left: 20px;
+}
+
+.upload-btn {
+  display: inline-block;
+  padding: 10px 20px;
+  background-color: #007bff;
+  color: white;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.upload-btn:hover {
+  background-color: #0056b3;
+}
+
+.file-input {
+  display: none;
+}
+
+/* Layout for form fields */
+.info-cont {
+  margin-top: 20px;
+}
+
+.profile-box {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.r-1, .r-2 {
+  display: flex;
+  justify-content: space-between;
+  gap: 10px;
+  align-items: center;
+}
+
+.r-1 label, .r-2 label {
+  width: 100px;
+}
+
+.r-1 input, .r-2 input {
+  flex: 1;
+  padding: 8px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+}
+
+.about-col {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.about-label {
+  font-weight: bold;
+}
+
+textarea {
+  width: 100%;
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  resize: vertical;
+}
+
+/* Submit button */
+.form-btn-cont {
+  text-align: right;
+  margin-top: 20px;
+}
+
+.submit-btn {
+  padding: 10px 20px;
+  background-color: #28a745;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.submit-btn:hover {
+  background-color: #218838;
+}
+
+.discard-btn {
+  padding: 10px 20px;
+  background-color: #a73b28;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  margin-left: 10px;
+}
+
+.discard-btn:hover {
+  background-color: #c82333;
+}
+
+
+.personal-info-cont {
+  margin-top: 20px;
+  margin-bottom: 60px;
+}
+
+.personal-info-box {
+  display: flex;
+  flex-direction: column;
+  gap: 30px;
+}
+
+.personal-info-box label{
+  font-weight: bold;
+  font-size: 0.8rem;
+}
+
+select{
+  flex: 1;
+  padding: 8px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  margin-left: 55px;
+}
+
+.personal-info-box input{
+  margin-right: 80px;
+}
+
+
+.account-section {
+  margin-bottom: 10px;
+  padding: 20px;
+}
+
+.account-section h3 {
+  font-size: 16px;
+  margin-bottom: 15px;
+  font-weight: bold;
+}
+
+.account-section label {
+  display: block;
+  margin-bottom: 8px;
+  font-weight: 600;
+  font-size: 0.8rem;
+}
+
+.account-section input[type="password"] {
+  width: 60%;
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  margin-bottom: 5px;
+  font-size: 10px;
+}
+
+.warning-text {
+  color: red;
+  font-weight: bold;
+  margin-bottom: 15px;
+}
+
+.form-btn-cont {
+  text-align: right;
+}
+
+.submit-btn, .delete-account-btn {
+  padding: 10px 20px;
+  background-color: #7d4a95;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 12px;
+}
+
+.submit-btn:hover {
+  background-color: #623975;
+}
+
+.delete-account-btn {
+  background-color: #dc3545;
+}
+
+.delete-account-btn:hover {
+  background-color: #c82333;
 }

@@ -22,16 +22,20 @@
           <span class="email">
             {{ user.email }}
           </span>
+          <span class="member_since">
+            Member Since: {{ user.created_at.strftime('%B %d, %Y') }}
+          </span>
           <br>
+          <div class="proedit-container">
+            <div class="button-container">
+              <a href="{{ url_for('account_settings') }}"><button class="profile-edit-btn">Edit Profile</button></a>
+            </div>
+          </div>
           <span class="appointments">
             {{ pending_appointments|length }} Appointments Pending
           </span>
         </div>
-        <div class="proedit-container">
-          <div class="button-container">
-            <a href="{{ url_for('account_settings') }}"><button class="profile-edit-btn">Edit Profile</button></a>
-          </div>
-        </div>
+        
       </div>
     </div>
 

@@ -5,7 +5,7 @@ from salonManagement.forms import SignUpForm , LoginForm
 from flask_sqlalchemy import SQLAlchemy
 from sqlalchemy.orm import joinedload
 from flask_login import login_user, current_user, logout_user, login_required
-from datetime import datetime, time as dt_time
+from datetime import datetime, time as dt_time, timedelta
 from sqlalchemy import func
 import time
 import pandas 
@@ -561,17 +561,54 @@ def adminPanel_payments():
 
 @app.route("/account-settings/profile")
 def accountSet_profile():
-
-    return render_template("accountSet_profile.html",active_tab='payments')
+    user = current_user
+    return render_template("accountSet_profile.html",active_tab='payments',user=user)
 
 
 @app.route("/account-settings/personal")
 def accountSet_personal():
+    user = current_user
+    return render_template("accountSet_personal.html",active_tab='payments',user=user)
 
-    return render_template("accountSet_personal.html",active_tab='payments')
 
-
-@app.route("/account-settings/personal")
+@app.route("/account-settings/account")
 def accountSet_account():
 
     return render_template("accountSet_account.html",active_tab='payments')
+
+@app.route('/appointments/schedule')
+def appointments_schedule():
+    today = datetime.today().date()
+    tomorrow = today + timedelta(days=1)
+    
+    # Fetch appointments for today and tomorrow
+    appointments_today = (
+        db.session.query(Appointment, Service)
+        .join(Service, Appointment.service_id == Service.service_id)
+        .filter(Appointment.date == today)
+        .all()
+    )
+    appointments_tomorrow= (
+        db.session.query(Appointment, Service)
+        .join(Service, Appointment.service_id == Service.service_id)
+        .filter(Appointment.date == tomorrow)
+        .all()
+    )
+    
+    # Group appointments by employee
+    employees = db.session.query(Employee, User).join(User).all()
+    employee_appointments = {employee.Employee.id: {'today': [], 'tomorrow': []} for employee in employees}
+
+    for appointment in appointments_today:
+        employee_appointments[appointment.Appointment.employee_id]['today'].append(appointment)
+
+    for appointment in appointments_tomorrow:
+        employee_appointments[appointment.Appointment.employee_id]['tomorrow'].append(appointment)
+
+    return render_template(
+        'appointment_schedule.html',
+        employees=employees,
+        employee_appointments=employee_appointments,
+        today=today,
+        tomorrow=tomorrow
+    )

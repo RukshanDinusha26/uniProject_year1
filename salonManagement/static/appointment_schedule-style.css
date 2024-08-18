@@ -1,0 +1,236 @@
+/* Global Styles */
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Lobster&display=swap');
+
+* {
+  font-family: 'Poppins', sans-serif;
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  color: #333;
+}
+
+h1 {
+  font-family: 'Lobster', cursive;
+  font-size: 2.5rem;
+  color: #7d4a95;
+  margin-bottom: 20px;
+}
+
+/* Container Styles */
+.container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 20px;
+}
+
+.tab-buttons {
+  display: flex;
+  justify-content: center;
+}
+
+.tab-buttons button {
+    background-color: transparent;
+    border-radius: 8px;
+    color:#7d4a95;
+    font-weight: 500;
+    border: 2px solid #7d4a95;
+    margin-left: 2rem;
+    margin: 5px;
+    z-index: 10;
+    padding: 5px;
+}
+
+.tab-buttons button:hover{
+    cursor: pointer;
+}
+.tab a {
+    position: absolute;
+    right: 300px;
+    top: 210px;
+    color: white;
+    background: #be8ab6;
+    font-size: 0.8rem;
+    border: 2px solid transparent;
+    padding: 10px 24px;
+    line-height: 1;
+    font-weight: 500;
+    border-radius: 30px;
+    text-transform: uppercase;
+  }
+  
+  .tab a:hover {
+    background: white;
+    border: solid 2px #7d4a95;
+    color: #7d4a95
+  }
+  
+  
+select {
+    margin-top: 20px;
+    margin-bottom: 20px;
+    padding: 10px;
+    font-size: 12px;
+    border-radius: 5px;
+    border: 1px solid #ccc;
+    box-sizing: border-box; 
+  }
+.tab-buttons button.active {
+  background-color: #a468a9;
+  color: white;
+}
+
+.tab-content {
+  width: 100%;
+  max-width: 1000px;
+  background-color: white;
+  padding: 20px;
+  border: none;
+}
+
+/* Tab Sections */
+.tab {
+  display: none;
+
+}
+
+.tab.active {
+  display: block;
+  
+}
+.tab{
+    padding: 40px 19%;
+    border: none;
+}
+
+/* Appointment Styles */
+.appointment-list {
+  list-style: none;
+  padding: 0;
+}
+
+.appointment-list li {
+  background-color: #fff;
+  padding: 15px;
+  margin-bottom: 10px;
+  border-radius: 8px;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+  position: relative;
+}
+
+.appointment-list li.ongoing {
+  border-left: 5px solid #a468a9;
+  background-color: #e5d4e7;
+}
+
+.appointment-list li strong {
+  display: block;
+  margin-bottom: 5px;
+}
+
+.appointment-list li .service-name {
+  font-size: 1.1rem;
+  color: #7d4a95;
+}
+
+.appointment-list li .time-slot {
+  font-size: 0.9rem;
+  color: #a468a9;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .tab-buttons {
+    flex-direction: column;
+  }
+
+  .tab-buttons button {
+    margin-bottom: 10px;
+  }
+
+  .appointment-list li {
+    padding: 10px;
+  }
+}
+
+
+
+/* General Table Styles */
+.table-container {
+    width: 100%;
+    max-width: 800px;
+    margin-top: 1rem;
+    background-color: #fff;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    z-index: 15;
+  }
+  
+  /* Table Styles */
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 0;
+  }
+  
+  th, td {
+    text-align: left;
+    padding: 12px;
+    border-bottom: 1px solid #ddd;
+  }
+  
+  th {
+    background-color: #7d4a95;
+    color: white;
+    font-size: 1rem;
+    font-weight: 600;
+  }
+  
+  td {
+    font-size: 0.9rem;
+    color: #333;
+  }
+  
+  tbody tr:nth-child(even) {
+    background-color: #f2f2f2;
+  }
+  
+  tbody tr:nth-child(odd) {
+    background-color: #fff;
+  }
+  
+  tbody tr:hover {
+    background-color: #e5d4e7; /* Highlight row on hover */
+  }
+  
+  /* Specific Table Elements */
+  .service-name {
+    color: #000000;
+  }
+  
+  .service-price {
+    color: #a468a9;
+  }
+  
+  /* Highlighting ongoing appointments */
+  .ongoing-appointment {
+    background-color: #ffe4e1; /* Light red background for ongoing appointments */
+    border-left: 5px solid #ff6347; /* Red border to highlight */
+  }
+  
+  /* Responsive Table Styles */
+  @media (max-width: 768px) {
+    table {
+      font-size: 0.8rem; /* Smaller text on smaller screens */
+    }
+  
+    th, td {
+      padding: 8px;
+    }
+  }
+  
