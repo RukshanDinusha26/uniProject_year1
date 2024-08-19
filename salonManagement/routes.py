@@ -350,10 +350,64 @@ def report():
     append_to_csv_report(file_path)
     return render_template("report.html")
 
+def is_float(value):
+    try:
+        float(value)
+        return True
+    except ValueError:
+        return False
+
 @app.route("/report/financial")   
 @admin_required
 def report_financial():
-    return render_template("report_financial.html",active_tab='financial') 
+    csv_file_path = 'C:\\Users\\HP\\Documents\\Project\\uniProject_year1\\salonManagement\\static\\reports\\appointment_report.csv'
+    daily_report = []
+    weekly_report = []
+    monthly_report = []
+
+    with open(csv_file_path, mode='r') as file:
+        reader = csv.DictReader(file)
+        
+        for row in reader:
+            employee_name = row['Employee Name']
+            time = row['Time']
+            date = row['Date']
+            payment = row['Payment']
+            service_name = row['Service Name']
+            
+            daily_report.append({
+                'employee': employee_name,
+                'timeslot': time,
+                'service': service_name,
+                'payment': payment
+            })
+            weekly_report.append({
+                'employee': employee_name,
+                'week': 'Week 1',
+                'service': service_name,
+                'payment': payment
+            })
+            monthly_report.append({
+                'employee': employee_name,
+                'month': 'April',
+                'service': service_name,
+                'payment': payment
+            })
+
+    # Filter and sum only numeric values
+    daily_total = sum(float(item['payment'].replace('$', '')) for item in daily_report if is_float(item['payment'].replace('$', '')))
+    weekly_total = sum(float(item['payment'].replace('$', '')) for item in weekly_report if is_float(item['payment'].replace('$', '')))
+    monthly_total = sum(float(item['payment'].replace('$', '')) for item in monthly_report if is_float(item['payment'].replace('$', '')))
+
+
+    # Pass the data to the template
+    return render_template('report_financial.html', 
+                           daily_report=daily_report, 
+                           weekly_report=weekly_report, 
+                           monthly_report=monthly_report,
+                           daily_total=daily_total,
+                           weekly_total=weekly_total,
+                           monthly_total=monthly_total,active_tab='financial')
 
 @app.route("/report/appointment")
 @admin_required

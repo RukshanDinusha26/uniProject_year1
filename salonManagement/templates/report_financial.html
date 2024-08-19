@@ -1,6 +1,6 @@
 {% extends "report.html" %}
 
-{% block title %} Financial Report {% endblock title %}
+{% block title %}Financial Report{% endblock title %}
 
 {% block content2 %}
   <div class="Main-container">
@@ -26,13 +26,14 @@
             </tr>
           </thead>
           <tbody>
+            {% for entry in daily_report %}
             <tr>
-              <td>Heshan</td>
-              <td>09:00 AM - 10:00 AM</td>
-              <td>Haircut</td>
-              <td>$20</td>
+              <td>{{ entry.employee }}</td>
+              <td>{{ entry.timeslot }}</td>
+              <td>{{ entry.service }}</td>
+              <td>${{ entry.payment }}</td>
             </tr>
-            <!-- More rows -->
+            {% endfor %}
           </tbody>
         </table>
 
@@ -40,16 +41,9 @@
           <tbody>
             <tr>
               <td>Total Payments</td>
-              <td>$65</td>
+              <td>${{ daily_total }}</td>
             </tr>
-            <tr>
-              <td>Expenses</td>
-              <td>$40</td>
-            </tr>
-            <tr>
-              <td>Revenue</td>
-              <td>$25</td>
-            </tr>
+            <!-- Add more summary rows as needed -->
           </tbody>
         </table>
       </div>
@@ -66,13 +60,14 @@
             </tr>
           </thead>
           <tbody>
+            {% for entry in weekly_report %}
             <tr>
-              <td>Heshan</td>
-              <td>Week 1</td>
-              <td>Haircut</td>
-              <td>$20</td>
+              <td>{{ entry.employee }}</td>
+              <td>{{ entry.week }}</td>
+              <td>{{ entry.service }}</td>
+              <td>${{ entry.payment }}</td>
             </tr>
-            <!-- More rows -->
+            {% endfor %}
           </tbody>
         </table>
 
@@ -80,16 +75,9 @@
           <tbody>
             <tr>
               <td>Total Payments</td>
-              <td>$65</td>
+              <td>${{ weekly_total }}</td>
             </tr>
-            <tr>
-              <td>Expenses</td>
-              <td>$40</td>
-            </tr>
-            <tr>
-              <td>Revenue</td>
-              <td>$25</td>
-            </tr>
+            <!-- Add more summary rows as needed -->
           </tbody>
         </table>
       </div>
@@ -106,13 +94,14 @@
             </tr>
           </thead>
           <tbody>
+            {% for entry in monthly_report %}
             <tr>
-              <td>Heshan</td>
-              <td>April</td>
-              <td>Haircut</td>
-              <td>$2000</td>
+              <td>{{ entry.employee }}</td>
+              <td>{{ entry.month }}</td>
+              <td>{{ entry.service }}</td>
+              <td>${{ entry.payment }}</td>
             </tr>
-            <!-- More rows -->
+            {% endfor %}
           </tbody>
         </table>
 
@@ -120,49 +109,30 @@
           <tbody>
             <tr>
               <td>Total Payments</td>
-              <td>$65</td>
+              <td>${{ monthly_total }}</td>
             </tr>
-            <tr>
-              <td>Expenses</td>
-              <td>$40</td>
-            </tr>
-            <tr>
-              <td>Revenue</td>
-              <td>$25</td>
-            </tr>
+            <!-- Add more summary rows as needed -->
           </tbody>
         </table>
       </div>
     </div>
   </div>
+
   <script>
     document.addEventListener('DOMContentLoaded', function() {
-        // Get the select element
         const reportTypeSelect = document.getElementById('report_type');
     
-        // Add an event listener for changes
         reportTypeSelect.addEventListener('change', function() {
-            // Get the selected value
             const selectedValue = reportTypeSelect.value;
-    
-            // Get all table containers
             const tableContainers = document.querySelectorAll('.table-container');
-    
-            // Hide all table containers
             tableContainers.forEach(container => container.style.display = 'none');
-    
-            // Show the selected table container
             const selectedContainer = document.querySelector(`.${selectedValue.toLowerCase()}-container`);
             if (selectedContainer) {
                 selectedContainer.style.display = 'block';
             }
         });
     
-        // Trigger change event to display the default table
         reportTypeSelect.dispatchEvent(new Event('change'));
     });
-    </script>
-    
+  </script>
 {% endblock content2 %}
-
-    
