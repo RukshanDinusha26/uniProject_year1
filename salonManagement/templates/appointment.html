@@ -21,7 +21,7 @@
           onchange="console.log('Selected service:', this.value)" >
           <label for="service{{ loop.index }}">
             <div class="service-card">
-              <img src="{{ url_for('static', filename='images/service1.jpg') }}" alt="Service 1">
+              <img src="{{ url_for('static', filename='/uploads/' ~ service.service_image) }}" alt="Service 1">
               <div class="service-details">
                 <div class="service-name">{{ service.service_name }}</div>
                 <div class="service-price">Rs. {{ service.price }}</div>

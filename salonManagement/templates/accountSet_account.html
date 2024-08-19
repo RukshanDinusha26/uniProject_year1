@@ -2,7 +2,7 @@
 
 {% block settings %}
 <div class="setting-sub-container active">
-    <form method="POST" action="/account/change-password">
+    <form method="POST" action="{{ url_for('accountSet_account')}}">
         <div class="title-cont">
             <span>Account Settings</span>
         </div>
@@ -27,7 +27,7 @@
     </form>
 
     <!-- Delete Account Section -->
-    <form method="POST" action="/account/delete" onsubmit="return confirm('Are you sure you want to delete your account? This action cannot be undone.');">
+    <form method="POST" action="{{ url_for('delete_account')}}" onsubmit="return confirm('Are you sure you want to delete your account? This action cannot be undone.');">
         <div class="account-section">
             <h3>Delete Account</h3>
             <p class="warning-text">Warning: This action is permanent and cannot be undone. You will lose all your data.</p>

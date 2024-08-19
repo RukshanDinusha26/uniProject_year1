@@ -4,7 +4,7 @@ from flask_wtf.file import FileField, FileAllowed
 from flask_login import current_user
 from wtforms import StringField, PasswordField, RadioField, SubmitField, BooleanField, TextAreaField, validators
 from wtforms.validators import DataRequired, Length, Email, EqualTo, ValidationError
-from salonManagement import User
+from salonManagement import User,bcrypt
 
 class SignUpForm(FlaskForm):
     usertype = RadioField('User Type', choices=[('user', 'User'), ('employee', 'Employee')], default='user')
@@ -40,5 +40,5 @@ class LoginForm(FlaskForm):
     
     def validate_password(self, password):
         user = User.query.filter_by(username=self.username.data).first()
-        if user and user.password != password.data:
+        if user and not bcrypt.check_password_hash(user.password, password.data):
             raise ValidationError("Incorrect password.")

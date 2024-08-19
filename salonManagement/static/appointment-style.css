@@ -133,9 +133,10 @@ body{
 }
 
 .service-card img {
-  max-width: 100%;
-  height: auto;
+  width: 150px;
+  height: 120px;
   border-radius: 10px;
+  object-fit: cover;
 }
 
 .service-details {

@@ -19,7 +19,14 @@
 </head>
 
 <header class="header">
-  <a href="{{ url_for('home') }}" class="logo">SALON-WEBSITE</a>
+  <a href="{{ url_for('home') }}" class="logo">SALON-WEBSITE {% if session['is_admin'] %}
+    <span class="tag admin-tag">Admin</span>
+  {% elif session['is_employee'] %}
+    <span class="tag employee-tag">Employee</span>
+  {% endif %}</a>
+  
+   
+  
   
   <ul class="navlist">
     {% if request.endpoint == 'home' %}
@@ -32,9 +39,13 @@
       <a class="menu" href="#">Tools <i class="fa fa-caret-down"></i></a>
       <div class="dropdown-content">
          <a href="{{ url_for('appointments_schedule') }}">Appointment Schedule</a>
+         {% if session['is_admin'] %}
          <a href="{{ url_for('report') }}">Report Generation</a>
          <a href="{{ url_for('adminPanel')}}">Admin Panel</a>
+         {% endif %}
+         {% if session['is_employee'] %}
          <a href="{{ url_for('manage_appointments')}}">Manage Appointments</a>
+         {% endif %}
       </div>
    </li>
   </ul>

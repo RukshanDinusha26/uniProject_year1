@@ -9,8 +9,11 @@
         <div class="img-main-cont">
             <div class="img-cont">
                 <div class="img-holder">
-                    <!-- Display current image -->
-                    <img src="{{  url_for('static', filename='images/profile.jpg') }}" alt="Profile Image" class="profile-image">
+                    {% if user.profile_image %}
+                        <img src="{{ url_for('static', filename='/profile/' ~ user.profile_image) }}" alt="Profile Image" class="profile-image">
+                    {% else %}
+                        <img src="{{ url_for('static', filename='/profile/profile.jpg') }}" alt="Default Profile Image" class="profile-image">
+                    {% endif %}
                 </div>
             </div>
             <div class="img-btn-cont">

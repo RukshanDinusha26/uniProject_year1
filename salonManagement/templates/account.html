@@ -12,7 +12,11 @@
       <div class="profile-container">
         <div class="propic-container">
           <div class="propic">
-            <img src="" alt="Profile Picture">
+            {% if user.profile_image %}
+                        <img src="{{ url_for('static', filename='/profile/' ~ user.profile_image) }}" alt="Profile Image" class="profile-image">
+                    {% else %}
+                        <img src="{{ url_for('static', filename='/profile/profile.jpg') }}" alt="Default Profile Image" class="profile-image">
+                    {% endif %}
           </div>
         </div>
         <div class="proinfo-container">
@@ -28,7 +32,7 @@
           <br>
           <div class="proedit-container">
             <div class="button-container">
-              <a href="{{ url_for('account_settings') }}"><button class="profile-edit-btn">Edit Profile</button></a>
+              <a href="{{ url_for('accountSet_profile') }}"><button class="profile-edit-btn">Edit Profile</button></a>
             </div>
           </div>
           <span class="appointments">

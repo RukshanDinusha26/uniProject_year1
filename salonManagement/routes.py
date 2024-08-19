@@ -1,6 +1,6 @@
 import json
 from flask import request, render_template, url_for, flash, redirect, jsonify
-from salonManagement import db, User, app, bcrypt, Employee, Appointment , Service, employee_service
+from salonManagement import app, db, User, app, bcrypt, Employee, Appointment , Service, employee_service, login_manager, ADMIN_PASSWORD
 from salonManagement.forms import SignUpForm , LoginForm
 from werkzeug.utils import secure_filename
 from flask_sqlalchemy import SQLAlchemy
@@ -13,16 +13,18 @@ import pandas
 import matplotlib
 matplotlib.use('Agg') 
 import matplotlib.pyplot as plt
-import io
+import csv
+from io import StringIO 
 import base64
+import io
 from flask import session
 import seaborn 
 from sklearn.model_selection import TimeSeriesSplit
 from sklearn.ensemble import RandomForestRegressor
 from sklearn.metrics import mean_absolute_error
-from sklearn.metrics import mean_absolute_error
 import numpy as np
 import os
+from functools import wraps
 import secrets
 
 @app.route("/")
@@ -30,19 +32,61 @@ import secrets
 def home():
     return render_template('home.html')
 
+def admin_required(f):
+    @wraps(f)
+    def decorated_function(*args, **kwargs):
+        if not current_user.is_authenticated:
+            flash('You need to be logged in as an admin to access this page.', 'danger')
+            return redirect(url_for('home'))
+        if not session.get('is_admin'):
+            flash('Admin access only.', 'danger')
+            return redirect(url_for('home'))  
+        return f(*args, **kwargs)
+    return decorated_function
+
+def employee_required(f):
+    @wraps(f)
+    def decorated_function(*args, **kwargs):
+        if not current_user.is_authenticated:
+            flash('You need to be logged in as an Employee to access this page.', 'danger')
+            return redirect(url_for('home'))
+        if not session.get('is_employee'):
+            flash('Employee access only.', 'danger')
+            return redirect(url_for('home'))  
+        return f(*args, **kwargs)
+    return decorated_function
+
+
 @app.route("/login", methods=['GET', 'POST'])
 def login():
     time.sleep(1.5)
     form2 = LoginForm()
     if form2.validate_on_submit():
+        hashed_admin_password = bcrypt.generate_password_hash(ADMIN_PASSWORD).decode('utf-8')
         user = User.query.filter_by(username=form2.username.data).first()
-        if user and (user.password == form2.password.data):
-            login_user(user, remember=form2.remember.data)
-            flash('Welcom '+user.username+' ! You have Successfully Logged In', 'success')
-            return redirect(url_for('home'))
-            
+        if user and bcrypt.check_password_hash(hashed_admin_password,form2.password.data):
+                session['is_admin'] = True
+                login_user(user, remember=True)
+                flash('Welcome ADMIN ! You have Successfully Logged In', 'success')
+                return redirect(url_for('home'))
+        
+        if user and bcrypt.check_password_hash(user.password,form2.password.data):
+                if user.employee_id:
+                    session['is_employee'] = True
+                    login_user(user, remember=True)
+                    flash('Welcome'+user.username+'You have Successfully Logged In as an Employee!', 'success')
+                    return redirect(url_for('home'))
+                
+                login_user(user, remember=True)
+                flash('Welcome '+user.username+' ! You have Successfully Logged In', 'success')
+                return redirect(url_for('home'))
+
 
     return render_template('login.html', title="login",form2=form2)
+
+@login_manager.user_loader
+def load_user(user_id):
+    return User.query.get(int(user_id))
 
 @app.route("/signup", methods=['GET', 'POST'])
 def signup():
@@ -54,12 +98,13 @@ def signup():
         name = request.form.get("username")
         email = request.form.get("email")
         password = request.form.get("pwd")
+        hashed_password = bcrypt.generate_password_hash(password).decode('utf-8')
 
 
         new_user = User(
             username=name,
             email=email,
-            password=password
+            password=hashed_password
         )
 
         if usertype == 'employee':
@@ -70,7 +115,7 @@ def signup():
                 new_user = User(
                     username=name,
                     email=email,
-                    password=password,
+                    password=hashed_password,
                     employee_id = emp_id
                 )
             else:
@@ -88,6 +133,7 @@ def signup():
 
 
 @app.route("/appointment/add", methods=['GET', 'POST'])
+@login_required
 def appointment_add():
     if request.method == 'POST':
         if not current_user.is_authenticated:
@@ -172,32 +218,6 @@ def generate_secure_token():
     
 @app.route("/appointment", methods=['GET','POST'])
 def appointment(): 
-    if request.is_json:
-        if request.method == 'POST':
-            datepicked = request.json.get('date')
-            selectedEmployee = request.json.get('selectedEmp')
-            print()
-            print(datepicked)
-            print(selectedEmployee)
-
-            datepicked_obj = datetime.strptime(datepicked, '%Y-%m-%d').date()
-
-            appt = Appointment.query.filter(
-                Appointment.date == datepicked_obj,
-                Appointment.employee_name == selectedEmployee
-            ).all()
-
-            hours = [8,9,10,11,12,13,14,15,16,17]
-            for appt_item in appt:
-                time_obj = db.session.query(func.strftime('%H',appt_item.time)).first()
-                print(time_obj)
-                i = int(time_obj[0])
-
-                if i in hours:
-                    hours = [x for x in hours if x !=i ]
-            return jsonify({'hours': hours})
-    
-
     employees = db.session.query(Employee, User).join(User).all()
     services = Service.query.all()
     for service in services:
@@ -213,6 +233,7 @@ def appointment():
 
 
 @app.route('/book_appointment', methods=['POST'])
+@login_required
 def book_appointment():
     print(request.form)
     try:
@@ -278,6 +299,7 @@ def book_appointment():
         flash('An error occurred while booking the appointment.')
 
 @app.route("/appointment/proceed")
+@login_required
 def appointment_proceed():
 
     if not session.get('appointment_proceed'):
@@ -293,7 +315,10 @@ def appointment_proceed():
     return render_template("appointment_proceed.html",token=token,service=service)
 
 @app.route("/logout")
+@login_required
 def logout():
+    session['is_admin'] = False
+    session['is_employee'] = False
     logout_user()
     return redirect(url_for('home'))
 
@@ -315,17 +340,23 @@ def account():
 
 @app.route("/account/settings")
 def account_settings():
-    return render_template("accountSet.html")
+    user = current_user
+    return render_template("accountSet_profile.html",active_tab="profile",user=user)
 
 @app.route("/report")
+@admin_required
 def report():
+    file_path = app.config['REPORT_FOLDER']
+    append_to_csv_report(file_path)
     return render_template("report.html")
 
 @app.route("/report/financial")   
+@admin_required
 def report_financial():
     return render_template("report_financial.html",active_tab='financial') 
 
 @app.route("/report/appointment")
+@admin_required
 def report_appointments():
     return render_template("report_appointments.html",active_tab='appointments')
 
@@ -334,6 +365,7 @@ def load_customer_data():
     return data
 
 @app.route("/report/customer_trends")
+@admin_required
 def report_customer_trends():
     data = load_customer_data()
 
@@ -395,6 +427,7 @@ def load_service_data():
     return data
 
 @app.route("/report_service_trends")
+@admin_required
 def report_service_trends():
 
     data = load_service_data()
@@ -442,6 +475,7 @@ def report_service_trends():
     return render_template("report_service_trends.html",revenue_img_plot = revenue_img_base, distri_img_plot = distri_img_base,monthly_img_plot=monthly_img_base,active_tab='service')
 
 @app.route("/report_predict_revenue")
+@admin_required
 def report_predict_revenue():
     data = pandas.read_csv('C:\\Users\\HP\\Documents\\Project\\uniProject_year1\\salonManagement\\income.csv')
     data['Date'] = pandas.to_datetime(data['Date'])
@@ -539,11 +573,13 @@ def report_predict_revenue():
     return render_template("report_revenue_predict.html", predict_img_plot=predict_img_base,active_tab='revenue')
 
 @app.route("/admin-panel")
+@admin_required
 def adminPanel():
 
     return render_template("admin-panel.html")
 
 @app.route("/admin-panel/appointments",methods=['POST','GET'])
+@admin_required
 def adminPanel_appointments():
     today = datetime.today().date()
     yesterday = today - timedelta(days=1)
@@ -614,6 +650,7 @@ def adminPanel_appointments():
     
 
 @app.route("/admin-panel/employee",methods=['GET','POST'])
+@admin_required
 def adminPanel_employee():
     print(request.form)
     if request.method == 'POST':
@@ -634,6 +671,7 @@ def adminPanel_employee():
     return render_template("admin-employee.html",active_tab='employees',employees=employees)
 
 @app.route('/admin-panel/services', methods=['GET', 'POST'])
+@admin_required
 def adminPanel_services():
     if request.method == 'POST':
         service_name = request.form['service_name']
@@ -662,22 +700,87 @@ def adminPanel_services():
     return render_template('admin-service.html', services=services, active_tab="service")
 
 
-@app.route("/account-settings/profile")
+@app.route("/account-settings/profile",methods=['GET','POST'])
+@login_required
 def accountSet_profile():
     user = current_user
-    return render_template("accountSet_profile.html",active_tab='payments',user=user)
+    if request.method == 'POST':
+        username = request.form['username']
+        email = request.form['email']
+        fname = request.form['fname']
+        lname = request.form['lname']
+        about = request.form['about']
+        
+        # Check if an image was uploaded
+        if 'profile_image' in request.files:
+            file = request.files['profile_image']
+            if file.filename:  # If a file was uploaded
+                filename = secure_filename(file.filename)
+                file.save(os.path.join(app.config['PROFILE_UPLOAD_FOLDER'], filename))
+                user.profile_image = filename
+        
+        user.username = username
+        user.email = email
+        user.firstname = fname
+        user.lastname = lname
+        user.about = about
+
+        db.session.commit()
+
+        flash('Profile updated successfully!', 'success')
+        return redirect(url_for('accountSet_profile'))
+    return render_template("accountSet_profile.html",active_tab='profile',user=user)
 
 
-@app.route("/account-settings/personal")
+@app.route("/account-settings/personal",methods=['GET','POST'])
+@login_required
 def accountSet_personal():
     user = current_user
-    return render_template("accountSet_personal.html",active_tab='payments',user=user)
+    if request.method == 'POST':
+        dob = request.form.get('dob')
+        age = request.form.get('age')
+        gender = request.form.get('gender')
+        address = request.form.get('about')
+
+        # Update user information
+        user.dob = dob
+        user.age = age
+        user.gender = gender
+        user.address = address
+
+        # Commit the changes to the database
+        db.session.commit()
+
+        flash('Personal information updated successfully!', 'success')
+        return redirect(url_for('accountSet_personal'))
+
+    return render_template("accountSet_personal.html", active_tab='personal', user=user)
 
 
-@app.route("/account-settings/account")
+@app.route("/account-settings/account",methods=['GET','POST'])
+@login_required
 def accountSet_account():
+    if request.method == 'POST':
+        current_password = request.form.get('current_password')
+        new_password = request.form.get('new_password')
+        confirm_password = request.form.get('confirm_password')
 
-    return render_template("accountSet_account.html",active_tab='payments')
+        if current_user.password != current_password:
+            flash('Current password is incorrect.', 'error')
+            return redirect(url_for('accountSet_account'))
+
+        if new_password != confirm_password:
+            flash('New passwords do not match.', 'error')
+            return redirect(url_for('accountSet_account'))
+
+        # Update the password
+        current_user.password = bcrypt.generate_password_hash(new_password).decode('utf-8')
+        db.session.commit()
+
+        flash('Password changed successfully!', 'success')
+        return redirect(url_for('accountSet_account'))
+    
+    return render_template("accountSet_account.html",active_tab='account')
 
 @app.route('/appointments/schedule')
 def appointments_schedule():
@@ -717,6 +820,7 @@ def appointments_schedule():
     )
 
 @app.route('/appointments/manage', methods=['GET', 'POST'])
+@employee_required
 def manage_appointments():
     today = datetime.today().date()
     yesterday = today - timedelta(days=1)
@@ -795,6 +899,7 @@ def manage_appointments():
     )
 
 @app.route('/employees/delete', methods=['GET','POST'])
+@admin_required
 def delete_employee():
     # Find the employee to delete
     
@@ -810,6 +915,7 @@ def delete_employee():
     return redirect(url_for("adminPanel_employee"))
 
 @app.route('/delete_service', methods=['POST'])
+@admin_required
 def delete_service():
     service_id = request.form['service_id']
     service = Service.query.get(service_id)
@@ -829,6 +935,7 @@ def delete_service():
     return redirect(url_for('adminPanel_services'))
 
 @app.route('/services/update', methods=['POST'])
+@admin_required
 def update_service():
     service_id = request.form['service_id']
     service = Service.query.get(service_id)
@@ -851,6 +958,7 @@ def update_service():
     return redirect(url_for('adminPanel_services'))
 
 @app.route('/admin/assign-services', methods=['GET', 'POST'])
+@admin_required
 def adminPanel_assign_services():
     if request.method == 'POST':
         employee_id = request.form.get('employee_id')
@@ -875,6 +983,7 @@ def adminPanel_assign_services():
     return render_template('admin-assign_service.html', employees=employees, services=services, employee_services=employee_services,active_tab='assign_service')
 
 @app.route('/admin/remove-service', methods=['POST'])
+@admin_required
 def remove_service():
     employee_id = request.form.get('employee_id')
     service_id = request.form.get('service_id')
@@ -897,3 +1006,60 @@ def remove_service():
         
 
     return redirect(url_for('adminPanel_assign_services'))
+
+
+
+@app.route("/account/delete", methods=['POST'])
+@login_required
+def delete_account():
+    if current_user.is_authenticated:
+        db.session.delete(current_user)
+        db.session.commit()
+
+        flash('Account deleted successfully!', 'success')
+        return redirect(url_for('home'))  
+
+    flash('You must be logged in to delete your account.', 'error')
+    return redirect(url_for('login'))  
+
+def append_to_csv_report(file_path):
+    # Query the database to get appointment details along with related user, employee, and service data
+    appointments = Appointment.query.options(
+        joinedload(Appointment.employee),
+        joinedload(Appointment.service),
+        joinedload(Appointment.employee).joinedload(Employee.user)
+    ).all()
+
+    # Create an in-memory string buffer
+    output = StringIO()
+    writer = csv.writer(output)
+
+    # Write data rows
+    for appointment in appointments:
+        employee_name = f"{appointment.employee.user.firstname} {appointment.employee.user.lastname}"
+        service_name = appointment.service.service_name
+        user_gender = appointment.employee.user.gender
+        user_age = appointment.employee.user.age
+        
+        writer.writerow([
+            employee_name,
+            f"{appointment.time}",
+            f"{appointment.date}",
+            appointment.payment_status,
+            user_gender,
+            service_name,
+            user_age
+        ])
+
+    # Reset buffer position to the beginning
+    output.seek(0)
+
+    # Append data to the existing CSV file or create it if it does not exist
+    file_exists = os.path.isfile(file_path)
+    with open(file_path, mode='a', newline='') as file:
+        writer = csv.writer(file)
+        if not file_exists:
+            # Write the header if the file is being created for the first time
+            writer.writerow(['Employee Name', 'Time', 'Date', 'Payment Status', 'User Gender', 'Service Name', 'User Age'])
+        # Write the new data rows
+        file.write(output.getvalue())

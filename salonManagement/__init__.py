@@ -7,21 +7,31 @@ from flask_login import LoginManager, UserMixin
 from sqlalchemy import CheckConstraint , UniqueConstraint
 from sqlalchemy import create_engine, Column, Integer, String, Text, Date, ForeignKey, Boolean, Float, ForeignKeyConstraint, Table, PrimaryKeyConstraint
 from sqlalchemy.orm import relationship, declarative_base
+from dotenv import load_dotenv
+import os
 #from flask_debugtoolbar import  DebugToolbarExtension
-
+load_dotenv()
 
 app = Flask(__name__)
 #app.debug = True
-app.config['SECRET_KEY'] = '275159fcd3bf7264d16dd63a3e300d15'
-app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://postgres:root@localhost:5432/site'
+app.config['SECRET_KEY'] = os.getenv('SECRET_KEY')
+app.config['SQLALCHEMY_DATABASE_URI'] = os.getenv('DATABASE_URL')
 #toolbar = DebugToolbarExtension(app)
 UPLOAD_FOLDER = 'salonManagement/static/uploads/'
+REPORT_FOLDER = 'salonManagement/static/reports/appointment_report.csv'
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
+app.config['REPORT_FOLDER'] = REPORT_FOLDER
+PROFILE_UPLOAD_FOLDER = 'salonManagement/static/profile'
+app.config['PROFILE_UPLOAD_FOLDER'] = PROFILE_UPLOAD_FOLDER
+ADMIN_PASSWORD = os.getenv('ADMIN_PASSWORD')
 
 db = SQLAlchemy(app)
 migrate = Migrate(app,db)
 bcrypt = Bcrypt(app)
 login_manager = LoginManager(app)
+login_manager.login_view = 'home'
+
+
 
 @login_manager.user_loader
 def load_user(user_id):

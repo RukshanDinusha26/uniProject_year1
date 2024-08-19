@@ -38,17 +38,7 @@ body {
   justify-content: center;
 }
 
-.tab-buttons button {
-    background-color: transparent;
-    border-radius: 8px;
-    color:#7d4a95;
-    font-weight: 500;
-    border: 2px solid #7d4a95;
-    margin-left: 2rem;
-    margin: 5px;
-    z-index: 10;
-    padding: 5px;
-}
+
 
 .tab-buttons button:hover{
     cursor: pointer;

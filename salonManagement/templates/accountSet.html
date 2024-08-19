@@ -21,9 +21,9 @@
                     <div class="proSetting-container">
                         <div class="side-container">
                             <div class="side-sub-container">
-                                <a href="{{ url_for('accountSet_profile')}}"><div class="tab active">Profile Info</div></a>
-                                <a href="{{ url_for('accountSet_personal')}}"><div class="tab">Personal Info</div></a>
-                                <a href="{{ url_for('accountSet_account')}}"><div class="tab">Account settings</div></a>
+                                <a href="{{ url_for('accountSet_profile')}}"><div class="sidebtn {% if active_tab == 'profile' %}sideactive{% endif %}">Profile Info</div></a>
+                                <a href="{{ url_for('accountSet_personal')}}"><div class="sidebtn {% if active_tab == 'personal' %}sideactive{% endif %}">Personal Info</div></a>
+                                <a href="{{ url_for('accountSet_account')}}"><div class="sidebtn {% if active_tab == 'account' %}sideactive{% endif %}">Account settings</div></a>
                             </div>
                         </div>
                         <div class="setting-container">
@@ -32,4 +32,22 @@
 
                 </div>
             </div>
+
+            {% with messages = get_flashed_messages(with_categories=true) %}
+      {% if messages %}
+        <div class="flash-overlay">
+          <div class="flash-message">
+            {% for category, message in messages %}
+              <div class="alert alert-{{ category }}">
+                {{ message }}
+              </div>
+            {% endfor %}
+            <a href="{% if active_tab == 'profile' %} {{ url_for('accountSet_profile') }}{% elif active_tab == 'personal' %} {{ url_for('accountSet_personal') }}{% elif active_tab == 'account' %} {{ url_for('accountSet_account') }}{% endif %}">
+                <button class="btn">Continue</button>
+              </a>
+              
+          </div>
+        </div>
+      {% endif %}
+  {% endwith %}
 {% endblock content %}

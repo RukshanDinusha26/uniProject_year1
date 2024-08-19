@@ -27,7 +27,9 @@
   font-size: 1.2rem;
   font-weight: 700;
   color: white;
+  position: relative;
 }
+
 
 .navlist,.navlist2{
   display: flex;
@@ -345,4 +347,29 @@ html {
   align-items: center;
   justify-content: center;
   padding: 3px;
+}
+
+.tag {
+  position: absolute;
+  top: 4px;
+  right: -60px;
+  padding: 4px; /* Adjust padding for size */
+  border-radius: 5px; /* Rounded corners */
+  color: white;
+  font-weight: bold;
+  text-align: center;
+  font-size: 0.5em; /* Adjust font size as needed */
+}
+
+/* Admin tag style */
+.admin-tag {
+  background-color: rgb(173, 151, 27); /* Gold background */
+  border: None; /* Slightly darker border to match gold */
+}
+
+/* Employee tag style */
+.employee-tag {
+  background-color: silver; /* Silver background */
+  border: none; /* Slightly darker border to match silver */
+  right: -70px;
 }

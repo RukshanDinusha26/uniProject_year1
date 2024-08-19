@@ -66,6 +66,11 @@ body{
   display: flex;
   flex-direction: column;
 }
+
+.side-sub-container a{
+  color: #7d4a95;
+}
+
 .side-sub-container div{
   display: flex;
   height: 50px;
@@ -74,7 +79,11 @@ body{
   font-weight: 600;
 }
 
-.side-sub-container div:hover{
+.sideactive{
+  color: #391649;
+}
+
+.sidebtn:hover{
   color:#a067ba;
   cursor: pointer;
 }
