@@ -113,7 +113,7 @@
 
   
   /* Form Styles */
-  .employee-form {
+  .employee-form, .service-form {
     margin-bottom: 40px;
   }
   
@@ -186,7 +186,7 @@ body {
   flex-direction: column;
   align-items: center;
   padding: 40px 19%;
-  margin-top: 
+
 }
 
 .tab-buttons {
@@ -230,17 +230,17 @@ body {
     color: #7d4a95
   }
 
-.edit{
+.edit1{
     border: 1px solid #7d4a95;
     width: 800px;
     padding: 5px;
     border-radius: 5px;
 }
-.edit select{
+.edit1 select{
     margin-left: 20px;
 }
 
-.edit label{
+.edit1 label{
     margin-left: 20px;
     font-weight: bold;
     color: rgb(0, 0, 0);
@@ -486,4 +486,61 @@ select {
 
   table tbody tr.highlighted {
     background-color: #d57be7 !important; /* Use !important if necessary to override other styles */
+}
+
+.edit{
+  display: flex;
+  flex-direction: column;
+  border: 1px solid #7d4a95;
+  width: 800px;
+  padding: 5px;
+  border-radius: 5px;
+  padding: 20px;
+
+}
+.edit select{
+  margin-left: 20px;
+}
+
+.edit label{
+  margin-left: 20px;
+  font-weight: bold;
+  color: rgb(0, 0, 0);
+}
+
+.update{
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 20px;
+}
+
+.update .btn3{
+  align-self: flex-end;
+}
+
+.assign-service-form {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px; /* Space between elements */
+  border: 1px solid #7d4a95;
+  border-radius: 5px;
+  margin-bottom: 20px;
+}
+
+.assign-service-form .form-group {
+  display: flex;
+  flex-direction: row;
+  margin-right: 10px;
+  margin-bottom: 0;
+  align-items: center;
+  justify-content: center; /* Space between label and select */
+}
+
+
+.assign-service-form select {
+  padding: 5px;
+  font-size: 16px;
+  margin-left: 20px;
 }

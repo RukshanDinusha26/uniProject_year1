@@ -9,7 +9,8 @@
   <div class="sub-header">
     <a href="{{ url_for('adminPanel_appointments') }}"><button class="btn {% if active_tab == 'appointments' %}active{% endif %}">Appointments</button></a>
     <a href="{{ url_for('adminPanel_employee') }}"><button class="btn {% if active_tab == 'employees' %}active{% endif %}">Employees</button></a>
-    <a href="{{ url_for('adminPanel_payments') }}"><button class="btn {% if active_tab == 'payments' %}active{% endif %}">Payments</button></a>
+    <a href="{{ url_for('adminPanel_services') }}"><button class="btn {% if active_tab == 'service' %}active{% endif %}">Services</button></a>
+    <a href="{{ url_for('adminPanel_assign_services') }}"><button class="btn {% if active_tab == 'assign_service' %}active{% endif %}">Assign Services</button></a>
   </div>
 
   {% block subcontent %}

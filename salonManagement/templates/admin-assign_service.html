@@ -1,0 +1,72 @@
+{% extends "admin-panel.html" %}
+
+{% block subcontent %}
+<!-- Assign Services to Employees Section -->
+<div id="assign-services" class="section">
+  <h2>Assign Services to Employees</h2>
+  
+  <!-- Form to Assign Service -->
+  <form class="assign-service-form" method="POST">
+    <div class="form-group">
+      <label for="employeeId">Employee ID:</label>
+      <select id="employeeId" name="employee_id" required>
+        {% for employee in employees %}
+          <option value="{{ employee.id }}">{{ employee.id }}</option>
+        {% endfor %}
+      </select>
+    </div>
+    <div class="form-group">
+      <label for="serviceId">Service ID:</label>
+      <select id="serviceId" name="service_id" required>
+        {% for service in services %}
+          <option value="{{ service.service_id }}">{{ service.service_id }} - {{ service.service_name }}</option>
+        {% endfor %}
+      </select>
+    </div>
+    <button type="submit" class="btn">Assign Service</button>
+  </form>
+
+  <!-- Table to Display Assigned Services -->
+  <h3>Assigned Services</h3>
+  <table class="table">
+    <thead>
+      <tr>
+        <th>Employee ID</th>
+        <th>Service ID</th>
+        <th>Actions</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for assignment in employee_services %}
+      <tr>
+        <td>{{ assignment.employee_id }}</td>
+        <td>{{ assignment.service_id }}</td>
+        <td>
+          <form action="{{ url_for('remove_service') }}" method="POST" style="display:inline;">
+            <input type="hidden" name="employee_id" value="{{ assignment.employee_id }}">
+            <input type="hidden" name="service_id" value="{{ assignment.service_id }}">
+            <button type="submit" class="btn btn-danger" onclick="return confirm('Are you sure you want to remove this assignment?');">Remove</button>
+          </form>
+        </td>
+      </tr>
+      {% endfor %}
+      <!-- Add more assignment rows here -->
+    </tbody>
+  </table>
+</div>
+
+{% with messages = get_flashed_messages(with_categories=true) %}
+  {% if messages %}
+    <div class="flash-overlay">
+      <div class="flash-message">
+        {% for category, message in messages %}
+          <div class="alert alert-{{ category }}">
+            {{ message }}
+          </div>
+        {% endfor %}
+        <a href="{{ url_for('adminPanel_assign_services') }}"><button class="btn">Continue</button></a>
+      </div>
+    </div>
+  {% endif %}
+{% endwith %}
+{% endblock subcontent %}

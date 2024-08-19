@@ -5,7 +5,7 @@ from flask_bcrypt import Bcrypt
 from flask_migrate import Migrate
 from flask_login import LoginManager, UserMixin
 from sqlalchemy import CheckConstraint , UniqueConstraint
-from sqlalchemy import create_engine, Column, Integer, String, Text, Date, ForeignKey, Boolean, Float, ForeignKeyConstraint, Table
+from sqlalchemy import create_engine, Column, Integer, String, Text, Date, ForeignKey, Boolean, Float, ForeignKeyConstraint, Table, PrimaryKeyConstraint
 from sqlalchemy.orm import relationship, declarative_base
 #from flask_debugtoolbar import  DebugToolbarExtension
 
@@ -15,6 +15,8 @@ app = Flask(__name__)
 app.config['SECRET_KEY'] = '275159fcd3bf7264d16dd63a3e300d15'
 app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://postgres:root@localhost:5432/site'
 #toolbar = DebugToolbarExtension(app)
+UPLOAD_FOLDER = 'salonManagement/static/uploads/'
+app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 
 db = SQLAlchemy(app)
 migrate = Migrate(app,db)
@@ -39,18 +41,21 @@ class User(db.Model, UserMixin):
     dob = Column(Date)
     address = Column(Text)
     gender = Column(String(10))
+    profile_image = db.Column(db.String(255)) 
     created_at = db.Column(db.DateTime, default=lambda: datetime.now(timezone.utc))
 
     employee_id = Column(Integer, ForeignKey('employee.id'), nullable=True)
     # Relationships
-    employee = relationship("Employee", uselist=False, back_populates="user")
+    employee = relationship("Employee", uselist=False, back_populates="user",single_parent=True)
 
     def __repr__(self):
         return f"User('{self.username}',{self.email}','{self.employee_id}','{self.firstname},'{self.lastname})"
 
-employee_service = Table('employee_service', db.Model.metadata,
+employee_service = Table(
+    'employee_service', db.Model.metadata,
     Column('employee_id', Integer, ForeignKey('employee.id')),
-    Column('service_id', Integer, ForeignKey('services.service_id'))
+    Column('service_id', Integer, ForeignKey('services.service_id')),
+    PrimaryKeyConstraint('employee_id', 'service_id')
 )
 class Employee(db.Model):
     __tablename__ = 'employee'
@@ -87,6 +92,7 @@ class Appointment(db.Model):
     date = db.Column(db.Date, nullable=False)
     time = db.Column(db.Time, nullable=False)
     payment_status = db.Column(db.String(20), nullable=False, default='Pending')
+    status = db.Column(db.String(20), nullable=False, default='Pending')
 
     employee = db.relationship('Employee', backref=db.backref('appointments', lazy=True))
     service = db.relationship('Service')

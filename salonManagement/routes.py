@@ -1,7 +1,8 @@
 import json
 from flask import request, render_template, url_for, flash, redirect, jsonify
-from salonManagement import db, User, app, bcrypt, Employee, Appointment , Service
+from salonManagement import db, User, app, bcrypt, Employee, Appointment , Service, employee_service
 from salonManagement.forms import SignUpForm , LoginForm
+from werkzeug.utils import secure_filename
 from flask_sqlalchemy import SQLAlchemy
 from sqlalchemy.orm import joinedload
 from flask_login import login_user, current_user, logout_user, login_required
@@ -612,16 +613,53 @@ def adminPanel_appointments():
     )
     
 
-
-@app.route("/admin-panel/employee")
+@app.route("/admin-panel/employee",methods=['GET','POST'])
 def adminPanel_employee():
+    print(request.form)
+    if request.method == 'POST':
+        employee_id = request.form.get('employeeId')
 
-    return render_template("admin-employee.html",active_tab='employees')
+        existing_employee = Employee.query.filter_by(id=employee_id).first()
+        if existing_employee:
+            flash("Employee with this ID already exists.", "error")
 
-@app.route("/admin-panel/payments")
-def adminPanel_payments():
+        new_employee = Employee(id=employee_id)
+        db.session.add(new_employee)
+        db.session.commit()
 
-    return render_template("admin-payments.html",active_tab='payments')
+        flash("Employee has Sucessfully added!",'sucess')
+        return redirect(url_for('adminPanel_employee'))
+    
+    employees = db.session.query(Employee, User).join(User).all()
+    return render_template("admin-employee.html",active_tab='employees',employees=employees)
+
+@app.route('/admin-panel/services', methods=['GET', 'POST'])
+def adminPanel_services():
+    if request.method == 'POST':
+        service_name = request.form['service_name']
+        service_price = request.form['service_price']
+        service_image = request.files['service_image']
+
+        if not os.path.exists(app.config['UPLOAD_FOLDER']):
+            os.makedirs(app.config['UPLOAD_FOLDER'])
+
+        max_service_id = db.session.query(func.max(Service.service_id)).scalar()
+
+        new_service_id = max_service_id + 1 if max_service_id else 1
+
+        if service_image:
+            filename = secure_filename(service_image.filename)
+            service_image.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
+
+            new_service = Service(service_id=new_service_id,service_name=service_name, price=service_price, service_image=filename)
+            db.session.add(new_service)
+            db.session.commit()
+
+            flash('Service created successfully!', 'success')
+            return redirect(url_for('adminPanel_services'))
+
+    services = Service.query.all()
+    return render_template('admin-service.html', services=services, active_tab="service")
 
 
 @app.route("/account-settings/profile")
@@ -756,3 +794,106 @@ def manage_appointments():
         tomorrow=tomorrow
     )
 
+@app.route('/employees/delete', methods=['GET','POST'])
+def delete_employee():
+    # Find the employee to delete
+    
+    employee_id = request.form.get('employee_id')
+    print(employee_id)
+    employee = Employee.query.filter_by(id=employee_id).first()
+
+
+    db.session.delete(employee)
+    db.session.commit()
+
+    flash(f"Employee {employee_id} deleted successfully.", "success")
+    return redirect(url_for("adminPanel_employee"))
+
+@app.route('/delete_service', methods=['POST'])
+def delete_service():
+    service_id = request.form['service_id']
+    service = Service.query.get(service_id)
+    if service:
+        # Delete image file if exists
+        try:
+            os.remove(os.path.join(app.config['UPLOAD_FOLDER'], service.service_image))
+        except Exception as e:
+            print(f"Error deleting image: {e}")
+        
+        db.session.delete(service)
+        db.session.commit()
+        flash('Service deleted successfully!', 'success')
+    else:
+        flash('Service not found!', 'danger')
+
+    return redirect(url_for('adminPanel_services'))
+
+@app.route('/services/update', methods=['POST'])
+def update_service():
+    service_id = request.form['service_id']
+    service = Service.query.get(service_id)
+
+    service_name = request.form['service_name']
+    service_price = request.form['service_price']
+
+    # Check if a new image was uploaded
+    file = request.files['service_image']
+    if file and file.filename != '':
+        filename = secure_filename(file.filename)
+        file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
+        service.service_image = filename
+
+    service.service_name = service_name
+    service.price = service_price
+
+    db.session.commit()
+    flash('Service updated successfully!', 'success')
+    return redirect(url_for('adminPanel_services'))
+
+@app.route('/admin/assign-services', methods=['GET', 'POST'])
+def adminPanel_assign_services():
+    if request.method == 'POST':
+        employee_id = request.form.get('employee_id')
+        service_id = request.form.get('service_id')
+
+        employee = Employee.query.get(employee_id)
+        service = Service.query.get(service_id)
+
+        if employee and service:
+            employee.services.append(service)
+            db.session.commit()
+            flash('Service assigned successfully!', 'success')
+        else:
+            flash('Invalid Employee ID or Service ID.', 'danger')
+
+    
+        return redirect(url_for('adminPanel_assign_services'))
+
+    employees = Employee.query.all()
+    services = Service.query.all()
+    employee_services = db.session.query(employee_service).all()
+    return render_template('admin-assign_service.html', employees=employees, services=services, employee_services=employee_services,active_tab='assign_service')
+
+@app.route('/admin/remove-service', methods=['POST'])
+def remove_service():
+    employee_id = request.form.get('employee_id')
+    service_id = request.form.get('service_id')
+
+    
+    employee = Employee.query.get(employee_id)
+    service = Service.query.get(service_id)
+
+    if employee and service:
+        db.session.execute(
+                employee_service.delete().where(
+                    (employee_service.c.employee_id == employee_id) &
+                    (employee_service.c.service_id == service_id)
+                ))
+        db.session.commit()
+        flash('Service removed successfully!', 'success')
+    
+    else:
+        flash('Invalid Employee ID or Service ID.', 'danger')
+        
+
+    return redirect(url_for('adminPanel_assign_services'))
