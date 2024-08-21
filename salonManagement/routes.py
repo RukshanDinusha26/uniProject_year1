@@ -10,6 +10,7 @@ from datetime import datetime, time as dt_time, timedelta
 from sqlalchemy import func
 import time
 import pandas 
+
 import matplotlib
 matplotlib.use('Agg') 
 import matplotlib.pyplot as plt
@@ -26,6 +27,7 @@ import numpy as np
 import os
 from functools import wraps
 import secrets
+import stripe
 
 @app.route("/")
 @app.route("/home")
@@ -240,20 +242,18 @@ def book_appointment():
         if not current_user.is_authenticated:
             flash('Unauthorized access. Please log in.', 'error')
             return redirect(url_for('login'))
-        # Retrieve form data
+        
         service_id = request.form.get('service_id')
         agent_name = request.form.get('agent')
         date_str = request.form.get('date')
         time_str = request.form.get('time')
         print(service_id)
 
-        # Parse date and time
         date = datetime.strptime(date_str, '%Y-%m-%d') if date_str else None
         time = datetime.strptime(time_str, '%I:%M %p').time() if time_str else None
 
         current_username = current_user.username
 
-        # Get employee_id from agent_name
         name_parts = agent_name.split(' ', 1)
         if len(name_parts) != 2:
             flash('Invalid agent name.')
@@ -277,7 +277,6 @@ def book_appointment():
 
         service_id = service.service_id
         print(service)
-        # Create a new appointment
         new_appointment = Appointment(
             token_number = token,
             username=current_username,
@@ -286,16 +285,17 @@ def book_appointment():
             date=date,
             time=time
         )
-        # Add and commit to the database
+       
         db.session.add(new_appointment)
         db.session.commit()
+        appointment_id = new_appointment.id
 
         session['appointment_proceed'] = True
 
-        return redirect(url_for('appointment_proceed' ,token=token,service_id=service_id))
+        return redirect(url_for('appointment_proceed' ,token=token,service_id=service_id,appointment_id=appointment_id))
 
     except Exception as e:
-        print(f"Error: {e}")  # Log the error for debugging
+        print(f"Error: {e}")  
         flash('An error occurred while booking the appointment.')
 
 @app.route("/appointment/proceed")
@@ -308,11 +308,15 @@ def appointment_proceed():
 
     token = request.args.get('token')
     service_id = request.args.get('service_id')
+    appointment_id = request.args.get('appointment_id')
     service = Service.query.filter_by(service_id=service_id).first()
+    appointment = Appointment.query.filter_by(id=appointment_id).first()
     
     session.pop('appointment_proceed', None)
 
-    return render_template("appointment_proceed.html",token=token,service=service)
+    return render_template("appointment_proceed.html",token=token,service=service,appointment=appointment)
+
+
 
 @app.route("/logout")
 @login_required
@@ -1117,3 +1121,51 @@ def append_to_csv_report(file_path):
             writer.writerow(['Employee Name', 'Time', 'Date', 'Payment Status', 'User Gender', 'Service Name', 'User Age'])
         # Write the new data rows
         file.write(output.getvalue())
+
+@app.route("/create-checkout-session", methods=['POST'])
+@login_required
+def create_checkout_session():
+    try:
+        service_id = request.form.get('service_id')
+        service = Service.query.filter_by(service_id=service_id).first()
+
+        session = stripe.checkout.Session.create(
+            payment_method_types=['card'],
+            line_items=[{
+                'price_data': {
+                    'currency': 'lkr',  
+                    'product_data': {
+                        'name': service.service_name,
+                    },
+                    'unit_amount': int(service.price), 
+                },
+                'quantity': 1,
+            }],
+            mode='payment',
+            success_url=url_for('payment_success', appointment_id=request.form.get('appointment_id'), _external=True),
+            cancel_url=url_for('payment_cancel', appointment_id=request.form.get('appointment_id'), _external=True),
+        )
+
+        return jsonify({'id': session.id})
+
+    except Exception as e:
+        return jsonify(error=str(e)), 403
+
+@app.route("/payment-success")
+@login_required
+def payment_success():
+    appointment_id = request.args.get('appointment_id')
+
+    # Update the appointment to reflect successful payment
+    appointment = Appointment.query.get(appointment_id)
+    appointment.payment_status = 'Paid'
+    db.session.commit()
+
+    flash('Payment successful!', 'success')
+    return render_template('sucess.html')
+
+@app.route("/payment-cancel")
+@login_required
+def payment_cancel():
+    flash('Payment canceled.', 'error')
+    return render_template('fail.html')
