@@ -5,7 +5,6 @@
 {% endblock head %}
 
 {% block content %}
-  <!-- Navigation Bar -->
   <div class="sub-header">
     <a href="{{ url_for('adminPanel_appointments') }}"><button class="btn {% if active_tab == 'appointments' %}active{% endif %}">Appointments</button></a>
     <a href="{{ url_for('adminPanel_employee') }}"><button class="btn {% if active_tab == 'employees' %}active{% endif %}">Employees</button></a>
@@ -14,21 +13,13 @@
   </div>
 
   {% block subcontent %}
-  <!-- Content Area -->
   <section class="container">
-    <!-- Dashboard Section -->
     <div id="dashboard" class="section">
       <h2>Dashboard</h2>
       <p>Overview of today's appointments, pending payments, and employee availability.</p>
-      <!-- Add more dashboard content here -->
     </section>
   {% endblock subcontent %}
-    <!-- Appointments Section -->
-    
-
-    
-
-    <!-- Payments Section -->
+  
     
   </div>
 {% endblock content %}

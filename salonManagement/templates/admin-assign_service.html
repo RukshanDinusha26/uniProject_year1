@@ -1,11 +1,9 @@
 {% extends "admin-panel.html" %}
 
 {% block subcontent %}
-<!-- Assign Services to Employees Section -->
 <div id="assign-services" class="section">
   <h2>Assign Services to Employees</h2>
   
-  <!-- Form to Assign Service -->
   <form class="assign-service-form" method="POST">
     <div class="form-group">
       <label for="employeeId">Employee ID:</label>
@@ -26,7 +24,6 @@
     <button type="submit" class="btn">Assign Service</button>
   </form>
 
-  <!-- Table to Display Assigned Services -->
   <h3>Assigned Services</h3>
   <table class="table">
     <thead>
@@ -50,7 +47,6 @@
         </td>
       </tr>
       {% endfor %}
-      <!-- Add more assignment rows here -->
     </tbody>
   </table>
 </div>

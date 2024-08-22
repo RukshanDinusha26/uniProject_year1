@@ -247,7 +247,7 @@ form.sign-up-form{
   transform: translateX(800px);
 }
 
-/* Adding Animations to Panels */
+
 
 .container.sign-up-mode:before{
   transform: translate(100%, -50%);
@@ -385,7 +385,7 @@ form.sign-up-form{
   background: white;
   padding: 20px;
   border-radius: 10px;
-  box-shadow: 0px 0px 15px rgba(0, 0, 0, 0.3); /* Subtle shadow for depth */
+  box-shadow: 0px 0px 15px rgba(0, 0, 0, 0.3); 
   text-align: center;
   display: flex;
   flex-direction: column;

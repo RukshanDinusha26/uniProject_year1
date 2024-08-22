@@ -110,9 +110,6 @@
     background-color: #f1f1f1;
   }
   
-
-  
-  /* Form Styles */
   .employee-form, .service-form {
     margin-bottom: 40px;
   }
@@ -143,23 +140,12 @@
   }
   
 
-  /* Global Styles */
-@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap');
-@import url('https://fonts.googleapis.com/css2?family=Lobster&display=swap');
-
-* {
-  font-family: 'Poppins', sans-serif;
-  box-sizing: border-box;
-  margin: 0;
-  padding: 0;
-}
-
 body {
   color: #333;
 }
 
 .highlighted {
-    background-color: #d57be7; /* Light blue highlight */
+    background-color: #d57be7; 
 }
 
 .title{
@@ -172,15 +158,15 @@ body {
 .apptitle {
   width: 100%;
   display: flex;
-  justify-content: flex-start; /* Aligns items to the start of the container */
+  justify-content: flex-start; 
 }
 
 .apptitle h2 {
-  margin-left: 20px; /* Remove default margin */
-  padding: 0; /* Optional: Remove padding if needed */
+  margin-left: 20px; 
+  padding: 0; 
   color: #7d4a95;
 }
-/* Container Styles */
+
 .appcontainer {
   display: flex;
   flex-direction: column;
@@ -268,7 +254,7 @@ select {
   border: none;
 }
 
-/* Tab Sections */
+
 .tab {
   display: none;
 
@@ -283,7 +269,6 @@ select {
     border: none;
 }
 
-/* Appointment Styles */
 .appointment-list {
   list-style: none;
   padding: 0;
@@ -318,7 +303,7 @@ select {
   color: #a468a9;
 }
 
-/* Responsive Design */
+
 @media (max-width: 768px) {
   .tab-buttons {
     flex-direction: column;
@@ -334,8 +319,6 @@ select {
 }
 
 
-
-/* General Table Styles */
 .table-container {
     width: 100%;
     max-width: 800px;
@@ -347,7 +330,7 @@ select {
     z-index: 15;
   }
   
-  /* Table Styles */
+
   table {
     width: 100%;
     border-collapse: collapse;
@@ -382,10 +365,9 @@ select {
   }
   
   tbody tr:hover {
-    background-color: #e5d4e7; /* Highlight row on hover */
+    background-color: #e5d4e7; 
   }
   
-  /* Specific Table Elements */
   .service-name {
     color: #000000;
   }
@@ -394,16 +376,16 @@ select {
     color: #a468a9;
   }
   
-  /* Highlighting ongoing appointments */
+ 
   .ongoing-appointment {
-    background-color: #ffe4e1; /* Light red background for ongoing appointments */
-    border-left: 5px solid #ff6347; /* Red border to highlight */
+    background-color: #ffe4e1; 
+    border-left: 5px solid #ff6347; 
   }
   
-  /* Responsive Table Styles */
+ 
   @media (max-width: 768px) {
     table {
-      font-size: 0.8rem; /* Smaller text on smaller screens */
+      font-size: 0.8rem; 
     }
   
     th, td {
@@ -460,7 +442,7 @@ select {
     background: white;
     padding: 20px;
     border-radius: 10px;
-    box-shadow: 0px 0px 15px rgba(0, 0, 0, 0.3); /* Subtle shadow for depth */
+    box-shadow: 0px 0px 15px rgba(0, 0, 0, 0.3); 
     text-align: center;
     display: flex;
     flex-direction: column;
@@ -485,7 +467,7 @@ select {
   }
 
   table tbody tr.highlighted {
-    background-color: #d57be7 !important; /* Use !important if necessary to override other styles */
+    background-color: #d57be7 !important; 
 }
 
 .edit{
@@ -523,7 +505,7 @@ select {
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: 10px; /* Space between elements */
+  gap: 10px; 
   border: 1px solid #7d4a95;
   border-radius: 5px;
   margin-bottom: 20px;
@@ -535,7 +517,7 @@ select {
   margin-right: 10px;
   margin-bottom: 0;
   align-items: center;
-  justify-content: center; /* Space between label and select */
+  justify-content: center; 
 }
 
 

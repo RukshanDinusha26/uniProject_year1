@@ -8,10 +8,8 @@
     <body>
         <div class="sub-header">
             <a href="{{ url_for('report_financial') }}"><button class="btn {% if active_tab == 'financial' %}active{% endif %} ">Finacial Reports</button></a>
-            <a href="{{ url_for('report_appointments') }}"><button class="btn {% if active_tab == 'appointments' %}active{% endif %}">Appointment Reports</button></a>
             <a href="{{ url_for('report_customer_trends') }}"><button class="btn {% if active_tab == 'customer' %}active{% endif %}">Customer Trends</button></a>
             <a href="{{ url_for('report_service_trends') }}"><button class="btn {% if active_tab == 'service' %}active{% endif %}">Service Trends</button></a>
-            <a href="{{ url_for('report_predict_revenue') }}"><button class="btn {% if active_tab == 'revenue' %}active{% endif %}">Revenue Prediction</button></a>
         </div>
         
         {% block content2 %}

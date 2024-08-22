@@ -12,7 +12,6 @@
             </select>
         </div>
 
-        <!-- Daily Report Table Container -->
         <div class="table-container daily-container">
             <table class="service-table">
                 <thead>
@@ -31,7 +30,7 @@
                         <td>Haircut</td>
                         <td>$20</td>
                     </tr>
-                    <!-- More rows -->
+                    
                 </tbody>
             </table>
 
@@ -53,7 +52,6 @@
             </table>
         </div>
 
-        <!-- Weekly Report Table Container -->
         <div class="table-container weekly-container" style="display: none;">
             <table class="service-table">
                 <thead>
@@ -72,7 +70,6 @@
                         <td>Haircut</td>
                         <td>$20</td>
                     </tr>
-                    <!-- More rows -->
                 </tbody>
             </table>
 
@@ -93,7 +90,6 @@
             </table>
         </div>
 
-        <!-- Monthly Report Table Container -->
         <div class="table-container monthly-container" style="display: none;">
             <table class="service-table">
                 <thead>
@@ -112,7 +108,7 @@
                         <td>Haircut</td>
                         <td>$20</td>
                     </tr>
-                    <!-- More rows -->
+                    
                 </tbody>
             </table>
 
@@ -139,26 +135,20 @@
 
 <script>
     document.addEventListener('DOMContentLoaded', function() {
-        // Get the select element
+        
         const reportTypeSelect = document.getElementById('report_type');
     
-        // Add an event listener for changes
         reportTypeSelect.addEventListener('change', function() {
-            // Get the selected value
             const selectedValue = reportTypeSelect.value.toLowerCase();
     
-            // Get all table containers
             const tableContainers = document.querySelectorAll('.table-container');
     
-            // Hide all table containers
             tableContainers.forEach(container => container.style.display = 'none');
     
-            // Show the selected table container
             const selectedContainers = document.querySelectorAll(`.${selectedValue}-container`);
             selectedContainers.forEach(container => container.style.display = 'block');
         });
     
-        // Trigger change event to display the default table
         reportTypeSelect.dispatchEvent(new Event('change'));
     });
     </script>

@@ -199,21 +199,21 @@
 
             const rows = document.querySelectorAll('tbody tr');
                 rows.forEach(function(row) {
-                    row.classList.remove('highlighted'); // Remove highlight class from all rows
+                    row.classList.remove('highlighted'); 
                 });
             var statusSelect = document.getElementById('status');
         if (statusSelect) {
-        statusSelect.value = status;  // Assign the value dynamically
+        statusSelect.value = status;  
         }
 
-    // Set the selected value for the payment status select element
+
     var paymentStatusSelect = document.getElementById('payment_status');
     if (paymentStatusSelect) {
-        paymentStatusSelect.value = paymentStatus;  // Assign the value dynamically
+        paymentStatusSelect.value = paymentStatus;  
     }   const button = document.querySelector(`button[onclick*="editAppointment(${appointmentId}"]`);
         if (button) {
                 const row = button.closest('tr');
-                row.classList.add('highlighted'); // Highlight selected row
+                row.classList.add('highlighted'); 
             }
         }
 

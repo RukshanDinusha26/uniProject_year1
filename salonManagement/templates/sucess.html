@@ -2,8 +2,36 @@
 
 {% block content %}
 <div class="success-page">
-    <h1>Payment sucess</h1>
+    <h1>Payment Successful!</h1>
+    
+    <div class="payment-details">
+        <h2>Payment Details</h2>
+        <p>Thank you for your payment. Your transaction has been successfully completed.</p>
+        
+        <!-- Summary of the appointment -->
+        <div class="appointment-summary">
+            <h3>Appointment Summary</h3>
+            <ul>
+                <li><strong>Appointment ID:</strong> {{ appointment.id }}</li>
+                <li><strong>Date:</strong> {{ appointment.date.strftime('%Y-%m-%d') }}</li>
+                <li><strong>Time:</strong> {{ appointment.time }}</li>
+                <li><strong>Payment Status:</strong> {{ appointment.payment_status }}</li>
+            </ul>
+        </div>
+        
+        <!-- Next steps -->
+        <div class="next-steps">
+            <h3>What’s Next?</h3>
+            <p>Your appointment is confirmed. You will receive an email confirmation shortly.</p>
+            <p>If you need to make changes to your appointment, please contact us at <a href="mailto:support@salon.com">support@salon.com</a>.</p>
+        </div>
+        
+        <!-- Action buttons -->
+        <div class="actions">
+            <a href="{{ url_for('appointments_schedule') }}" class="btn btn-primary">View Appointments</a>
+            <a href="{{ url_for('appointment') }}" class="btn btn-secondary">Book Another Appointment</a>
+        </div>
+    </div>
 </div>
-   
 
 {% endblock content %}

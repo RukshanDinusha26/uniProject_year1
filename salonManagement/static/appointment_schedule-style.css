@@ -20,7 +20,6 @@ h1 {
   margin-bottom: 20px;
 }
 
-/* Container Styles */
 .container {
   display: flex;
   flex-direction: column;
@@ -92,7 +91,6 @@ select {
   border: none;
 }
 
-/* Tab Sections */
 .tab {
   display: none;
 
@@ -107,7 +105,6 @@ select {
     border: none;
 }
 
-/* Appointment Styles */
 .appointment-list {
   list-style: none;
   padding: 0;
@@ -158,8 +155,6 @@ select {
 }
 
 
-
-/* General Table Styles */
 .table-container {
     width: 100%;
     max-width: 800px;
@@ -171,7 +166,6 @@ select {
     z-index: 15;
   }
   
-  /* Table Styles */
   table {
     width: 100%;
     border-collapse: collapse;
@@ -205,10 +199,9 @@ select {
   }
   
   tbody tr:hover {
-    background-color: #e5d4e7; /* Highlight row on hover */
+    background-color: #e5d4e7; 
   }
   
-  /* Specific Table Elements */
   .service-name {
     color: #000000;
   }
@@ -217,16 +210,14 @@ select {
     color: #a468a9;
   }
   
-  /* Highlighting ongoing appointments */
   .ongoing-appointment {
-    background-color: #ffe4e1; /* Light red background for ongoing appointments */
-    border-left: 5px solid #ff6347; /* Red border to highlight */
+    background-color: #ffe4e1; 
+    border-left: 5px solid #ff6347;
   }
   
-  /* Responsive Table Styles */
   @media (max-width: 768px) {
     table {
-      font-size: 0.8rem; /* Smaller text on smaller screens */
+      font-size: 0.8rem; 
     }
   
     th, td {

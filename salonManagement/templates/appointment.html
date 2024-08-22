@@ -9,7 +9,6 @@
 {% block content %}
 <body>
     <div class="appointment-container">
-      <!-- Services Section -->
        
       <div class="services-section">
         {% for service in services %}
@@ -35,20 +34,17 @@
         <form method="POST" action="{{ url_for('book_appointment') }}" onsubmit="checkSelectedService(event)">
           <input type="hidden" name="service_id" id="hidden-service-id">
           <input type="hidden" name="employee_id" id="hidden-employee-id">
-          <!-- Select Agent -->
           <div class="form-group">
             <label for="select-agent">Select Barber / Beautician </label>
             <select name="agent" id="select-agent">
             </select>
           </div>
           
-          <!-- Select Date -->
           <div class="form-group">
             <label for="select-date">Select Date</label>
             <input type="date" name="date" id="select-date" required>
           </div>
   
-          <!-- Select Available Time -->
           <div class="form-group">
             <div class="subtitle">Select Available Time</div>
             <div class="available-times" id="available-times">
@@ -68,7 +64,6 @@
             </div>
           </div>
   
-          <!-- Submit Button -->
            <div class="btn-cont">
           <button type="submit" class="btn2 submit">Book Appointment</button>
           </div>

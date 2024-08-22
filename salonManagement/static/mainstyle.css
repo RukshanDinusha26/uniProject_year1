@@ -97,12 +97,12 @@
 }
 
 .side-bar {
-  position: relative; /* Removed absolute positioning */
+  position: relative; 
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: flex-start;
-  padding: 0 20px; /* Adjust padding as needed */
+  padding: 0 20px; 
 }
 
 .side-bar a {
@@ -123,8 +123,6 @@
 .side-bar a:hover i {
   transform: scale(1.2);
 }
-
-/* Other existing styles */
 
 #home{
   padding: 150px 19%;
@@ -329,78 +327,72 @@
 }
 .modal-content {
   background-color: #fff;
-  margin: 15% auto; /* 15% from the top and centered */
+  margin: 15% auto;
   padding: 20px;
   border: 1px solid #888;
-  width: 400px; /* Could be more or less, depending on screen size */
+  width: 400px; 
   text-align: center;
   border-radius: 10px;
 }
 
 .modal {
-  display: none; /* Hidden by default */
-  position: fixed; /* Stay in place */
-  z-index: 1000; /* Sit on top */
+  display: none; 
+  position: fixed; 
+  z-index: 1000; 
   left: 0;
   top: 0;
-  width: 100%; /* Full width */
-  height: 100%; /* Full height */
-  background-color: rgba(0, 0, 0, 0.5); /* Black w/ opacity */
-  backdrop-filter: blur(5px); /* Apply blur effect to the background */
+  width: 100%;
+  height: 100%; 
+  background-color: rgba(0, 0, 0, 0.5); 
+  backdrop-filter: blur(5px);
 }
 
-/* Dropdown container */
 .dropdown {
   position: relative;
   display: inline-block;
   margin: 0;
 }
 
-/* Dropdown content (hidden by default) */
 .dropdown-content {
   display: none;
   position: absolute;
-  background-color: white; /* Main dropdown background color */
+  background-color: white; 
   box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
   z-index: 1;
-  border: none; /* Border color */
+  border: none; 
   border-radius: 3px;
-  padding: 0; /* Ensure no extra padding */
-  margin: 0; /* Ensure no extra margin */
-  left: 0; /* Align to the left edge */
+  padding: 0; 
+  margin: 0; 
+  left: 0; 
   overflow: hidden;
 }
 
-/* Show the dropdown content on hover */
+
 .dropdown:hover .dropdown-content {
   display: block;
 }
 
-/* Dropdown links */
 .dropdown-content a {
-  color: black; /* Link text color */
+  color: black; 
   padding: 12px 16px;
   text-decoration: none;
   transition: background-color 0.3s ease, color 0.3s ease;
   display: flex;
   flex-direction: row;
-  margin: 0; /* Ensure no extra margin */
-  box-sizing: border-box; /* Include padding and border in width */
+  margin: 0; 
+  box-sizing: border-box; 
 }
 
-
-/* Change the background and text color of links on hover */
 .dropdown-content a:hover {
-  background-color: #deb7f3; /* Hover background color */
-  color: black; /* Hover text color */
+  background-color: #deb7f3; 
+  color: black; 
 }
 
-/* Optional: Caret styling */
 .fa-caret-down {
   margin-left: 5px;
   font-size: 0.8rem;
   transition: transform 0.3s ease;
-  color: #ffffff; /* Caret color to match text */
+  color: #ffffff; 
 }
 
 .dropdown:hover .fa-caret-down {
@@ -411,9 +403,9 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
-  background-color: #f5f5f5; /* Light background for contrast */
+  background-color: #ffffff; 
   color: #333;
-  padding: 150px 19%;
+  padding: 20px 19%;
 }
 
 .service-item {
@@ -433,10 +425,13 @@
   line-height: 1.5;
 }
 
-/* Offers Section */
+.sv-img {
+  width: 200px;
+  border-radius: 5px;
+}
+
 #offers {
-  background: linear-gradient(to left, #a468a9, #bb86c0); /* Gradient background */
-  color: white;
+  background: linear-gradient(to left, #a468a9, #bb86c0); 
   text-align: center;
   padding: 150px 19%;
 }
@@ -468,9 +463,8 @@
   color: #7d4a95;
 }
 
-/* About Us Section */
 #about {
-  background-color: #fff; /* Plain background */
+  background-color: #fff; 
   color: #333;
   text-align: left;
   padding: 150px 19%;
@@ -508,12 +502,10 @@
   box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
 }
 
-/* Smooth Scrolling */
 html {
   scroll-behavior: smooth;
 }
 
-/* Active Link Highlight */
 .navlist a.active {
   font-weight: 700;
   color: #bb86c0;

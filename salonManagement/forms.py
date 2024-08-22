@@ -4,11 +4,11 @@ from flask_wtf.file import FileField, FileAllowed
 from flask_login import current_user
 from wtforms import StringField, PasswordField, RadioField, SubmitField, BooleanField, TextAreaField, validators
 from wtforms.validators import DataRequired, Length, Email, EqualTo, ValidationError
-from salonManagement import User,bcrypt
+from salonManagement import User,bcrypt,Employee
 
 class SignUpForm(FlaskForm):
     usertype = RadioField('User Type', choices=[('user', 'User'), ('employee', 'Employee')], default='user')
-    empid = StringField('Employee ID', [validators.Optional()])  # Optional validator for employee ID
+    empid = StringField('Employee ID', [validators.Optional()])  
     username = StringField('Username', [validators.DataRequired()])
     email = StringField('Email', [validators.Email(), validators.DataRequired()])
     pwd = PasswordField('Password', [validators.DataRequired()])
@@ -20,6 +20,19 @@ class SignUpForm(FlaskForm):
         if user:
             raise ValidationError(
                 'That username is taken. Please choose a different one')
+        
+    def validate_employee(self, empid):
+      
+        if self.usertype.data != 'employee':
+            return
+
+        if empid.data:
+            employee = User.query.filter_by(username=empid.data).first()
+            if employee:
+                raise ValidationError('That employee ID is taken. Please choose a different one')
+
+            if not Employee.query.filter_by(id=empid.data).first():
+                raise ValidationError('Invalid employee ID')
 
     def validate_email(self, email):
         user = User.query.filter_by(email=email.data).first()

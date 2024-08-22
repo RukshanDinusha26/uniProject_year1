@@ -1,6 +1,6 @@
 import json
 from flask import request, render_template, url_for, flash, redirect, jsonify
-from salonManagement import app, db, User, app, bcrypt, Employee, Appointment , Service, employee_service, login_manager, ADMIN_PASSWORD
+from salonManagement import app, db, User, app, bcrypt, Employee, Appointment , Service, employee_service, login_manager, ADMIN_PASSWORD 
 from salonManagement.forms import SignUpForm , LoginForm
 from werkzeug.utils import secure_filename
 from flask_sqlalchemy import SQLAlchemy
@@ -10,7 +10,6 @@ from datetime import datetime, time as dt_time, timedelta
 from sqlalchemy import func
 import time
 import pandas 
-
 import matplotlib
 matplotlib.use('Agg') 
 import matplotlib.pyplot as plt
@@ -20,14 +19,12 @@ import base64
 import io
 from flask import session
 import seaborn 
-from sklearn.model_selection import TimeSeriesSplit
-from sklearn.ensemble import RandomForestRegressor
-from sklearn.metrics import mean_absolute_error
-import numpy as np
 import os
 from functools import wraps
 import secrets
 import stripe
+
+stripe.api_key = app.config['STRIPE_SECRET_KEY']
 
 @app.route("/")
 @app.route("/home")
@@ -102,7 +99,6 @@ def signup():
         password = request.form.get("pwd")
         hashed_password = bcrypt.generate_password_hash(password).decode('utf-8')
 
-
         new_user = User(
             username=name,
             email=email,
@@ -113,7 +109,6 @@ def signup():
             existing_employee = Employee.query.filter_by(id=emp_id).first()
             
             if existing_employee:
-                # If employee ID exists, create the employee user account
                 new_user = User(
                     username=name,
                     email=email,
@@ -121,7 +116,6 @@ def signup():
                     employee_id = emp_id
                 )
             else:
-                # If employee ID does not exist, flash an error message
                 flash('Employee ID does not exist. Please contact the admin.', 'danger')
                 return render_template('signup.html', title="Signup", form1=form1)
             
@@ -179,14 +173,11 @@ def get_available_times():
         if not agent_name or not date:
             return jsonify({'times': []})
 
-        # Split the agent_name into first and last names if applicable
-        name_parts = agent_name.split(' ', 1)  # Split on the first space
+        name_parts = agent_name.split(' ', 1)  
         if len(name_parts) != 2:
             return jsonify({'times': []})
 
         first_name, last_name = name_parts
-
-        # Query to find the employee ID based on the agent's name
         employee = User.query.filter_by(firstname=first_name, lastname=last_name).first()
 
         if not employee:
@@ -194,25 +185,17 @@ def get_available_times():
 
         employee_id = employee.employee_id
 
-        # Convert time strings to datetime.time objects for comparison
+
         available_times = [dt_time(hour=int(slot.split(':')[0]), minute=int(slot.split(':')[1].split(' ')[0])) for slot in ALL_TIME_SLOTS]
-
-        # Query existing appointments
         appointments = Appointment.query.filter_by(employee_id=employee_id, date=date).all()
-
-        # Extract booked times
         booked_times = [appt.time for appt in appointments]
-
-        # Determine available times by removing booked times
         available_times = [slot for slot in available_times if slot not in booked_times]
-
-        # Convert available times back to string format
         available_times_str = [f"{t.strftime('%I:%M %p')}" for t in available_times]
 
         return jsonify({'times': available_times_str})
 
     except Exception as e:
-        print(f"Error: {e}")  # Log the error for debugging
+        print(f"Error: {e}")  
         return jsonify({'times': []})
 
 def generate_secure_token():
@@ -329,9 +312,9 @@ def logout():
 @app.route("/account")
 @login_required
 def account():
-    user = current_user  # Assuming current_user contains the logged-in user's details
+    user = current_user  
 
-    # Fetch pending appointments for the user
+    
     pending_appointments = (
         db.session.query(Appointment, Service)
         .join(Service, Appointment.service_id == Service.service_id)
@@ -339,7 +322,6 @@ def account():
         .all()
     )
 
-    # Pass the user and appointments to the template
     return render_template('account.html', user=user, pending_appointments=pending_appointments)
 
 @app.route("/account/settings")
@@ -413,10 +395,6 @@ def report_financial():
                            weekly_total=weekly_total,
                            monthly_total=monthly_total,active_tab='financial')
 
-@app.route("/report/appointment")
-@admin_required
-def report_appointments():
-    return render_template("report_appointments.html",active_tab='appointments')
 
 def load_customer_data():
     data = pandas.read_csv('C:\\Users\\HP\\Documents\\Project\\uniProject_year1\\salonManagement\\customer.csv')
@@ -532,104 +510,6 @@ def report_service_trends():
 
     return render_template("report_service_trends.html",revenue_img_plot = revenue_img_base, distri_img_plot = distri_img_base,monthly_img_plot=monthly_img_base,active_tab='service')
 
-@app.route("/report_predict_revenue")
-@admin_required
-def report_predict_revenue():
-    data = pandas.read_csv('C:\\Users\\HP\\Documents\\Project\\uniProject_year1\\salonManagement\\income.csv')
-    data['Date'] = pandas.to_datetime(data['Date'])
-    
-    data['Month'] = data['Date'].dt.month
-    data['Year'] = data['Date'].dt.year
-    monthly_revenue = data.groupby(['Year', 'Month']).agg({'Payment': 'sum'}).reset_index()
-    monthly_revenue['Month_Year'] = monthly_revenue['Year'].astype(str) + '-' + monthly_revenue['Month'].astype(str).str.zfill(2)
-    
-    current_year = monthly_revenue['Year'].max()
-    this_year_revenue = monthly_revenue[monthly_revenue['Year'] == current_year]
-
-    this_year_revenue['Lag_1'] = this_year_revenue['Payment'].shift(1)
-    this_year_revenue['Lag_2'] = this_year_revenue['Payment'].shift(2)
-    this_year_revenue['Rolling_Mean_3'] = this_year_revenue['Payment'].rolling(window=3).mean()
-    this_year_revenue.dropna(inplace=True)
-
-    X = this_year_revenue[['Month', 'Lag_1', 'Lag_2', 'Rolling_Mean_3']]
-    y = this_year_revenue['Payment']
-
-    tscv = TimeSeriesSplit(n_splits=3)
-    
-    best_model = None
-    best_mae = float("inf")
-
-    for train_index, test_index in tscv.split(X):
-        X_train, X_test = X.iloc[train_index], X.iloc[test_index]
-        y_train, y_test = y.iloc[train_index], y.iloc[test_index]
-
-        model = RandomForestRegressor(n_estimators=100, random_state=42)
-        model.fit(X_train, y_train)
-
-        y_pred = model.predict(X_test)
-        mae = mean_absolute_error(y_test, y_pred)
-
-        if mae < best_mae:
-            best_mae = mae
-            best_model = model
-
-    last_month = this_year_revenue['Month'].max()
-    last_lag_1 = this_year_revenue.iloc[-1]['Payment']
-    last_lag_2 = this_year_revenue.iloc[-2]['Payment']
-    last_rolling_mean = this_year_revenue['Rolling_Mean_3'].iloc[-1]
-
-    future_months = []
-    future_payments = []
-
-    for i in range(1, 4):  
-        new_month = last_month + i
-        new_year = current_year
-        if new_month > 12:
-            new_month -= 12
-            new_year += 1
-
-        new_rolling_mean = (last_lag_1 + last_lag_2 + last_rolling_mean) / 3
-        future_data = pandas.DataFrame({
-            'Month': [new_month],
-            'Lag_1': [last_lag_1],
-            'Lag_2': [last_lag_2],
-            'Rolling_Mean_3': [new_rolling_mean]
-        })
-
-        future_payment = best_model.predict(future_data)[0]
-        future_months.append(f"{new_year}-{str(new_month).zfill(2)}")
-        future_payments.append(future_payment)
-
-        last_lag_2 = last_lag_1
-        last_lag_1 = future_payment
-        last_rolling_mean = new_rolling_mean
-
-
-    future_revenue_df = pandas.DataFrame({
-        'Month_Year': future_months,
-        'Payment': future_payments
-    })
-
-    combined_revenue = pandas.concat([this_year_revenue[['Month_Year', 'Payment']], future_revenue_df], ignore_index=True)
-
-    plt.figure(figsize=(12, 6))
-    plt.plot(this_year_revenue['Month_Year'], this_year_revenue['Payment'], marker='o', label='Actual Revenue', color='blue')
-    plt.plot(future_revenue_df['Month_Year'], future_revenue_df['Payment'], marker='x', linestyle='--', color='red', label='Predicted Revenue')
-    plt.title(f'Monthly Revenue Prediction for {current_year}')
-    plt.xlabel('Month-Year')
-    plt.ylabel('Revenue ($)')
-    plt.xticks(rotation=45)
-    plt.legend()
-    plt.grid(True)
-
-    predict_img = io.BytesIO()
-    plt.tight_layout()
-    plt.savefig(predict_img, format='png')
-    predict_img_base = base64.b64encode(predict_img.getbuffer()).decode('ascii')
-    plt.close()
-
-    return render_template("report_revenue_predict.html", predict_img_plot=predict_img_base,active_tab='revenue')
-
 @app.route("/admin-panel")
 @admin_required
 def adminPanel():
@@ -643,7 +523,6 @@ def adminPanel_appointments():
     yesterday = today - timedelta(days=1)
     tomorrow = today + timedelta(days=1)
     
-    # Fetch appointments for yesterday, today, and tomorrow
     appointments_yesterday = (
         db.session.query(Appointment, Service)
         .join(Service, Appointment.service_id == Service.service_id)
@@ -688,7 +567,6 @@ def adminPanel_appointments():
             flash('Please Select an Appointment to update!', 'error')
             return redirect(url_for('adminPanel_appointments'))
         
-        # Update appointment status
         appointment = db.session.query(Appointment).filter_by(id=appointment_id).first()
         if appointment:
             appointment.status = status
@@ -769,10 +647,9 @@ def accountSet_profile():
         lname = request.form['lname']
         about = request.form['about']
         
-        # Check if an image was uploaded
         if 'profile_image' in request.files:
             file = request.files['profile_image']
-            if file.filename:  # If a file was uploaded
+            if file.filename: 
                 filename = secure_filename(file.filename)
                 file.save(os.path.join(app.config['PROFILE_UPLOAD_FOLDER'], filename))
                 user.profile_image = filename
@@ -800,13 +677,11 @@ def accountSet_personal():
         gender = request.form.get('gender')
         address = request.form.get('about')
 
-        # Update user information
         user.dob = dob
         user.age = age
         user.gender = gender
         user.address = address
 
-        # Commit the changes to the database
         db.session.commit()
 
         flash('Personal information updated successfully!', 'success')
@@ -845,7 +720,6 @@ def appointments_schedule():
     today = datetime.today().date()
     tomorrow = today + timedelta(days=1)
     
-    # Fetch appointments for today and tomorrow
     appointments_today = (
         db.session.query(Appointment, Service)
         .join(Service, Appointment.service_id == Service.service_id)
@@ -859,7 +733,6 @@ def appointments_schedule():
         .all()
     )
     
-    # Group appointments by employee
     employees = db.session.query(Employee, User).join(User).all()
     employee_appointments = {employee.Employee.id: {'today': [], 'tomorrow': []} for employee in employees}
 
@@ -884,7 +757,6 @@ def manage_appointments():
     yesterday = today - timedelta(days=1)
     tomorrow = today + timedelta(days=1)
     
-    # Fetch appointments for yesterday, today, and tomorrow
     appointments_yesterday = (
         db.session.query(Appointment, Service)
         .join(Service, Appointment.service_id == Service.service_id)
@@ -939,7 +811,6 @@ def manage_appointments():
             flash('Please Select an Appointment to update!', 'error')
             return redirect(url_for('manage_appointments'))
         
-        # Update appointment status
         appointment = db.session.query(Appointment).filter_by(id=appointment_id).first()
         if appointment:
             appointment.status = status
@@ -959,7 +830,6 @@ def manage_appointments():
 @app.route('/employees/delete', methods=['GET','POST'])
 @admin_required
 def delete_employee():
-    # Find the employee to delete
     
     employee_id = request.form.get('employee_id')
     print(employee_id)
@@ -978,7 +848,6 @@ def delete_service():
     service_id = request.form['service_id']
     service = Service.query.get(service_id)
     if service:
-        # Delete image file if exists
         try:
             os.remove(os.path.join(app.config['UPLOAD_FOLDER'], service.service_image))
         except Exception as e:
@@ -1001,7 +870,6 @@ def update_service():
     service_name = request.form['service_name']
     service_price = request.form['service_price']
 
-    # Check if a new image was uploaded
     file = request.files['service_image']
     if file and file.filename != '':
         filename = secure_filename(file.filename)
@@ -1081,18 +949,18 @@ def delete_account():
     return redirect(url_for('login'))  
 
 def append_to_csv_report(file_path):
-    # Query the database to get appointment details along with related user, employee, and service data
+    
     appointments = Appointment.query.options(
         joinedload(Appointment.employee),
         joinedload(Appointment.service),
         joinedload(Appointment.employee).joinedload(Employee.user)
     ).all()
 
-    # Create an in-memory string buffer
+    
     output = StringIO()
     writer = csv.writer(output)
 
-    # Write data rows
+    
     for appointment in appointments:
         employee_name = f"{appointment.employee.user.firstname} {appointment.employee.user.lastname}"
         service_name = appointment.service.service_name
@@ -1109,60 +977,57 @@ def append_to_csv_report(file_path):
             user_age
         ])
 
-    # Reset buffer position to the beginning
     output.seek(0)
 
-    # Append data to the existing CSV file or create it if it does not exist
     file_exists = os.path.isfile(file_path)
     with open(file_path, mode='a', newline='') as file:
         writer = csv.writer(file)
         if not file_exists:
-            # Write the header if the file is being created for the first time
+           
             writer.writerow(['Employee Name', 'Time', 'Date', 'Payment Status', 'User Gender', 'Service Name', 'User Age'])
-        # Write the new data rows
         file.write(output.getvalue())
-
+   
 @app.route("/create-checkout-session", methods=['POST'])
 @login_required
 def create_checkout_session():
     try:
         service_id = request.form.get('service_id')
+        appointment_id = request.form.get('appointment_id')
+
         service = Service.query.filter_by(service_id=service_id).first()
 
         session = stripe.checkout.Session.create(
             payment_method_types=['card'],
             line_items=[{
                 'price_data': {
-                    'currency': 'lkr',  
+                    'currency': 'lkr',
                     'product_data': {
                         'name': service.service_name,
                     },
-                    'unit_amount': int(service.price), 
+                    'unit_amount': int(service.price * 100),  
                 },
                 'quantity': 1,
             }],
             mode='payment',
-            success_url=url_for('payment_success', appointment_id=request.form.get('appointment_id'), _external=True),
-            cancel_url=url_for('payment_cancel', appointment_id=request.form.get('appointment_id'), _external=True),
+            success_url=url_for('payment_success', appointment_id=appointment_id, _external=True) + '?session_id={CHECKOUT_SESSION_ID}',
+            cancel_url=url_for('payment_cancel', appointment_id=appointment_id, _external=True),
         )
 
-        return jsonify({'id': session.id})
+        return redirect(session.url, code=303)
 
     except Exception as e:
         return jsonify(error=str(e)), 403
 
-@app.route("/payment-success")
+    
+@app.route("/payment-success/<int:appointment_id>")
 @login_required
-def payment_success():
-    appointment_id = request.args.get('appointment_id')
+def payment_success(appointment_id):
 
-    # Update the appointment to reflect successful payment
-    appointment = Appointment.query.get(appointment_id)
+    appointment = Appointment.query.filter_by(id=appointment_id).first()
     appointment.payment_status = 'Paid'
     db.session.commit()
-
-    flash('Payment successful!', 'success')
-    return render_template('sucess.html')
+    
+    return render_template('sucess.html',appointment=appointment)
 
 @app.route("/payment-cancel")
 @login_required

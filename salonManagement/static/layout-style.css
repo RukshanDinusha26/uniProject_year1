@@ -281,7 +281,7 @@ html {
 
 .success-page h1 {
   font-size: 2rem;
-  color: #7d4a95; /* Green color for success */
+  color: #7d4a95; 
   margin-bottom: 1rem;
 }
 
@@ -312,19 +312,18 @@ html {
 }
 
 .payment-options .btn-pay-now {
-  background-color: #4CAF50; /* Green color for Pay Now */
+  background-color: #4CAF50; 
 }
 
 .payment-options .btn-pay-now:hover {
-  background-color: #45a049; /* Darker green on hover */
+  background-color: #45a049; 
 }
-
 .payment-options .btn-pay-later {
-  background-color: #FFC107; /* Yellow color for Pay Later */
+  background-color: #FFC107; 
 }
 
 .payment-options .btn-pay-later:hover {
-  background-color: #e0a800; /* Darker yellow on hover */
+  background-color: #e0a800; 
 }
 
 .token{
@@ -353,23 +352,124 @@ html {
   position: absolute;
   top: 4px;
   right: -60px;
-  padding: 4px; /* Adjust padding for size */
-  border-radius: 5px; /* Rounded corners */
+  padding: 4px; 
+  border-radius: 5px;
   color: white;
   font-weight: bold;
   text-align: center;
-  font-size: 0.5em; /* Adjust font size as needed */
+  font-size: 0.5em; 
 }
 
-/* Admin tag style */
 .admin-tag {
-  background-color: rgb(173, 151, 27); /* Gold background */
-  border: None; /* Slightly darker border to match gold */
+  background-color: rgb(173, 151, 27);
+  border: None; 
 }
 
-/* Employee tag style */
 .employee-tag {
-  background-color: silver; /* Silver background */
-  border: none; /* Slightly darker border to match silver */
+  background-color: silver; 
+  border: none;
   right: -70px;
+}
+
+.success-page {
+  max-width: 800px;
+  margin: 50px auto;
+  margin-top: 80px;
+  padding: 20px;
+  border: 1px solid #ddd;
+  border-radius: 10px;
+  text-align: center;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+}
+
+.success-page h1 {
+  color: #28a745;
+  font-size: 32px;
+  margin-bottom: 20px;
+}
+
+.success-page h2 {
+  font-size: 24px;
+  margin-bottom: 15px;
+  color: #333;
+}
+
+.success-page h3 {
+  font-size: 20px;
+  margin-top: 30px;
+  color: #555;
+}
+
+.appointment-summary ul {
+  list-style-type: none;
+  padding: 0;
+  margin: 0;
+  text-align: left;
+  background-color: #fff;
+  padding: 20px;
+  border-radius: 5px;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+.appointment-summary ul li {
+  margin-bottom: 10px;
+  font-size: 16px;
+  color: #444;
+}
+
+.appointment-summary ul li strong {
+  color: #333;
+}
+
+.actions {
+  margin-top: 30px;
+}
+
+.actions .btn {
+  padding: 10px 20px;
+  font-size: 16px;
+  border-radius: 5px;
+  text-decoration: none;
+  margin: 5px;
+}
+
+.actions .btn-primary {
+  background-color: #007bff;
+  color: white;
+  border: none;
+}
+
+.actions .btn-primary:hover {
+  background-color: #0056b3;
+}
+
+.actions .btn-secondary {
+  background-color: #6c757d;
+  color: white;
+  border: none;
+}
+
+.actions .btn-secondary:hover {
+  background-color: #5a6268;
+}
+
+.next-steps {
+  margin-top: 20px;
+  background-color: #fff;
+  padding: 15px;
+  border-radius: 5px;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+.next-steps p {
+  color: #555;
+  font-size: 16px;
+}
+
+.next-steps a {
+  color: #007bff;
+}
+
+.next-steps a:hover {
+  color: #0056b3;
 }

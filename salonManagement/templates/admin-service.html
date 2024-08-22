@@ -1,7 +1,6 @@
 {% extends "admin-panel.html" %}
 
 {% block subcontent %}
-<!-- Employees Section -->
 <div id="employees" class="section">
   <h2>Manage Services</h2>
   <form class="service-form" method="POST" enctype="multipart/form-data">
@@ -50,12 +49,10 @@
         </td>
       </tr>
       {% endfor %}
-      <!-- Add more employee rows here -->
     </tbody>
   </table>
 </div>
 
-<!-- Update Form -->
 <div class="update">
 <form class="edit" method="POST" enctype="multipart/form-data">
   <input type="hidden" name="service_id" id="upt_service_id">
@@ -72,7 +69,6 @@
 <div class="form-group">
     <label for="upt_service_image">Service Image</label>
     <input type="file" id="upt_service_image" name="upt_service_image" accept="image/*">
-    <!-- Image preview -->
     <img id="image_preview" src="" alt="Service Image" style="display:none; margin-top:10px; max-width:100px;">
 </div>
 
@@ -97,31 +93,29 @@
 
   <script>
     function editService(serviceId, serviceName, servicePrice, serviceImage) {
-        // Set the form values based on the selected service
+        
         document.getElementById('upt_service_id').value = serviceId;
         document.getElementById('upt_service_name').value = serviceName;
         document.getElementById('upt_service_price').value = servicePrice;
 
-        // Set the current image to display
         var imageElement = document.getElementById('image_preview');
         if (serviceImage) {
             imageElement.src = `/static/uploads/${serviceImage}`;
             imageElement.alt = serviceName;
-            imageElement.style.display = 'block'; // Show the image preview
+            imageElement.style.display = 'block'; 
         } else {
-            imageElement.style.display = 'none'; // Hide if no image
+            imageElement.style.display = 'none'; 
         }
 
-        // Highlight the selected service row
         const rows = document.querySelectorAll('tbody tr');
         rows.forEach(function(row) {
-            row.classList.remove('highlighted'); // Remove highlight class from all rows
+            row.classList.remove('highlighted'); 
         });
 
         const button = document.querySelector(`button[onclick*="editService(${serviceId}"]`);
         if (button) {
             const row = button.closest('tr');
-            row.classList.add('highlighted'); // Highlight the selected row
+            row.classList.add('highlighted'); 
         }
     }
 

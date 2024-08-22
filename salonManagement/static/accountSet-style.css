@@ -34,8 +34,6 @@ body{
 }
 
 
-/* Body */
-
 .container-body{
   background-color: white;
   height: 600px;
@@ -207,7 +205,7 @@ body{
   from{transform: translateY(50px);opacity: 0;}
 }
 
-/* General settings */
+
 .setting-sub-container {
   padding: 40px;
   background-color: #f9f9f9;
@@ -223,15 +221,12 @@ body{
   font-weight: bold;
 }
 
-/* Profile image section */
 .img-main-cont {
   margin-top: -20px;
   display: flex;
   align-items: center;
   margin-bottom: 10px;
 }
-
-
 
 
 .img-btn-cont {
@@ -258,12 +253,10 @@ body{
   background-color: #0056b3;
 }
 
-/* Hide default file input */
 .file-input {
   display: none;
 }
 
-/* Input fields */
 .info-cont {
   margin-top: 20px;
 }
@@ -315,7 +308,7 @@ textarea {
   background-color: #218838;
 }
 
-/* General settings */
+
 .setting-sub-container {
   padding: 20px;
   background-color: #f9f9f9;
@@ -331,7 +324,7 @@ textarea {
   color: #7d4a95
 }
 
-/* Profile image section */
+
 .img-main-cont {
   display: flex;
   align-items: center;
@@ -367,7 +360,6 @@ textarea {
   display: none;
 }
 
-/* Layout for form fields */
 .info-cont {
   margin-top: 20px;
 }
@@ -414,7 +406,6 @@ textarea {
   resize: vertical;
 }
 
-/* Submit button */
 .form-btn-cont {
   text-align: right;
   margin-top: 20px;

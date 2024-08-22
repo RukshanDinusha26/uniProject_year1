@@ -10,46 +10,15 @@
     <div class="price">Rs. {{ service.price }}</div>
 
     <div class="payment-options">
-        <form action="/create-checkout-session" method="POST" id="payment-form">
+        <form action="{{ url_for('create_checkout_session') }}" method="POST">
             <input type="hidden" name="service_id" value="{{ service.service_id }}">
             <input type="hidden" name="appointment_id" value="{{ appointment.id }}">
-            <button type="submit" class="btn btn-pay-now">Pay Now</button>
+            <button type="submit">Pay Now</button>
         </form>
         <a href="{{ url_for('home')}}" class="btn btn-pay-later">Pay Later</a>
     </div>
     
     <script src="https://js.stripe.com/v3/"></script>
-    <script type="text/javascript">
-        var stripe = Stripe('{{ config.STRIPE_PUBLISHABLE_KEY }}');
-    
-        var paymentForm = document.getElementById('payment-form');
-    
-        paymentForm.addEventListener('submit', function(event) {
-            event.preventDefault();
-    
-            fetch('/create-checkout-session', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/x-www-form-urlencoded',
-                },
-                body: new URLSearchParams(new FormData(paymentForm)),
-            })
-            .then(function (response) {
-                return response.json();
-            })
-            .then(function (session) {
-                return stripe.redirectToCheckout({ sessionId: session.id });
-            })
-            .then(function (result) {
-                if (result.error) {
-                    alert(result.error.message);
-                }
-            })
-            .catch(function (error) {
-                console.error('Error:', error);
-            });
-        });
-    </script>
-    
+
 
 {% endblock content %}

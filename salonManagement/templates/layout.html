@@ -4,7 +4,6 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <!-- importing font awsome icons -->
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css" />
   <link rel="stylesheet" href="{{ url_for('static', filename='layout-style.css')}}" />
   {% block head %}
@@ -73,26 +72,20 @@
 
 {% endblock %}
 <script>
-  // Get the modal
   var modal = document.getElementById("logoutModal");
 
-  // Get the button that opens the modal
   var btn = document.getElementById("logoutBtn");
 
-  // Get the cancel button that closes the modal
   var cancelBtn = document.getElementById("cancelBtn");
 
-  // When the user clicks the logout button, open the modal
   btn.onclick = function() {
     modal.style.display = "block";
   }
 
-  // When the user clicks on cancel, close the modal
   cancelBtn.onclick = function() {
     modal.style.display = "none";
   }
 
-  // When the user clicks anywhere outside of the modal, close it
   window.onclick = function(event) {
     if (event.target == modal) {
       modal.style.display = "none";

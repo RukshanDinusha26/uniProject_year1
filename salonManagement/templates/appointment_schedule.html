@@ -10,27 +10,22 @@
     <h1>Appointments</h1>
 
     
-
-    <!-- Tab Buttons for Employees -->
     <div class="tab-buttons">
         {% for employee in employees %}
             <button data-id="{{ employee.Employee.id }}" onclick="showTab({{ employee.Employee.id }})">{{ employee.User.firstname }} {{ employee.User.lastname }}</button>
         {% endfor %}
     </div>
 
-    <!-- Tabs for Each Employee -->
     {% for employee in employees %}
         <div id="tab-{{ employee.Employee.id }}" class="tab">
             <h2>{{ employee.User.firstname }} {{ employee.User.lastname }} - Appointments</h2>
            
             
-            <!-- Dropdown Menu for Selecting Date -->
         <select id="date-select" onchange="updateSchedule(this.value)">
         <option value="today">Today</option>
         <option value="tomorrow">Tomorrow</option>
         </select>
         <a href="{{ url_for('appointment')}}" class="feedback">Add Appointment Now</a>
-            <!-- Table for Today -->
             <div class="today">
                 <h3>Today ({{ today }})</h3>
                 <div class="table-container">
@@ -59,7 +54,6 @@
                 </div>
             </div>
 
-            <!-- Table for Tomorrow -->
             <div class="tomorrow">
                 <h3>Tomorrow ({{ tomorrow }})</h3>
                 <div class="table-container">
@@ -114,7 +108,6 @@
             var activeTab = document.getElementById('tab-' + employeeId);
             if (activeTab) {
                 activeTab.style.display = 'block';
-                // Update the schedule to show the currently selected date
                 var dateSelect = document.getElementById('date-select');
                 if (dateSelect) {
                     updateSchedule(dateSelect.value);

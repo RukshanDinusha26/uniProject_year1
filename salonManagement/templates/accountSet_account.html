@@ -7,7 +7,6 @@
             <span>Account Settings</span>
         </div>
 
-        <!-- Change Password Section -->
         <div class="account-section">
             <h3>Change Password</h3>
             <label for="current-password">Current Password</label>
@@ -19,20 +18,17 @@
             <label for="confirm-password">Confirm New Password</label>
             <input type="password" name="confirm_password" id="confirm-password" required>
 
-            <!-- Submit Button for Password Change -->
             <div class="form-btn-cont">
                 <button type="submit" class="submit-btn">Change Password</button>
             </div>
         </div>
     </form>
 
-    <!-- Delete Account Section -->
     <form method="POST" action="{{ url_for('delete_account')}}" onsubmit="return confirm('Are you sure you want to delete your account? This action cannot be undone.');">
         <div class="account-section">
             <h3>Delete Account</h3>
             <p class="warning-text">Warning: This action is permanent and cannot be undone. You will lose all your data.</p>
 
-            <!-- Submit Button for Account Deletion -->
             <div class="form-btn-cont">
                 <button type="submit" class="delete-account-btn">Delete My Account</button>
             </div>

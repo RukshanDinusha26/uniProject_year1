@@ -106,7 +106,6 @@ body {
   cursor: pointer;
 }
 
-/* Account Details Section */
 .profile-details {
   margin-bottom: 40px;
 }
@@ -129,7 +128,7 @@ body {
 .profile-details strong {
   color: #555;
 }
-/* Appointments Section */
+
 .appointments-section {
   display: flex;
   flex-direction: column;
@@ -147,14 +146,14 @@ body {
 }
 
 .appointments-section table {
-  width: 70%;  /* Smaller width for the table */
-  max-width: 800px; /* You can adjust this size */
-  background-color: #fffeff; /* Light purple background */
+  width: 70%; 
+  max-width: 800px; 
+  background-color: #fffeff;
   border-collapse: collapse;
   border-radius: 10px;
   overflow: hidden;
   margin-bottom: 20px;
-  box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1); /* Subtle shadow */
+  box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1); 
 }
 
 .appointments-section th,
@@ -162,11 +161,11 @@ body {
   padding: 15px;
   text-align: left;
   border-bottom: 1px solid #ddd;
-  color: #333; /* Darker text color for readability */
+  color: #333; 
 }
 
 .appointments-section th {
-  background-color: #be8ab6; /* Slightly darker purple for table header */
+  background-color: #be8ab6; 
   color: #ffffff;
 }
 

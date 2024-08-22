@@ -12,6 +12,7 @@ import os
 #from flask_debugtoolbar import  DebugToolbarExtension
 load_dotenv()
 
+#app configarations
 app = Flask(__name__)
 #app.debug = True
 app.config['SECRET_KEY'] = os.getenv('SECRET_KEY')
@@ -40,6 +41,7 @@ def load_user(user_id):
     return User.query.get(int(user_id))
 
 class User(db.Model, UserMixin):
+
     __tablename__ = 'user'
 
     id = Column(Integer, primary_key=True)
@@ -56,8 +58,10 @@ class User(db.Model, UserMixin):
     profile_image = db.Column(db.String(255)) 
     created_at = db.Column(db.DateTime, default=lambda: datetime.now(timezone.utc))
 
+    #foreign key
     employee_id = Column(Integer, ForeignKey('employee.id'), nullable=True)
-    # Relationships
+
+    # 1 to 1 relationship with employee
     employee = relationship("Employee", uselist=False, back_populates="user",single_parent=True)
 
     def __repr__(self):
@@ -75,7 +79,7 @@ class Employee(db.Model):
     id = Column(Integer, primary_key=True)
     user = relationship('User', back_populates='employee', uselist=False)
     
-    # Define the many-to-many relationship with the Service model
+    # many-to-many relationship with the Service model
     services = relationship('Service', secondary=employee_service, back_populates='employees')
 
     def __repr__(self):
@@ -86,10 +90,10 @@ class Service(db.Model):
     
     service_id = db.Column(db.Integer, primary_key=True, autoincrement=True)
     service_name = db.Column(db.String(100), nullable=False)
-    service_image = db.Column(db.String(255))  # Stores image file path or URL
+    service_image = db.Column(db.String(255))  
     price = db.Column(db.Float, nullable=False)
 
-    # Define the many-to-many relationship with the Employee model
+    #many-to-many relationship with the Employee model
     employees = relationship('Employee', secondary=employee_service, back_populates='services')
 
     def __repr__(self):
